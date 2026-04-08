@@ -23,15 +23,30 @@
 }
 html,body{height:100%;overflow:hidden}
 body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);display:flex;flex-direction:column}
-.app{display:flex;flex-direction:column;height:100vh;max-width:1100px;margin:0 auto;width:100%;position:relative}
+.app{display:flex;flex-direction:row;height:100vh;width:100%;position:relative}
 
-/* TOP BAR */
-.topbar{flex-shrink:0;background:var(--white);border-bottom:1px solid rgba(0,0,0,0.06);padding:13px 18px 11px;display:flex;align-items:center;justify-content:space-between;z-index:20}
-.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:var(--clay-d)}
-.logo em{color:var(--clay);font-style:italic}
-.btn-primary{background:var(--clay);color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:0.03em;transition:opacity .15s;white-space:nowrap}
+/* SIDE NAV */
+.sidenav{width:220px;flex-shrink:0;background:var(--white);border-right:1px solid rgba(0,0,0,0.07);display:flex;flex-direction:column;padding:0;z-index:30;transition:transform .22s ease}
+.sidenav-logo{padding:20px 18px 16px;font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:var(--clay-d);border-bottom:1px solid rgba(0,0,0,0.06);flex-shrink:0}
+.sidenav-logo em{color:var(--clay);font-style:italic}
+.sidenav-items{flex:1;padding:10px 8px;display:flex;flex-direction:column;gap:2px}
+.snav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;border:none;background:transparent;font-family:'Lato',sans-serif;font-size:13px;font-weight:400;color:var(--muted);letter-spacing:0.01em;transition:background .12s,color .12s;width:100%;text-align:left}
+.snav-item:hover{background:var(--sand-l);color:var(--ink)}
+.snav-item.active{background:var(--clay-l);color:var(--clay-d);font-weight:400}
+.snav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.4;flex-shrink:0}
+.sidenav-footer{padding:12px 8px 20px;border-top:1px solid rgba(0,0,0,0.06);flex-shrink:0}
+.btn-primary{background:var(--clay);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:0.03em;transition:opacity .15s;white-space:nowrap;width:100%;display:flex;align-items:center;gap:7px}
 .btn-primary:hover{opacity:.86}
 .btn-primary.inv{visibility:hidden;pointer-events:none}
+
+/* HAMBURGER (mobile only) */
+.hamburger{display:none;position:fixed;top:13px;left:14px;z-index:50;background:var(--white);border:1px solid rgba(0,0,0,.09);border-radius:8px;padding:7px 9px;cursor:pointer;flex-direction:column;gap:4px}
+.hamburger span{display:block;width:18px;height:1.5px;background:var(--ink);border-radius:2px;transition:all .2s}
+.sidenav-overlay{display:none;position:fixed;inset:0;background:rgba(40,38,31,.3);z-index:25}
+.sidenav-overlay.show{display:block}
+
+/* MAIN CONTENT */
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 
 /* VIEWS */
 .view{display:none;flex:1;overflow:hidden;flex-direction:column}
@@ -178,6 +193,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 
 /* ══ CALCULATOR ══ */
 #view-calc{flex-direction:column;overflow-y:auto;padding:18px 18px 40px}
+@media(max-width:680px){#view-calc,#view-library,#view-board{padding-top:54px}}
 .calc-wrap{max-width:440px}
 .clay-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:15px}
 .clay-opt{background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:var(--r);padding:12px 10px;cursor:pointer;text-align:center;font-family:'Lato',sans-serif;transition:all .14s}
@@ -238,12 +254,13 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .glaze-color-pick input{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%}
 .empty-state{text-align:center;padding:36px 20px;color:var(--muted);font-family:'Playfair Display',serif;font-style:italic;font-size:14px}
 
-/* BOTTOM NAV */
-.bottomnav{flex-shrink:0;background:var(--white);border-top:1px solid rgba(0,0,0,0.07);display:flex}
-.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:9px 4px 13px;cursor:pointer;border:none;background:transparent;font-family:'Lato',sans-serif;transition:color .12s;color:var(--muted)}
-.bnav-item.active{color:var(--clay)}
-.bnav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.4}
-.bnav-label{font-size:10px;letter-spacing:0.05em;text-transform:uppercase}
+/* Mobile nav */
+@media(max-width:680px){
+  .hamburger{display:flex}
+  .sidenav{position:fixed;top:0;left:0;height:100%;transform:translateX(-100%)}
+  .sidenav.open{transform:translateX(0)}
+  .main-content{width:100%}
+}
 
 /* MODAL (new project only) */
 .modal-wrap{position:fixed;inset:0;background:rgba(40,38,31,.5);z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
@@ -295,12 +312,42 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 </style>
 </head>
 <body>
-<div class="app">
+<!-- Mobile overlay -->
+<div class="sidenav-overlay" id="sidenav-overlay" onclick="closeSidenav()"></div>
 
-  <div class="topbar">
-    <div class="logo">kiln <em>diary</em></div>
-    <button class="btn-primary" id="top-btn" onclick="topBtnClick()">+ New Project</button>
-  </div>
+<!-- Hamburger -->
+<button class="hamburger" id="hamburger-btn" onclick="toggleSidenav()">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="app">
+  <!-- SIDE NAV -->
+  <nav class="sidenav" id="sidenav">
+    <div class="sidenav-logo">kiln <em>diary</em></div>
+    <div class="sidenav-items">
+      <button class="snav-item active" id="bnav-board" onclick="navTo('board')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="18" rx="1.5"/><rect x="10" y="3" width="5" height="12" rx="1.5"/><rect x="17" y="3" width="5" height="15" rx="1.5"/></svg>
+        Board
+      </button>
+      <button class="snav-item" id="bnav-calc" onclick="navTo('calc')">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="8" ry="5"/><path d="M4 14 Q5 8 12 6 Q19 8 20 14" fill="none"/><path d="M10 6 Q11 2 12 2 Q13 2 14 6" fill="none"/></svg>
+        Calculator
+      </button>
+      <button class="snav-item" id="bnav-library" onclick="navTo('library')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="4" x2="8" y2="9"/></svg>
+        Library
+      </button>
+    </div>
+    <div class="sidenav-footer">
+      <button class="btn-primary" id="top-btn" onclick="topBtnClick()">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Project
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
 
   <!-- KANBAN BOARD -->
   <div class="view active" id="view-board">
@@ -386,22 +433,8 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
     </div>
   </div>
 
-  <!-- BOTTOM NAV -->
-  <nav class="bottomnav">
-    <button class="bnav-item active" id="bnav-board" onclick="navTo('board')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="18" rx="1.5"/><rect x="10" y="3" width="5" height="12" rx="1.5"/><rect x="17" y="3" width="5" height="15" rx="1.5"/></svg>
-      <span class="bnav-label">Board</span>
-    </button>
-    <button class="bnav-item" id="bnav-calc" onclick="navTo('calc')">
-      <svg viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="8" ry="5"/><path d="M4 14 Q5 8 12 6 Q19 8 20 14" fill="none"/><path d="M10 6 Q11 2 12 2 Q13 2 14 6" fill="none"/></svg>
-      <span class="bnav-label">Calculator</span>
-    </button>
-    <button class="bnav-item" id="bnav-library" onclick="navTo('library')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="4" x2="8" y2="9"/></svg>
-      <span class="bnav-label">Library</span>
-    </button>
-  </nav>
-</div>
+  </div><!-- end main-content -->
+</div><!-- end app -->
 
 <!-- NEW PROJECT MODAL -->
 <div class="modal-wrap hidden" id="modal-wrap">
@@ -491,19 +524,32 @@ function load(){
 let currentView='board';
 function navTo(v){
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('.bnav-item').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.snav-item').forEach(e=>e.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
   const nb=document.getElementById('bnav-'+v);if(nb)nb.classList.add('active');
   const tb=document.getElementById('top-btn');
-  if(v==='board'){tb.textContent='+ New Project';tb.classList.remove('inv');}
-  else{tb.classList.add('inv');}
+  if(v==='board'){tb.style.visibility='visible';}
+  else{tb.style.visibility='hidden';}
   currentView=v;
+  closeSidenav();
 }
 function goBack(){
   isEditing=false;editState={};
   navTo('board');
 }
 function topBtnClick(){openNewProjectModal()}
+
+// ── MOBILE SIDENAV ──
+function toggleSidenav(){
+  const nav=document.getElementById('sidenav');
+  const overlay=document.getElementById('sidenav-overlay');
+  nav.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+function closeSidenav(){
+  document.getElementById('sidenav').classList.remove('open');
+  document.getElementById('sidenav-overlay').classList.remove('show');
+}
 
 // ── KANBAN RENDER ──
 function renderBoard(){
@@ -580,11 +626,11 @@ function onDrop(e,key){
 function openDetail(id){
   detailId=id;isEditing=false;
   renderDetail();
-  navTo('board'); // keep board nav active
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
   document.getElementById('view-detail').classList.add('active');
+  document.querySelectorAll('.snav-item').forEach(e=>e.classList.remove('active'));
   document.getElementById('bnav-board').classList.add('active');
-  document.getElementById('top-btn').classList.add('inv');
+  document.getElementById('top-btn').style.visibility='hidden';
   document.getElementById('detail-scroll').scrollTop=0;
   currentView='detail';
 }
