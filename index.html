@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiln Diary</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kiln Diary">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#FBF8F3">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-startup-image" href="icon-512.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --clay:#C4541F;--clay-l:#FAECE7;--clay-m:#E8845A;--clay-d:#6B2510;
+  --ink:#28261F;--muted:#8C8A82;--sand:#C8C5BB;--sand-l:#F4F1EB;--sand-ll:#FAF8F4;
+  --white:#FFFFFF;--cream:#FBF8F3;
+  --r:10px;--rl:16px;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);display:flex;flex-direction:column}
+.app{display:flex;flex-direction:column;height:100vh;max-width:1100px;margin:0 auto;width:100%;position:relative}
+
+/* TOP BAR */
+.topbar{flex-shrink:0;background:var(--white);border-bottom:1px solid rgba(0,0,0,0.06);padding:13px 18px 11px;display:flex;align-items:center;justify-content:space-between;z-index:20}
+.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:var(--clay-d)}
+.logo em{color:var(--clay);font-style:italic}
+.btn-primary{background:var(--clay);color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:0.03em;transition:opacity .15s;white-space:nowrap}
+.btn-primary:hover{opacity:.86}
+.btn-primary.inv{visibility:hidden;pointer-events:none}
+
+/* VIEWS */
+.view{display:none;flex:1;overflow:hidden;flex-direction:column}
+.view.active{display:flex}
+
+/* ══ KANBAN BOARD ══ */
+#view-board{flex-direction:column}
+.kanban-scroll{flex:1;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:16px 16px 20px;display:flex;gap:14px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.kanban-scroll::-webkit-scrollbar{height:6px}
+.kanban-scroll::-webkit-scrollbar-track{background:transparent}
+.kanban-scroll::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
+
+.kanban-col{flex-shrink:0;width:220px;display:flex;flex-direction:column;background:var(--sand-ll);border-radius:var(--rl);border:1px solid rgba(0,0,0,0.05);overflow:hidden}
+.col-header{padding:13px 14px 11px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.col-title-row{display:flex;align-items:center;gap:8px}
+.col-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.col-title{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;letter-spacing:0.02em}
+.col-count{font-size:10px;color:var(--muted);background:var(--white);border:1px solid rgba(0,0,0,.07);padding:2px 8px;border-radius:20px}
+
+.col-cards{flex:1;overflow-y:auto;padding:6px 10px 12px;display:flex;flex-direction:column;gap:9px;min-height:80px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.col-cards::-webkit-scrollbar{width:4px}
+.col-cards::-webkit-scrollbar-thumb{background:var(--sand);border-radius:2px}
+.col-cards.drag-over{background:rgba(196,84,31,.06);border-radius:var(--r)}
+
+/* PROJECT CARD */
+.proj-card{background:var(--white);border:1px solid rgba(0,0,0,0.06);border-radius:var(--r);overflow:hidden;cursor:grab;transition:box-shadow .15s,opacity .15s,transform .15s;user-select:none}
+.proj-card:active{cursor:grabbing}
+.proj-card.dragging{opacity:.4;transform:scale(0.97);box-shadow:0 12px 28px rgba(0,0,0,0.15)}
+.pc-photo{height:120px;background:var(--sand-l);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pc-photo img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.pc-photo-empty{display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--sand);opacity:.7}
+.pc-photo-empty svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.2}
+.pc-photo-empty span{font-size:10px}
+.pc-body{padding:10px 11px 11px}
+.pc-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-clay{font-size:11px;color:var(--muted);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-glazes{display:flex;gap:4px}
+.g-dot{width:10px;height:10px;border-radius:50%;border:1px solid rgba(0,0,0,0.1)}
+
+/* Stage colors */
+.dot-idea{background:#888780}
+.col-idea .col-title{color:#444441}
+.dot-wet{background:#378ADD}
+.col-wet .col-title{color:#185FA5}
+.dot-bisqued{background:#639922}
+.col-bisqued .col-title{color:#3B6D11}
+.dot-glazed{background:#7F77DD}
+.col-glazed .col-title{color:#534AB7}
+
+/* ══ DETAIL VIEW ══ */
+#view-detail{flex-direction:column;overflow:hidden}
+.detail-scroll{flex:1;overflow-y:auto;padding:16px 18px 40px}
+.back-btn{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:14px;transition:color .12s;background:none;border:none;font-family:'Lato',sans-serif;padding:0;letter-spacing:0.03em}
+.back-btn:hover{color:var(--clay)}
+
+/* Hero */
+.detail-hero{height:220px;background:var(--sand-l);border-radius:var(--rl);overflow:hidden;margin-bottom:16px;position:relative;display:flex;align-items:center;justify-content:center}
+.detail-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.dh-empty{color:var(--sand);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.6}
+.dh-empty svg{width:44px;height:44px;stroke:currentColor;fill:none;stroke-width:1.1}
+.hero-upload-btn{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,0.9);border:none;border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--ink);font-family:'Lato',sans-serif;display:none}
+.is-editing .hero-upload-btn{display:block}
+
+/* Detail header */
+.detail-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
+.detail-title-wrap{flex:1;min-width:0}
+.detail-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:500;line-height:1.15}
+.detail-title-input{font-family:'Playfair Display',serif;font-size:26px;font-weight:500;line-height:1.15;border:none;border-bottom:1.5px solid var(--clay-m);background:transparent;color:var(--ink);outline:none;width:100%;padding:0 0 3px}
+.detail-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.edit-btn{background:var(--sand-l);border:none;border-radius:var(--r);padding:7px 14px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;transition:all .12s}
+.edit-btn:hover{background:var(--sand);color:var(--ink)}
+.edit-btn.save-mode{background:var(--clay);color:#fff}
+.edit-btn.save-mode:hover{opacity:.87}
+
+/* Stage badge */
+.stage-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px 5px 10px;border-radius:20px;background:var(--sand-l);margin-bottom:16px}
+.stage-badge-dot{width:8px;height:8px;border-radius:50%}
+.stage-badge-label{font-size:12px;color:var(--muted);letter-spacing:0.03em}
+.stage-select{font-size:12px;color:var(--muted);background:transparent;border:none;outline:none;font-family:'Lato',sans-serif;cursor:pointer;display:none;padding:0;letter-spacing:0.03em}
+.is-editing .stage-select{display:block}
+.is-editing .stage-badge-label{display:none}
+
+/* Info cards */
+.detail-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.dcard{background:var(--sand-ll);border-radius:var(--r);padding:11px 14px}
+.dcard .dl{font-size:10px;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'Playfair Display',serif}
+.dcard .dv{font-size:14px;color:var(--ink)}
+.dcard input{width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:14px;color:var(--ink);outline:none;padding:0 0 2px;font-family:'Lato',sans-serif;font-weight:300}
+
+/* Shrinkage result */
+.build-result{background:var(--clay-l);border:1px solid rgba(196,84,31,.25);border-radius:var(--r);padding:12px 16px;display:flex;gap:26px;margin-bottom:16px}
+.br-item .brl{font-size:10px;text-transform:uppercase;letter-spacing:0.09em;color:var(--clay);display:block;margin-bottom:2px}
+.br-item .brv{font-family:'Playfair Display',serif;font-size:19px;color:var(--clay-d)}
+
+.ds-label{font-family:'Playfair Display',serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);margin-bottom:9px}
+.detail-section{margin-bottom:18px}
+
+/* Glaze edit */
+.glaze-list{display:flex;flex-direction:column;gap:9px}
+.glaze-row-d{display:flex;align-items:center;gap:10px}
+.gswatch{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(0,0,0,0.1);flex-shrink:0;position:relative}
+.gswatch input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%;display:none}
+.is-editing .gswatch input[type=color]{display:block}
+.gname{font-size:13px;color:var(--ink)}
+.gname-input{font-size:13px;color:var(--ink);border:none;border-bottom:1px solid var(--clay-m);background:transparent;outline:none;font-family:'Lato',sans-serif;font-weight:300;min-width:0;flex:1;display:none;padding:0 0 2px}
+.is-editing .gname{display:none}
+.is-editing .gname-input{display:block}
+.grole{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em}
+.grole-select{font-size:11px;color:var(--muted);background:transparent;border:none;outline:none;font-family:'Lato',sans-serif;cursor:pointer;display:none;text-transform:uppercase;letter-spacing:0.06em}
+.is-editing .grole{display:none}
+.is-editing .grole-select{display:block}
+.del-glaze-btn{background:none;border:none;cursor:pointer;color:var(--sand);font-size:14px;padding:3px;display:none;margin-left:auto;flex-shrink:0}
+.is-editing .del-glaze-btn{display:block}
+.add-glaze-btn{font-size:12px;color:var(--clay);border:none;background:none;cursor:pointer;font-family:'Lato',sans-serif;padding:4px 0;display:none;margin-top:4px}
+.is-editing .add-glaze-btn{display:block}
+
+/* Notes */
+.detail-notes{background:var(--sand-ll);border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:1.75;color:var(--ink)}
+.detail-notes-input{width:100%;background:var(--sand-ll);border:1px solid var(--clay-m);border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:1.75;color:var(--ink);outline:none;font-family:'Lato',sans-serif;font-weight:300;resize:vertical;min-height:80px;display:none}
+.is-editing .detail-notes{display:none}
+.is-editing .detail-notes-input{display:block}
+
+/* Pinterest tile */
+.pin-tile{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--r);padding:12px 14px;text-decoration:none;transition:box-shadow .12s}
+.pin-tile:hover{box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.pin-icon{width:36px;height:36px;border-radius:8px;background:#E60023;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pin-icon svg{width:20px;height:20px;fill:#fff}
+.pin-text .pt{font-size:13px;color:var(--ink);margin-bottom:2px}
+.pin-text .ps{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
+.pin-arrow{margin-left:auto;color:var(--sand);font-size:18px}
+.pin-input{width:100%;background:var(--white);border:1px solid var(--clay-m);border-radius:var(--r);padding:10px 12px;font-size:12px;font-family:'Lato',sans-serif;color:var(--ink);outline:none;display:none}
+.is-editing .pin-tile{display:none}
+.is-editing .pin-input{display:block}
+.pin-empty{font-size:12px;color:var(--muted);font-style:italic}
+.is-editing .pin-empty{display:none}
+
+/* Photo strip */
+.photo-strip{display:flex;gap:9px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.photo-strip::-webkit-scrollbar{display:none}
+.photo-strip img{width:80px;height:80px;border-radius:var(--r);object-fit:cover;flex-shrink:0;border:1px solid rgba(0,0,0,.06)}
+.add-photo-btn{width:80px;height:80px;border-radius:var(--r);border:1.5px dashed var(--sand);background:transparent;cursor:pointer;display:none;flex-shrink:0;align-items:center;justify-content:center;color:var(--muted);font-size:22px;transition:border-color .12s}
+.add-photo-btn:hover{border-color:var(--clay-m)}
+.is-editing .add-photo-btn{display:flex}
+
+/* ══ CALCULATOR ══ */
+#view-calc{flex-direction:column;overflow-y:auto;padding:18px 18px 40px}
+.calc-wrap{max-width:440px}
+.clay-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:15px}
+.clay-opt{background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:var(--r);padding:12px 10px;cursor:pointer;text-align:center;font-family:'Lato',sans-serif;transition:all .14s}
+.clay-opt:hover{border-color:var(--clay-m)}
+.clay-opt.on{background:var(--clay-l);border-color:var(--clay)}
+.clay-opt .cn{font-size:13px;color:var(--ink);display:block;margin-bottom:3px}
+.clay-opt .cp{font-size:11px;color:var(--muted);display:block}
+.clay-opt.on .cn{color:var(--clay-d)}
+.clay-opt.on .cp{color:var(--clay)}
+.custom-row{display:flex;align-items:center;gap:11px;padding:10px 14px;background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:var(--r);margin-bottom:15px}
+.custom-row label{font-size:12px;color:var(--muted);white-space:nowrap}
+.custom-row input[type=range]{flex:1}
+.custom-row .cv{font-family:'Playfair Display',serif;font-size:15px;min-width:44px;text-align:right;color:var(--ink)}
+.unit-row{display:flex;align-items:center;gap:9px;margin-bottom:15px}
+.unit-row span{font-size:11px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.utbtn{font-size:11px;padding:5px 15px;border-radius:20px;border:1px solid var(--sand);background:transparent;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;transition:all .12s}
+.utbtn.on{background:var(--clay);border-color:var(--clay);color:#fff}
+.calc-2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:15px}
+.cfield label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;font-family:'Playfair Display',serif}
+.cfi{display:flex;align-items:center;background:var(--white);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);overflow:hidden}
+.cfi input{flex:1;border:none;background:transparent;padding:10px;font-family:'Playfair Display',serif;font-size:18px;color:var(--ink);outline:none;min-width:0}
+.cfi input::-webkit-inner-spin-button{-webkit-appearance:none}
+.cfi span{font-size:12px;color:var(--muted);padding:0 10px}
+.calc-out-box{background:var(--clay-l);border:1px solid rgba(196,84,31,.22);border-radius:var(--rl);padding:15px 18px}
+.co-label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--clay);margin-bottom:9px;font-family:'Playfair Display',serif}
+.co-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.co-item{background:rgba(255,255,255,.65);border:1px solid rgba(196,84,31,.18);border-radius:var(--r);padding:11px 13px}
+.co-item .col{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--clay);margin-bottom:3px}
+.co-item .cov{font-family:'Playfair Display',serif;font-size:22px;color:var(--clay-d)}
+.co-item .cou{font-size:11px;color:var(--clay)}
+.calc-note{font-size:11px;color:var(--clay);opacity:.7;margin-top:10px;line-height:1.65}
+.sec-label{font-family:'Playfair Display',serif;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+
+/* ══ LIBRARY ══ */
+#view-library{flex-direction:column;overflow-y:auto;padding:18px 18px 40px}
+.seg-ctrl{display:flex;background:var(--sand-l);border-radius:20px;padding:3px;margin-bottom:18px;width:fit-content}
+.seg-btn{font-size:12px;padding:6px 20px;border-radius:17px;border:none;background:transparent;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:0.03em;transition:all .15s}
+.seg-btn.active{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.lib-section{display:none}
+.lib-section.active{display:block}
+.lib-list{display:flex;flex-direction:column;gap:9px}
+.lib-item{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--r);padding:12px 15px;display:flex;align-items:center;justify-content:space-between}
+.li-info .ln{font-size:14px;color:var(--ink);margin-bottom:2px}
+.li-info .lm{font-size:12px;color:var(--muted)}
+.li-badge{font-size:11px;padding:3px 11px;border-radius:20px;background:var(--clay-l);color:var(--clay-d)}
+.li-swatch{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0}
+.li-del{background:none;border:none;cursor:pointer;color:var(--sand);font-size:14px;padding:4px 7px;transition:color .12s}
+.li-del:hover{color:var(--muted)}
+.add-form{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--rl);padding:16px;margin-top:14px}
+.add-form-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:500;margin-bottom:13px;color:var(--clay-d)}
+.add-grid-clay{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:end}
+.add-grid-glaze{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:9px;align-items:end}
+.af-field label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;font-family:'Playfair Display',serif}
+.af-field input,.af-field select{width:100%;background:var(--cream);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:'Lato',sans-serif;color:var(--ink);outline:none}
+.btn-add-lib{background:var(--clay);color:#fff;border:none;border-radius:var(--r);padding:0 18px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;height:38px;transition:opacity .15s;align-self:end;white-space:nowrap}
+.btn-add-lib:hover{opacity:.87}
+.glaze-color-pick{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);position:relative;cursor:pointer;align-self:end}
+.glaze-color-pick input{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%}
+.empty-state{text-align:center;padding:36px 20px;color:var(--muted);font-family:'Playfair Display',serif;font-style:italic;font-size:14px}
+
+/* BOTTOM NAV */
+.bottomnav{flex-shrink:0;background:var(--white);border-top:1px solid rgba(0,0,0,0.07);display:flex}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:9px 4px 13px;cursor:pointer;border:none;background:transparent;font-family:'Lato',sans-serif;transition:color .12s;color:var(--muted)}
+.bnav-item.active{color:var(--clay)}
+.bnav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.4}
+.bnav-label{font-size:10px;letter-spacing:0.05em;text-transform:uppercase}
+
+/* MODAL (new project only) */
+.modal-wrap{position:fixed;inset:0;background:rgba(40,38,31,.5);z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
+.modal-wrap.hidden{display:none}
+.modal{background:var(--cream);border-radius:20px 20px 0 0;max-height:93vh;display:flex;flex-direction:column}
+.modal-handle{width:40px;height:4px;background:var(--sand);border-radius:2px;margin:12px auto 0;flex-shrink:0}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.06)}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:500}
+.modal-x{background:var(--sand-l);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.modal-body{overflow-y:auto;padding:18px 20px 28px;flex:1}
+.fr{margin-bottom:15px}
+.fr label{display:block;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-family:'Playfair Display',serif}
+.fr input,.fr textarea,.fr select{width:100%;background:var(--white);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);padding:10px 12px;font-size:13px;font-family:'Lato',sans-serif;font-weight:300;color:var(--ink);outline:none;transition:border-color .12s}
+.fr input:focus,.fr textarea:focus,.fr select:focus{border-color:var(--clay-m)}
+.fr textarea{resize:vertical;min-height:70px;line-height:1.65}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.inline-field{display:flex;align-items:center;background:var(--white);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);overflow:hidden}
+.inline-field input{flex:1;border:none;background:transparent;padding:10px 11px;font-size:13px;outline:none;font-family:'Lato',sans-serif;font-weight:300;color:var(--ink)}
+.inline-field span{font-size:11px;color:var(--muted);padding:0 11px}
+.stage-picker{display:flex;flex-wrap:wrap;gap:6px}
+.spill{font-size:11px;padding:5px 13px;border-radius:20px;border:1px solid var(--sand);cursor:pointer;background:transparent;color:var(--muted);font-family:'Lato',sans-serif;transition:all .12s}
+.spill.sel-idea{background:#F1EFE8;border-color:#888780;color:#5F5E5A;border-width:1.5px}
+.spill.sel-wet{background:#E6F1FB;border-color:#378ADD;color:#185FA5;border-width:1.5px}
+.spill.sel-bisqued{background:#EAF3DE;border-color:#639922;color:#3B6D11;border-width:1.5px}
+.spill.sel-glazed{background:#EEEDFE;border-color:#7F77DD;color:#534AB7;border-width:1.5px}
+.gb-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.color-swatch{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0;position:relative;cursor:pointer}
+.color-swatch input{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%}
+.gb-row input[type=text]{flex:1;border:1px solid rgba(0,0,0,.08);border-radius:var(--r);padding:8px 10px;font-size:12px;background:var(--white);outline:none;font-family:'Lato',sans-serif;color:var(--ink)}
+.gb-row select{font-size:11px;padding:8px 7px;border:1px solid rgba(0,0,0,.08);border-radius:var(--r);background:var(--white);outline:none;font-family:'Lato',sans-serif;color:var(--muted);max-width:115px}
+.gb-del{background:none;border:none;cursor:pointer;color:var(--sand);font-size:16px;padding:4px;line-height:1}
+.gb-del:hover{color:var(--muted)}
+.btn-ghost{background:transparent;border:1px solid var(--sand);border-radius:var(--r);padding:7px 14px;font-size:12px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;transition:all .12s;margin-top:4px}
+.btn-ghost:hover{border-color:var(--clay-m);color:var(--clay)}
+.inline-calc{background:var(--clay-l);border:1px solid rgba(196,84,31,.2);border-radius:var(--r);padding:11px 15px;display:flex;gap:22px;margin-top:8px}
+.ic-item label{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--clay);display:block;margin-bottom:2px}
+.ic-item span{font-family:'Playfair Display',serif;font-size:18px;color:var(--clay-d)}
+.photo-zone{border:1.5px dashed var(--sand);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;position:relative;background:var(--white)}
+.photo-zone:hover{border-color:var(--clay-m)}
+.photo-zone p{font-size:12px;color:var(--muted);margin-top:6px}
+.thumb-strip-sm{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.thumb-strip-sm img{width:56px;height:56px;border-radius:8px;object-fit:cover;border:1px solid rgba(0,0,0,.07)}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding-top:16px;border-top:1px solid rgba(0,0,0,.06);margin-top:6px}
+.btn-cancel{background:transparent;border:1px solid var(--sand);border-radius:var(--r);padding:10px 18px;font-size:12px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif}
+.btn-save{background:var(--clay);color:#fff;border:none;border-radius:var(--r);padding:10px 24px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;transition:opacity .15s}
+.btn-save:hover{opacity:.87}
+
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="logo">kiln <em>diary</em></div>
+    <button class="btn-primary" id="top-btn" onclick="topBtnClick()">+ New Project</button>
+  </div>
+
+  <!-- KANBAN BOARD -->
+  <div class="view active" id="view-board">
+    <div class="kanban-scroll" id="kanban-scroll"></div>
+  </div>
+
+  <!-- DETAIL (inline edit) -->
+  <div class="view" id="view-detail">
+    <div class="detail-scroll" id="detail-scroll">
+      <button class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        Back
+      </button>
+      <div id="detail-inner"></div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div class="view" id="view-calc">
+    <div class="calc-wrap">
+      <div class="sec-label" style="margin-bottom:11px">Clay Body</div>
+      <div class="clay-grid" id="calc-clay-grid">
+        <button class="clay-opt" data-s="10" onclick="calcClay(this)"><span class="cn">Earthenware</span><span class="cp">~10%</span></button>
+        <button class="clay-opt" data-s="12" onclick="calcClay(this)"><span class="cn">Stoneware</span><span class="cp">~12%</span></button>
+        <button class="clay-opt on" data-s="14" onclick="calcClay(this)"><span class="cn">Soldate</span><span class="cp">14% · high-fire</span></button>
+        <button class="clay-opt" data-s="custom" onclick="calcClay(this)"><span class="cn">Custom</span><span class="cp">enter manually</span></button>
+      </div>
+      <div class="custom-row hidden" id="calc-custom">
+        <label>Shrinkage</label>
+        <input type="range" min="5" max="25" step="0.5" value="14" id="calc-slider" oninput="calcCustom()">
+        <span class="cv" id="calc-cv">14.0%</span>
+      </div>
+      <div class="unit-row">
+        <span>Show in</span>
+        <button class="utbtn on" id="cu-in" onclick="calcUnitFn('in')">inches</button>
+        <button class="utbtn" id="cu-cm" onclick="calcUnitFn('cm')">cm</button>
+      </div>
+      <div class="sec-label">Finished Size (Goal)</div>
+      <div class="calc-2">
+        <div class="cfield"><label>Diameter / Width</label><div class="cfi"><input type="number" id="cd" min="0" step=".1" placeholder="6" oninput="calcRun()"><span id="cdu">in</span></div></div>
+        <div class="cfield"><label>Height</label><div class="cfi"><input type="number" id="ch" min="0" step=".1" placeholder="4" oninput="calcRun()"><span id="chu">in</span></div></div>
+      </div>
+      <div id="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- LIBRARY -->
+  <div class="view" id="view-library">
+    <div class="seg-ctrl">
+      <button class="seg-btn active" onclick="libTab('clay')">Clay</button>
+      <button class="seg-btn" onclick="libTab('glaze')">Glazes</button>
+    </div>
+    <div class="lib-section active" id="lib-clay">
+      <div class="lib-list" id="clay-list"></div>
+      <div class="add-form">
+        <div class="add-form-title">Add Clay Body</div>
+        <div class="add-grid-clay">
+          <div class="af-field"><label>Name</label><input type="text" id="new-clay-name" placeholder="e.g. Soldate 60"></div>
+          <div class="af-field"><label>Shrinkage %</label><input type="number" id="new-clay-shrink" min="0" max="30" step="0.5" placeholder="14"></div>
+          <button class="btn-add-lib" onclick="addClay()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="lib-section" id="lib-glaze">
+      <div class="lib-list" id="glaze-list"></div>
+      <div class="add-form">
+        <div class="add-form-title">Add Glaze</div>
+        <div class="add-grid-glaze">
+          <div class="af-field"><label>Color</label>
+            <div class="glaze-color-pick" id="new-glaze-swatch" style="background:#3B6D11">
+              <input type="color" value="#3B6D11" id="new-glaze-color" oninput="document.getElementById('new-glaze-swatch').style.background=this.value">
+            </div>
+          </div>
+          <div class="af-field"><label>Name</label><input type="text" id="new-glaze-name" placeholder="e.g. Celadon…"></div>
+          <div class="af-field"><label>Default Role</label>
+            <select id="new-glaze-role">
+              <option>Top coat</option><option>Bottom coat</option><option>Interior</option><option>Exterior</option><option>Accent</option>
+            </select>
+          </div>
+          <button class="btn-add-lib" onclick="addGlazeToLib()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottomnav">
+    <button class="bnav-item active" id="bnav-board" onclick="navTo('board')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="18" rx="1.5"/><rect x="10" y="3" width="5" height="12" rx="1.5"/><rect x="17" y="3" width="5" height="15" rx="1.5"/></svg>
+      <span class="bnav-label">Board</span>
+    </button>
+    <button class="bnav-item" id="bnav-calc" onclick="navTo('calc')">
+      <svg viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="8" ry="5"/><path d="M4 14 Q5 8 12 6 Q19 8 20 14" fill="none"/><path d="M10 6 Q11 2 12 2 Q13 2 14 6" fill="none"/></svg>
+      <span class="bnav-label">Calculator</span>
+    </button>
+    <button class="bnav-item" id="bnav-library" onclick="navTo('library')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="4" x2="8" y2="9"/></svg>
+      <span class="bnav-label">Library</span>
+    </button>
+  </nav>
+</div>
+
+<!-- NEW PROJECT MODAL -->
+<div class="modal-wrap hidden" id="modal-wrap">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">New Project</div>
+      <button class="modal-x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fr"><label>Project Name</label><input type="text" id="f-name" placeholder="e.g. Breakfast bowls, tall vase…"></div>
+      <div class="f2">
+        <div class="fr"><label>Clay Body</label><input type="text" id="f-clay" placeholder="Soldate, B-Mix…"></div>
+        <div class="fr"><label>Shrinkage %</label><input type="number" id="f-shrink" placeholder="14" step=".5" min="0" max="30" oninput="modalCalc()"></div>
+      </div>
+      <div class="f2">
+        <div class="fr"><label>Goal Diameter</label><div class="inline-field"><input type="number" id="f-dia" min="0" step=".1" placeholder="6" oninput="modalCalc()"><span>in</span></div></div>
+        <div class="fr"><label>Goal Height</label><div class="inline-field"><input type="number" id="f-ht" min="0" step=".1" placeholder="4" oninput="modalCalc()"><span>in</span></div></div>
+      </div>
+      <div id="modal-calc-out"></div>
+      <div class="fr" style="margin-top:12px"><label>Stage</label><div class="stage-picker" id="f-stages"></div></div>
+      <div class="fr"><label>Build Method</label>
+        <select id="f-method"><option value="">Select…</option><option>Hand built</option><option>Thrown</option><option>Both</option></select>
+      </div>
+      <div class="fr">
+        <label>Glazes</label>
+        <div id="f-glazes"></div>
+        <button class="btn-ghost" onclick="addGlazeRow()">+ Add glaze</button>
+      </div>
+      <div class="fr"><label>Pinterest / Inspiration Link</label><input type="url" id="f-pin" placeholder="https://pinterest.com/…"></div>
+      <div class="fr"><label>Notes</label><textarea id="f-notes" placeholder="Glaze tests, firing notes, ideas…"></textarea></div>
+      <div class="fr">
+        <label>Photos</label>
+        <div class="photo-zone" onclick="document.getElementById('f-photos').click()">
+          <input type="file" id="f-photos" accept="image/*" multiple onchange="handlePhotos(event)" style="display:none">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8C5BB" stroke-width="1.4" style="display:block;margin:0 auto"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p>Click to upload photos</p>
+        </div>
+        <div class="thumb-strip-sm" id="f-thumbs"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-save" onclick="saveNewProject()">Save Project</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="hero-photo-input" accept="image/*" multiple style="display:none" onchange="handleHeroPhotos(event)">
+
+<script>
+// ── DATA ──
+const STAGES=[
+  {key:'idea',   label:'Idea'},
+  {key:'wet',    label:'Wet work'},
+  {key:'bisqued',label:'Bisqued'},
+  {key:'glazed', label:'Glazed'}
+];
+const STAGE_BY_LABEL={};
+STAGES.forEach(s=>STAGE_BY_LABEL[s.label]=s.key);
+const GLAZE_DEFAULTS=['#3B6D11','#185FA5','#C4541F','#534AB7','#B4B2A9','#854F0B','#993556','#085041'];
+
+let projects=[],clays=[],glazeLib=[],formGlazes=[],formPhotos=[];
+let calcShrinkRate=14,calcUnitVal='in';
+let dragId=null;
+let detailId=null,isEditing=false;
+let editState={};
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+
+// ── STORAGE ──
+function save(){try{localStorage.setItem('kd_v4',JSON.stringify({projects,clays,glazeLib}))}catch(e){}}
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem('kd_v4')||'{}');
+    projects=d.projects||[];
+    clays=d.clays||[{id:'c1',name:'Soldate 60',shrink:14,note:'High-fire'},{id:'c2',name:'B-Mix',shrink:12,note:'Mid-fire'}];
+    glazeLib=d.glazeLib||[
+      {id:'g1',name:'Celadon',color:'#5DCAA5',role:'Top coat'},
+      {id:'g2',name:'Tenmoku',color:'#28261F',role:'Top coat'},
+      {id:'g3',name:'Shino',color:'#E8845A',role:'Top coat'}
+    ];
+  }catch(e){projects=[];clays=[{id:'c1',name:'Soldate 60',shrink:14,note:'High-fire'}];glazeLib=[];}
+}
+
+// ── NAV ──
+let currentView='board';
+function navTo(v){
+  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.bnav-item').forEach(e=>e.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  const nb=document.getElementById('bnav-'+v);if(nb)nb.classList.add('active');
+  const tb=document.getElementById('top-btn');
+  if(v==='board'){tb.textContent='+ New Project';tb.classList.remove('inv');}
+  else{tb.classList.add('inv');}
+  currentView=v;
+}
+function goBack(){
+  isEditing=false;editState={};
+  navTo('board');
+}
+function topBtnClick(){openNewProjectModal()}
+
+// ── KANBAN RENDER ──
+function renderBoard(){
+  const ks=document.getElementById('kanban-scroll');
+  ks.innerHTML=STAGES.map(s=>{
+    const ps=projects.filter(p=>(p.stage||'Idea')===s.label);
+    return `<div class="kanban-col col-${s.key}" id="col-${s.key}"
+      ondragover="onDragOver(event,'${s.key}')"
+      ondragleave="onDragLeave(event,'${s.key}')"
+      ondrop="onDrop(event,'${s.key}')">
+      <div class="col-header">
+        <div class="col-title-row">
+          <span class="col-dot dot-${s.key}"></span>
+          <span class="col-title">${s.label}</span>
+        </div>
+        <span class="col-count">${ps.length}</span>
+      </div>
+      <div class="col-cards" id="cards-${s.key}">
+        ${ps.length?ps.map(p=>cardHTML(p)).join(''):`<div style="padding:8px 4px;font-size:12px;color:var(--sand);font-family:'Playfair Display',serif;font-style:italic;text-align:center">Drop here</div>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function cardHTML(p){
+  const thumb=p.photos&&p.photos.length
+    ?`<div class="pc-photo"><img src="${p.photos[0]}" alt="" draggable="false"></div>`
+    :`<div class="pc-photo"><div class="pc-photo-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>no photo</span></div></div>`;
+  const glazeDots=(p.glazes&&p.glazes.length)?`<div class="pc-glazes">${p.glazes.map(g=>`<span class="g-dot" style="background:${g.color}" title="${g.name}"></span>`).join('')}</div>`:'';
+  return `<div class="proj-card" id="card-${p.id}" draggable="true"
+    ondragstart="onDragStart(event,'${p.id}')"
+    ondragend="onDragEnd(event)"
+    onclick="openDetail('${p.id}')">
+    ${thumb}
+    <div class="pc-body">
+      <div class="pc-name">${p.name||'Untitled'}</div>
+      ${p.clay?`<div class="pc-clay">${p.clay}</div>`:''}
+      ${glazeDots}
+    </div>
+  </div>`;
+}
+
+// ── DRAG & DROP ──
+function onDragStart(e,id){
+  dragId=id;e.dataTransfer.effectAllowed='move';
+  setTimeout(()=>{const el=document.getElementById('card-'+id);if(el)el.classList.add('dragging');},0);
+}
+function onDragEnd(){
+  if(dragId){const el=document.getElementById('card-'+dragId);if(el)el.classList.remove('dragging');}
+  document.querySelectorAll('.col-cards').forEach(c=>c.classList.remove('drag-over'));
+  dragId=null;
+}
+function onDragOver(e,key){
+  e.preventDefault();e.dataTransfer.dropEffect='move';
+  document.querySelectorAll('.col-cards').forEach(c=>c.classList.remove('drag-over'));
+  const cc=document.getElementById('cards-'+key);if(cc)cc.classList.add('drag-over');
+}
+function onDragLeave(e,key){
+  if(!e.currentTarget.contains(e.relatedTarget)){
+    const cc=document.getElementById('cards-'+key);if(cc)cc.classList.remove('drag-over');
+  }
+}
+function onDrop(e,key){
+  e.preventDefault();
+  if(!dragId)return;
+  const newLabel=STAGES.find(s=>s.key===key)?.label||'Idea';
+  const p=projects.find(x=>x.id===dragId);
+  if(p){p.stage=newLabel;save();renderBoard();}
+  document.querySelectorAll('.col-cards').forEach(c=>c.classList.remove('drag-over'));
+  dragId=null;
+}
+
+// ── DETAIL WITH INLINE EDIT ──
+function openDetail(id){
+  detailId=id;isEditing=false;
+  renderDetail();
+  navTo('board'); // keep board nav active
+  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
+  document.getElementById('view-detail').classList.add('active');
+  document.getElementById('bnav-board').classList.add('active');
+  document.getElementById('top-btn').classList.add('inv');
+  document.getElementById('detail-scroll').scrollTop=0;
+  currentView='detail';
+}
+
+function renderDetail(){
+  const p=projects.find(x=>x.id===detailId);if(!p)return;
+  const es=isEditing?editState:p;
+  const stageKey=STAGE_BY_LABEL[es.stage||'Idea']||'idea';
+  const heroSrc=(es.photos&&es.photos.length)?es.photos[0]:null;
+
+  // Build shrink calc
+  let calcHtml='';
+  const sr=parseFloat(es.shrink)||0;
+  const dd=parseFloat(es.dia)||0;
+  const hh=parseFloat(es.ht)||0;
+  if(sr&&(dd||hh)){
+    const f=1/(1-sr/100);
+    calcHtml=`<div class="detail-section"><div class="ds-label">Build Dimensions</div><div class="build-result">
+      ${dd?`<div class="br-item"><span class="brl">Build Diameter</span><span class="brv">${(dd*f).toFixed(2)}"</span></div>`:''}
+      ${hh?`<div class="br-item"><span class="brl">Build Height</span><span class="brv">${(hh*f).toFixed(2)}"</span></div>`:''}
+    </div></div>`;
+  }
+
+  // Glazes
+  const glazes=es.glazes||[];
+  const glazeRows=glazes.map((g,i)=>`
+    <div class="glaze-row-d">
+      <div class="gswatch" style="background:${g.color}">
+        <input type="color" value="${g.color}" onchange="editGlaze(${i},'color',this.value);this.parentElement.style.background=this.value">
+      </div>
+      <span class="gname">${g.name}</span>
+      <input class="gname-input" type="text" value="${g.name}" oninput="editGlaze(${i},'name',this.value)" placeholder="Glaze name">
+      <span class="grole">${g.role}</span>
+      <select class="grole-select" onchange="editGlaze(${i},'role',this.value)">
+        ${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}
+      </select>
+      <button class="del-glaze-btn" onclick="removeDetailGlaze(${i})">✕</button>
+    </div>`).join('');
+
+  // Extra photos
+  const extraPhotos=(es.photos&&es.photos.length>1)
+    ?es.photos.slice(1).map(ph=>`<img src="${ph}">`).join(''):'';
+
+  // Pinterest
+  const pinHtml=es.pin
+    ?`<a href="${es.pin}" target="_blank" class="pin-tile">
+        <div class="pin-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.641 1.267 1.408 0 .858-.546 2.141-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.132-1.867 3.132-4.562 0-2.387-1.715-4.054-4.163-4.054-2.838 0-4.503 2.128-4.503 4.327 0 .856.33 1.775.741 2.276a.3.3 0 0 1 .069.286c-.076.312-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.522 0 10-4.477 10-10S17.522 2 12 2z"/></svg></div>
+        <div class="pin-text"><div class="pt">Pinterest Board</div><div class="ps">${es.pin}</div></div>
+        <div class="pin-arrow">›</div>
+      </a>`
+    :`<span class="pin-empty">No link added</span>`;
+
+  const editClass=isEditing?'is-editing':'';
+  document.getElementById('detail-inner').innerHTML=`
+    <div class="${editClass}" id="detail-body">
+      <div class="detail-hero" id="detail-hero">
+        ${heroSrc?`<img src="${heroSrc}" id="hero-img" alt="">`:`<div class="dh-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
+        <button class="hero-upload-btn" onclick="document.getElementById('hero-photo-input').click()">+ Add Photo</button>
+      </div>
+
+      <div class="detail-top">
+        <div class="detail-title-wrap">
+          <div class="detail-title" id="d-title-view">${es.name||'Untitled'}</div>
+          <input class="detail-title-input hidden" id="d-title-input" type="text" value="${es.name||''}" oninput="editField('name',this.value)" placeholder="Project name">
+          <div class="detail-sub">${[es.clay,es.method].filter(Boolean).join(' · ')}</div>
+        </div>
+        <button class="edit-btn" id="edit-toggle-btn" onclick="toggleEdit()">${isEditing?'Save':'Edit'}</button>
+      </div>
+
+      <div class="stage-badge">
+        <span class="stage-badge-dot dot-${stageKey}" id="d-stage-dot"></span>
+        <span class="stage-badge-label">${es.stage||'Idea'}</span>
+        <select class="stage-select" id="d-stage-select" onchange="editField('stage',this.value);updateStageDot()">
+          ${STAGES.map(s=>`<option value="${s.label}"${(es.stage||'Idea')===s.label?' selected':''}>${s.label}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="detail-2col">
+        <div class="dcard">
+          <div class="dl">Clay</div>
+          <div class="dv" id="d-clay-view">${es.clay||'—'}</div>
+          <input class="hidden" id="d-clay-input" type="text" value="${es.clay||''}" oninput="editField('clay',this.value)" placeholder="Clay body">
+        </div>
+        <div class="dcard">
+          <div class="dl">Shrinkage</div>
+          <div class="dv" id="d-shrink-view">${es.shrink?es.shrink+'%':'—'}</div>
+          <input class="hidden" id="d-shrink-input" type="number" value="${es.shrink||''}" step=".5" oninput="editField('shrink',this.value);refreshCalcDisplay()" placeholder="14">
+        </div>
+      </div>
+
+      <div class="detail-2col">
+        <div class="dcard">
+          <div class="dl">Goal Diameter</div>
+          <div class="dv" id="d-dia-view">${es.dia?es.dia+' in':'—'}</div>
+          <input class="hidden" id="d-dia-input" type="number" value="${es.dia||''}" step=".1" oninput="editField('dia',this.value);refreshCalcDisplay()" placeholder="6">
+        </div>
+        <div class="dcard">
+          <div class="dl">Goal Height</div>
+          <div class="dv" id="d-ht-view">${es.ht?es.ht+' in':'—'}</div>
+          <input class="hidden" id="d-ht-input" type="number" value="${es.ht||''}" step=".1" oninput="editField('ht',this.value);refreshCalcDisplay()" placeholder="4">
+        </div>
+      </div>
+
+      ${calcHtml?calcHtml:`<div id="build-calc-section"></div>`}
+
+      <div class="detail-section">
+        <div class="ds-label">Build Method</div>
+        <div class="dv" id="d-method-view">${es.method||'—'}</div>
+        <select class="hidden" id="d-method-input" onchange="editField('method',this.value)">
+          <option value="">Select…</option>
+          ${['Hand built','Thrown','Both'].map(m=>`<option${es.method===m?' selected':''}>${m}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="detail-section">
+        <div class="ds-label">Glazes</div>
+        <div class="glaze-list" id="d-glazes">${glazeRows||'<span style="font-size:12px;color:var(--muted)">No glazes added</span>'}</div>
+        <button class="add-glaze-btn" onclick="addDetailGlaze()">+ Add glaze</button>
+      </div>
+
+      <div class="detail-section">
+        <div class="ds-label">Inspiration</div>
+        ${pinHtml}
+        <input class="pin-input" type="url" value="${es.pin||''}" oninput="editField('pin',this.value)" placeholder="https://pinterest.com/…">
+      </div>
+
+      <div class="detail-section">
+        <div class="ds-label">Notes</div>
+        <div class="detail-notes">${es.notes||'<span style="color:var(--muted);font-style:italic">No notes yet</span>'}</div>
+        <textarea class="detail-notes-input" oninput="editField('notes',this.value)" placeholder="Glaze tests, firing notes, ideas…">${es.notes||''}</textarea>
+      </div>
+
+      ${(es.photos&&es.photos.length>0)?`<div class="detail-section">
+        <div class="ds-label">Photos</div>
+        <div class="photo-strip" id="d-photo-strip">
+          ${es.photos.map(ph=>`<img src="${ph}">`).join('')}
+          <button class="add-photo-btn" onclick="document.getElementById('hero-photo-input').click()">+</button>
+        </div>
+      </div>`:
+      `<div class="detail-section">
+        <div class="ds-label">Photos</div>
+        <div class="photo-strip" id="d-photo-strip">
+          <button class="add-photo-btn" onclick="document.getElementById('hero-photo-input').click()">+</button>
+        </div>
+      </div>`}
+    </div>`;
+}
+
+function toggleEdit(){
+  if(!isEditing){
+    // Enter edit mode
+    const p=projects.find(x=>x.id===detailId);if(!p)return;
+    editState=JSON.parse(JSON.stringify(p)); // deep copy
+    isEditing=true;
+    applyEditMode();
+  } else {
+    // Save
+    const p=projects.find(x=>x.id===detailId);if(!p)return;
+    Object.assign(p,editState);
+    save();isEditing=false;editState={};
+    renderBoard();
+    renderDetail();
+  }
+}
+
+function applyEditMode(){
+  const body=document.getElementById('detail-body');
+  if(!body)return;
+  body.classList.add('is-editing');
+  // Title
+  const tv=document.getElementById('d-title-view');const ti=document.getElementById('d-title-input');
+  if(tv)tv.classList.add('hidden');if(ti)ti.classList.remove('hidden');
+  // Clay, shrink, dia, ht, method
+  ['clay','shrink','dia','ht','method'].forEach(f=>{
+    const v=document.getElementById('d-'+f+'-view');
+    const i=document.getElementById('d-'+f+'-input');
+    if(v)v.classList.add('hidden');if(i)i.classList.remove('hidden');
+  });
+  // Edit btn text
+  const eb=document.getElementById('edit-toggle-btn');
+  if(eb){eb.textContent='Save';eb.classList.add('save-mode');}
+}
+
+function editField(key,val){
+  editState[key]=val;
+}
+function editGlaze(i,key,val){
+  if(!editState.glazes)editState.glazes=[];
+  if(editState.glazes[i])editState.glazes[i][key]=val;
+}
+function removeDetailGlaze(i){
+  if(!editState.glazes)return;
+  editState.glazes.splice(i,1);
+  rerenderDetailGlazes();
+}
+function addDetailGlaze(){
+  if(!editState.glazes)editState.glazes=[];
+  editState.glazes.push({id:uid(),name:'',color:GLAZE_DEFAULTS[editState.glazes.length%GLAZE_DEFAULTS.length],role:'Top coat'});
+  rerenderDetailGlazes();
+}
+function rerenderDetailGlazes(){
+  const el=document.getElementById('d-glazes');if(!el)return;
+  const glazes=editState.glazes||[];
+  el.innerHTML=glazes.map((g,i)=>`
+    <div class="glaze-row-d">
+      <div class="gswatch" style="background:${g.color}">
+        <input type="color" value="${g.color}" onchange="editGlaze(${i},'color',this.value);this.parentElement.style.background=this.value">
+      </div>
+      <span class="gname">${g.name}</span>
+      <input class="gname-input" type="text" value="${g.name}" oninput="editGlaze(${i},'name',this.value)" placeholder="Glaze name">
+      <span class="grole">${g.role}</span>
+      <select class="grole-select" onchange="editGlaze(${i},'role',this.value)">
+        ${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}
+      </select>
+      <button class="del-glaze-btn" onclick="removeDetailGlaze(${i})">✕</button>
+    </div>`).join('')||'<span style="font-size:12px;color:var(--muted)">No glazes added</span>';
+}
+function updateStageDot(){
+  const sel=document.getElementById('d-stage-select');if(!sel)return;
+  const key=STAGE_BY_LABEL[sel.value]||'idea';
+  const dot=document.getElementById('d-stage-dot');if(dot){dot.className='stage-badge-dot dot-'+key;}
+}
+function refreshCalcDisplay(){
+  const sr=parseFloat(editState.shrink)||0;
+  const dd=parseFloat(editState.dia)||0;
+  const hh=parseFloat(editState.ht)||0;
+  const sec=document.getElementById('build-calc-section');if(!sec)return;
+  if(!sr||((!dd)&&(!hh))){sec.innerHTML='';return;}
+  const f=1/(1-sr/100);
+  sec.innerHTML=`<div class="detail-section"><div class="ds-label">Build Dimensions</div><div class="build-result">
+    ${dd?`<div class="br-item"><span class="brl">Build Diameter</span><span class="brv">${(dd*f).toFixed(2)}"</span></div>`:''}
+    ${hh?`<div class="br-item"><span class="brl">Build Height</span><span class="brv">${(hh*f).toFixed(2)}"</span></div>`:''}
+  </div></div>`;
+}
+function handleHeroPhotos(e){
+  Array.from(e.target.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{
+      if(!editState.photos)editState.photos=[];
+      editState.photos.push(ev.target.result);
+      // Update hero
+      const hero=document.getElementById('detail-hero');
+      if(hero){const img=hero.querySelector('img')||document.createElement('img');img.id='hero-img';img.src=editState.photos[0];if(!hero.querySelector('img'))hero.prepend(img);}
+      // Update strip
+      const strip=document.getElementById('d-photo-strip');
+      if(strip){
+        const addBtn=strip.querySelector('.add-photo-btn');
+        const newImg=document.createElement('img');newImg.src=ev.target.result;
+        strip.insertBefore(newImg,addBtn||null);
+      }
+    };
+    r.readAsDataURL(f);
+  });
+  e.target.value='';
+}
+
+// ── NEW PROJECT MODAL ──
+function openNewProjectModal(){
+  ['f-name','f-pin','f-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-clay').value='Soldate 60';
+  document.getElementById('f-shrink').value='14';
+  document.getElementById('f-dia').value='';
+  document.getElementById('f-ht').value='';
+  document.getElementById('f-method').value='';
+  document.getElementById('modal-calc-out').innerHTML='';
+  document.getElementById('f-thumbs').innerHTML='';
+  formGlazes=[];formPhotos=[];
+  renderFormGlazes();buildFormStages('Idea');
+  document.getElementById('modal-wrap').classList.remove('hidden');
+}
+function closeModal(){document.getElementById('modal-wrap').classList.add('hidden')}
+
+function buildFormStages(sel){
+  const el=document.getElementById('f-stages');
+  el.innerHTML=STAGES.map(s=>{
+    const active=s.label===(sel||'Idea');
+    return `<button class="spill${active?' sel-'+s.key:''}" onclick="pickStage(this,'${s.label}','${s.key}')">${s.label}</button>`;
+  }).join('');
+}
+function pickStage(btn,label,key){
+  document.querySelectorAll('#f-stages .spill').forEach(b=>b.className='spill');
+  btn.classList.add('sel-'+key);
+}
+function getFormStage(){
+  const a=document.querySelector('#f-stages .spill[class*="sel-"]');
+  return a?a.textContent:'Idea';
+}
+function addGlazeRow(){
+  formGlazes.push({id:uid(),name:'',color:GLAZE_DEFAULTS[formGlazes.length%GLAZE_DEFAULTS.length],role:'Top coat'});
+  renderFormGlazes();
+}
+function renderFormGlazes(){
+  const el=document.getElementById('f-glazes');
+  if(!formGlazes.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:6px">No glazes added yet</div>';return;}
+  el.innerHTML=formGlazes.map((g,i)=>`
+    <div class="gb-row">
+      <div class="color-swatch" style="background:${g.color}"><input type="color" value="${g.color}" onchange="upFormGlaze(${i},'color',this.value)"></div>
+      <input type="text" value="${g.name}" placeholder="Glaze name" oninput="upFormGlaze(${i},'name',this.value)">
+      <select onchange="upFormGlaze(${i},'role',this.value)">
+        ${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}
+      </select>
+      <button class="gb-del" onclick="delFormGlaze(${i})">✕</button>
+    </div>`).join('');
+}
+function upFormGlaze(i,k,v){formGlazes[i][k]=v;if(k==='color'){const rows=document.querySelectorAll('#f-glazes .gb-row');if(rows[i])rows[i].querySelector('.color-swatch').style.background=v;}}
+function delFormGlaze(i){formGlazes.splice(i,1);renderFormGlazes();}
+function handlePhotos(e){
+  Array.from(e.target.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{formPhotos.push(ev.target.result);document.getElementById('f-thumbs').innerHTML=formPhotos.map(ph=>`<img src="${ph}">`).join('');};
+    r.readAsDataURL(f);
+  });
+}
+function modalCalc(){
+  const d=parseFloat(document.getElementById('f-dia').value);
+  const h=parseFloat(document.getElementById('f-ht').value);
+  const s=parseFloat(document.getElementById('f-shrink').value);
+  const el=document.getElementById('modal-calc-out');
+  if((!d&&!h)||!s){el.innerHTML='';return;}
+  const f=1/(1-s/100);
+  let html='<div class="inline-calc">';
+  if(d)html+=`<div class="ic-item"><label>Build Diameter</label><span>${(d*f).toFixed(2)}"</span></div>`;
+  if(h)html+=`<div class="ic-item"><label>Build Height</label><span>${(h*f).toFixed(2)}"</span></div>`;
+  el.innerHTML=html+'</div>';
+}
+function saveNewProject(){
+  const p={
+    id:uid(),
+    name:document.getElementById('f-name').value.trim()||'Untitled',
+    clay:document.getElementById('f-clay').value.trim(),
+    shrink:parseFloat(document.getElementById('f-shrink').value)||0,
+    dia:parseFloat(document.getElementById('f-dia').value)||0,
+    ht:parseFloat(document.getElementById('f-ht').value)||0,
+    pin:document.getElementById('f-pin').value.trim(),
+    notes:document.getElementById('f-notes').value.trim(),
+    method:document.getElementById('f-method').value,
+    stage:getFormStage(),
+    glazes:[...formGlazes],
+    photos:[...formPhotos]
+  };
+  projects.unshift(p);
+  save();closeModal();renderBoard();
+}
+
+// ── CALCULATOR ──
+function calcClay(btn){
+  document.querySelectorAll('#calc-clay-grid .clay-opt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const v=btn.dataset.s;
+  const cr=document.getElementById('calc-custom');
+  if(v==='custom'){cr.classList.remove('hidden');calcShrinkRate=parseFloat(document.getElementById('calc-slider').value);}
+  else{cr.classList.add('hidden');calcShrinkRate=parseFloat(v);}
+  calcRun();
+}
+function calcCustom(){calcShrinkRate=parseFloat(document.getElementById('calc-slider').value);document.getElementById('calc-cv').textContent=calcShrinkRate.toFixed(1)+'%';calcRun();}
+function calcUnitFn(u){
+  calcUnitVal=u;
+  document.getElementById('cu-in').className='utbtn'+(u==='in'?' on':'');
+  document.getElementById('cu-cm').className='utbtn'+(u==='cm'?' on':'');
+  document.getElementById('cdu').textContent=u;document.getElementById('chu').textContent=u;
+  calcRun();
+}
+function calcRun(){
+  const d=parseFloat(document.getElementById('cd').value);
+  const h=parseFloat(document.getElementById('ch').value);
+  const el=document.getElementById('calc-out');
+  const hd=!isNaN(d)&&d>0,hh=!isNaN(h)&&h>0;
+  if(!hd&&!hh){el.innerHTML='';return;}
+  const f=1/(1-calcShrinkRate/100);const u=calcUnitVal;
+  let html=`<div class="calc-out-box"><div class="co-label">Build your piece at</div><div class="co-grid">`;
+  if(hd)html+=`<div class="co-item"><div class="col">Diameter / Width</div><div class="cov">${(d*f).toFixed(2)}<span class="cou"> ${u}</span></div></div>`;
+  if(hh)html+=`<div class="co-item"><div class="col">Height</div><div class="cov">${(h*f).toFixed(2)}<span class="cou"> ${u}</span></div></div>`;
+  html+=`</div><div class="calc-note">Using ${calcShrinkRate}% · Soldate high-fire default.</div></div>`;
+  el.innerHTML=html;
+}
+
+// ── LIBRARY ──
+function libTab(tab){
+  document.querySelectorAll('.seg-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&tab==='clay')||(i===1&&tab==='glaze')));
+  document.getElementById('lib-clay').classList.toggle('active',tab==='clay');
+  document.getElementById('lib-glaze').classList.toggle('active',tab==='glaze');
+}
+function renderClayList(){
+  const el=document.getElementById('clay-list');
+  if(!clays.length){el.innerHTML='<div class="empty-state">No clay bodies yet</div>';return;}
+  el.innerHTML=clays.map(c=>`<div class="lib-item">
+    <div class="li-info"><div class="ln">${c.name}</div>${c.note?`<div class="lm">${c.note}</div>`:''}</div>
+    <div style="display:flex;align-items:center;gap:9px"><span class="li-badge">${c.shrink}%</span><button class="li-del" onclick="deleteClay('${c.id}')">✕</button></div>
+  </div>`).join('');
+}
+function addClay(){
+  const n=document.getElementById('new-clay-name').value.trim();
+  const s=parseFloat(document.getElementById('new-clay-shrink').value);
+  if(!n||isNaN(s))return;
+  clays.push({id:uid(),name:n,shrink:s,note:''});
+  document.getElementById('new-clay-name').value='';document.getElementById('new-clay-shrink').value='';
+  save();renderClayList();
+}
+function deleteClay(id){clays=clays.filter(c=>c.id!==id);save();renderClayList();}
+function renderGlazeList(){
+  const el=document.getElementById('glaze-list');
+  if(!glazeLib.length){el.innerHTML='<div class="empty-state">No glazes yet</div>';return;}
+  el.innerHTML=glazeLib.map(g=>`<div class="lib-item">
+    <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+      <span class="li-swatch" style="background:${g.color}"></span>
+      <div class="li-info"><div class="ln">${g.name}</div><div class="lm">${g.role}</div></div>
+    </div>
+    <button class="li-del" onclick="deleteGlaze('${g.id}')">✕</button>
+  </div>`).join('');
+}
+function addGlazeToLib(){
+  const n=document.getElementById('new-glaze-name').value.trim();
+  const c=document.getElementById('new-glaze-color').value;
+  const r=document.getElementById('new-glaze-role').value;
+  if(!n)return;
+  glazeLib.push({id:uid(),name:n,color:c,role:r});
+  document.getElementById('new-glaze-name').value='';
+  save();renderGlazeList();
+}
+function deleteGlaze(id){glazeLib=glazeLib.filter(g=>g.id!==id);save();renderGlazeList();}
+
+// ── INIT ──
+load();renderBoard();renderClayList();renderGlazeList();calcRun();
+
+// Register service worker for PWA
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
