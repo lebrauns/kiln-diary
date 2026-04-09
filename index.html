@@ -745,20 +745,10 @@ async function fetchPinImages(boardUrl){
   const el=document.getElementById('inspo-embed');
   el.innerHTML='<p class="inspo-hint" style="opacity:.6">Fetching pins…</p>';
   try{
-    const proxy=`https://api.allorigins.win/get?url=${encodeURIComponent(boardUrl)}`;
-    const res=await fetch(proxy);
-    if(!res.ok)throw new Error('proxy');
+    const res=await fetch(`/api/pinterest?url=${encodeURIComponent(boardUrl)}`);
+    if(!res.ok)throw new Error('api');
     const data=await res.json();
-    const html=data.contents||'';
-    // Extract all Pinterest image URLs from the page HTML
-    const raw=html.match(/https:\/\/i\.pinimg\.com\/[0-9]+x\/[^"'\s\\>]+\.(?:jpg|jpeg|png|webp)/g)||[];
-    // Deduplicate and normalise to 564x size for good quality
-    const seen=new Set(),imgs=[];
-    for(const u of raw){
-      const norm=u.replace(/\/[0-9]+x\//,'/564x/');
-      if(!seen.has(norm)){seen.add(norm);imgs.push(norm);}
-      if(imgs.length>=24)break;
-    }
+    const imgs=data.images||[];
     if(!imgs.length){
       el.innerHTML=`<p class="inspo-hint">No images found — make sure the board is public. <a href="${boardUrl}" target="_blank" style="color:var(--clay)">Open on Pinterest ↗</a></p>`;
       return;
