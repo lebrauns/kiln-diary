@@ -869,17 +869,22 @@ async function loadInspoPage(url){
   const grid=document.getElementById('inspo-full-grid');
   const msg=document.getElementById('inspo-page-msg');
   grid.innerHTML='';
-  msg.textContent='Fetching all pins — this takes a few seconds for large boards…';
+  msg.textContent='Loading your pins…';
   try{
     const res=await fetch(`/api/pinterest?url=${encodeURIComponent(url)}`);
     const data=await res.json();
     const imgs=data.images||[];
     if(!imgs.length){msg.textContent='No images found — make sure the board is public.';return;}
-    msg.textContent='';
     grid.innerHTML=imgs.map(u=>`<div class="inspo-pin" onclick="openPinSheet('${u}')">
       <img src="${u}" loading="lazy" onerror="this.closest('.inspo-pin').remove()">
       <div class="inspo-pin-ov"><div class="inspo-pin-plus">+</div></div>
     </div>`).join('');
+    // Show a note if Pinterest limited access (no feed API)
+    if(!data.feedApiWorked && data.total){
+      msg.innerHTML=`<span style="font-size:12px;opacity:.65">Showing ${data.total} pins · <a href="${url}" target="_blank" rel="noopener" style="color:var(--clay);text-decoration:none">View all on Pinterest ↗</a></span>`;
+    }else{
+      msg.textContent='';
+    }
     inspoLoaded=true;
   }catch(e){msg.textContent='Couldn\'t load pins. Try refreshing.';}
 }

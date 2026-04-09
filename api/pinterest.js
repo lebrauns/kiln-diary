@@ -4,10 +4,10 @@ export default async function handler(req, res) {
   if (!url) return res.status(400).json({ error: 'No URL provided' });
 
   const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+  const allImages = new Map(); // url -> true, deduplication
 
   try {
-    // Step 1: Fetch the board page — follows pin.it redirects automatically
-    // Capture the final URL (after redirect) and session cookies
+    // ── Step 1: Fetch the board page (follows pin.it → pinterest.com redirect) ──
     const pageRes = await fetch(url, {
       redirect: 'follow',
       headers: {
@@ -17,61 +17,76 @@ export default async function handler(req, res) {
         'Cache-Control': 'no-cache',
       },
     });
-    if (!pageRes.ok) return res.status(pageRes.status).json({ error: `Pinterest returned ${pageRes.status}` });
 
-    // Build a cookie string from the response Set-Cookie headers
-    const setCookieHeaders = pageRes.headers.getSetCookie ? pageRes.headers.getSetCookie() : [];
-    const cookieMap = {};
-    for (const c of setCookieHeaders) {
-      const [pair] = c.split(';');
-      const [name, ...rest] = pair.split('=');
-      cookieMap[name.trim()] = rest.join('=').trim();
-    }
-    const cookieStr = Object.entries(cookieMap).map(([k, v]) => `${k}=${v}`).join('; ');
-    const csrfToken = cookieMap['csrftoken'] || '';
-
-    const html = await pageRes.text();
-    const htmlLen = html.length;
-
-    // Extract the final board URL from the HTML (after pin.it redirect)
-    const boardPathMatch = html.match(/"board","path":"(\/[^\/]+\/[^\/\"]+\/)"/) ||
-                           html.match(/"path":"(\/[^\/]+\/[^\/\"]+\/)"[^}]*"type":"board"/);
-    const boardPath = boardPathMatch ? boardPathMatch[1] : null;
-
-    // Step 2: Extract images visible in the initial page HTML
-    const allImages = new Map();
-    for (const img of extractHtmlImages(html)) allImages.set(img, true);
-
-    // Step 3: Find the board ID — try HTML first, then fall back to pidgets API
-    let boardId = extractBoardId(html);
+    let html = '';
+    let boardId = null;
     let boardUser = null;
     let boardSlug = null;
+    let cookieStr = '';
+    let csrfToken = '';
 
-    if (!boardId && boardPath) {
-      // Extract username/boardname from path like /lebraunz/ceramics/
-      const parts = boardPath.split('/').filter(Boolean);
-      if (parts.length >= 2) {
-        boardUser = parts[0];
-        boardSlug = parts[1];
-        // Try pidgets API — it returns board.id and doesn't require auth
-        const pidgetsData = await fetchPidgets(boardUser, boardSlug, UA);
-        if (pidgetsData) {
-          boardId = pidgetsData.boardId;
-          // Also add the 50 images from pidgets
-          for (const img of pidgetsData.images) allImages.set(img, true);
-        }
+    if (pageRes.ok) {
+      // Capture cookies for subsequent API calls
+      const setCookieHeaders = pageRes.headers.getSetCookie ? pageRes.headers.getSetCookie() : [];
+      const cookieMap = {};
+      for (const c of setCookieHeaders) {
+        const [pair] = c.split(';');
+        const [name, ...rest] = pair.split('=');
+        cookieMap[name.trim()] = rest.join('=').trim();
+      }
+      cookieStr = Object.entries(cookieMap).map(([k, v]) => `${k}=${v}`).join('; ');
+      csrfToken = cookieMap['csrftoken'] || '';
+
+      html = await pageRes.text();
+
+      // Extract images from the initial HTML load
+      for (const img of extractHtmlImages(html)) allImages.set(img, true);
+
+      // Try to get board ID and board path from HTML
+      boardId = extractBoardId(html);
+
+      // Extract board user/slug from the page (needed to call pidgets)
+      const pathMatch = html.match(/"board","path":"(\/([^\/\"]+)\/([^\/\"]+)\/)"/) ||
+                        html.match(/"path":"(\/([^\/\"]+)\/([^\/\"]+)\/)"[^}]*"type":"board"/);
+      if (pathMatch) {
+        boardUser = pathMatch[2];
+        boardSlug = pathMatch[3];
+      }
+    }
+
+    // ── Step 2: Always try the pidgets API (public, no auth, 50 pins) ──
+    // This is our most reliable source. Extract board user/slug from pin.it if
+    // we didn't get them from the HTML.
+    if (!boardUser || !boardSlug) {
+      // Try to extract from the URL itself if it already looks like a board URL
+      const boardUrlMatch = url.match(/pinterest\.com\/([^\/]+)\/([^\/]+)/);
+      if (boardUrlMatch) {
+        boardUser = boardUrlMatch[1];
+        boardSlug = boardUrlMatch[2];
+      }
+    }
+
+    if (boardUser && boardSlug) {
+      const pidgets = await fetchPidgets(boardUser, boardSlug, UA);
+      if (pidgets) {
+        if (!boardId) boardId = pidgets.boardId;
+        for (const img of pidgets.images) allImages.set(img, true);
       }
     }
 
     if (!boardId) {
+      // Couldn't find the board at all
       return res.json({
         images: [...allImages.keys()],
+        total: allImages.size,
         pages: 1,
-        debug: `no_board_id | html_len=${htmlLen} | board_path=${boardPath}`,
+        note: 'board_not_found',
       });
     }
 
-    // Step 4: Paginate through ALL pins via BoardFeedResource
+    // ── Step 3: Try Pinterest's internal feed API with session cookies ──
+    // This requires a logged-in session; from a server it will 403.
+    // We try anyway — it works if somehow the session is valid.
     const API_HEADERS = {
       'User-Agent': UA,
       'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -110,15 +125,6 @@ export default async function handler(req, res) {
       pageCount++;
     }
 
-    // Step 5: If BoardFeedResource didn't work, try fetching more from pidgets
-    // (pidgets caps at 50, but better than nothing)
-    if (!feedApiWorked && boardUser && boardSlug) {
-      const pidgetsData = await fetchPidgets(boardUser, boardSlug, UA);
-      if (pidgetsData) {
-        for (const img of pidgetsData.images) allImages.set(img, true);
-      }
-    }
-
     res.json({
       images: [...allImages.keys()],
       total: allImages.size,
@@ -131,18 +137,23 @@ export default async function handler(req, res) {
   }
 }
 
-// Fetch pins from Pinterest's public widget API (no auth, max 50 pins)
+// Fetch up to 50 pins from Pinterest's public widget API (no auth required)
 async function fetchPidgets(user, board, ua) {
   try {
-    const r = await fetch(`https://api.pinterest.com/v3/pidgets/boards/${user}/${board}/pins/?page_size=50`, {
-      headers: { 'User-Agent': ua, 'Accept': 'application/json' },
-    });
+    const r = await fetch(
+      `https://api.pinterest.com/v3/pidgets/boards/${user}/${board}/pins/?page_size=50`,
+      { headers: { 'User-Agent': ua, 'Accept': 'application/json' } }
+    );
     if (!r.ok) return null;
     const data = await r.json();
     const pins = data?.data?.pins || [];
     const boardId = data?.data?.board?.id || null;
     const images = pins
-      .map(p => p?.images?.['564x']?.url || p?.images?.['237x']?.url)
+      .map(p => {
+        // Normalize all sizes to 564x for consistency
+        const raw = p?.images?.['564x']?.url || p?.images?.['237x']?.url || p?.images?.['236x']?.url;
+        return raw ? raw.replace(/\/\d+x\//, '/564x/') : null;
+      })
       .filter(Boolean);
     return { boardId, images };
   } catch {
@@ -185,18 +196,14 @@ function extractHtmlImages(html) {
 // Extract the numeric board ID from the page HTML
 function extractBoardId(html) {
   const patterns = [
-    // Most reliable: the boardfeed key in the Redux state
     /boardfeed:(\d+)/,
-    // Common JSON patterns
     /"board_id"\s*:\s*"(\d+)"/,
     /"boardId"\s*:\s*"(\d+)"/,
     /"board":\{"id":"(\d+)"/,
     /"board_id":"(\d+)"/,
     /"boardId":"(\d+)"/,
     /"entityId":"(\d+)","type":"board"/,
-    // Attribute patterns
     /data-board-id="(\d+)"/,
-    // Fallback: large numeric ID near seo_description (board metadata)
     /"id":"(\d{15,})"[^}]*"seo_description"/,
     /"seo_description"[^}]*"id":"(\d{15,})"/,
   ];
