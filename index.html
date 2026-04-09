@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kiln Diary</title>
+<title>Toast Ceramics</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Kiln Diary">
+<meta name="apple-mobile-web-app-title" content="Toast Ceramics">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#FBF8F3">
+<meta name="theme-color" content="#211608">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="apple-touch-startup-image" href="icon-512.png">
@@ -18,37 +18,60 @@
 :root{
   --clay:#A03318;--clay-l:#EFE0D4;--clay-m:#C4632A;--clay-d:#3D1508;
   --olive:#4A5C2A;--olive-l:#DDE5CC;
+  --teal:#4A7A8A;--teal-l:#D8ECF0;
   --ink:#1C1208;--muted:#7A6E60;--sand:#C2B4A0;--sand-l:#EAE0D2;--sand-ll:#F2EBE0;
   --white:#FDFAF5;--cream:#F5EDE0;
-  --nav:#211608;--nav-border:rgba(255,255,255,0.08);--nav-text:rgba(255,255,255,0.55);--nav-text-active:#F5EDE0;
+  --nav:#211608;--nav-border:rgba(255,255,255,0.08);--nav-text:rgba(255,255,255,0.52);--nav-active:#F5EDE0;
   --r:8px;--rl:14px;
 }
 html,body{height:100%;overflow:hidden}
 body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);display:flex;flex-direction:column}
 ::selection{background:var(--clay-l);color:var(--clay-d)}
-.app{display:flex;flex-direction:row;height:100vh;width:100%;position:relative}
+.app{display:flex;flex-direction:row;height:100vh;width:100%}
 
-/* SIDE NAV */
-.sidenav{width:220px;flex-shrink:0;background:var(--nav);border-right:none;display:flex;flex-direction:column;padding:0;z-index:30;transition:transform .22s ease}
-.sidenav-logo{padding:22px 18px 18px;flex-shrink:0;border-bottom:1px solid var(--nav-border)}
-.sidenav-logo .logo-sub{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:5px}
-.sidenav-logo .logo-name{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--nav-text-active);line-height:1.05;font-style:italic;letter-spacing:0.04em;text-transform:uppercase;font-variation-settings:'opsz' 144}
-.sidenav-logo .logo-shape{display:flex;gap:6px;margin-top:11px;opacity:0.25}
-.sidenav-logo .logo-shape svg{fill:var(--nav-text-active)}
-.sidenav-items{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:1px}
-.snav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;cursor:pointer;border:none;background:transparent;font-family:'Lato',sans-serif;font-size:12px;font-weight:400;color:var(--nav-text);letter-spacing:0.04em;text-transform:uppercase;transition:background .12s,color .12s;width:100%;text-align:left}
-.snav-item:hover{background:rgba(255,255,255,0.07);color:var(--nav-text-active)}
-.snav-item.active{background:rgba(160,51,24,0.35);color:var(--nav-text-active);font-weight:700}
-.snav-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5;flex-shrink:0;opacity:0.8}
-.sidenav-footer{padding:12px 10px 22px;border-top:1px solid var(--nav-border);flex-shrink:0}
-.btn-primary{background:var(--clay);color:var(--nav-text-active);border:none;border-radius:6px;padding:10px 14px;font-size:11px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;transition:opacity .15s;white-space:nowrap;width:100%;display:flex;align-items:center;gap:7px}
+/* ══ SIDE NAV ══ */
+.sidenav{width:220px;flex-shrink:0;background:var(--nav);display:flex;flex-direction:column;z-index:30;transition:width .22s ease;overflow:hidden}
+.sidenav-logo{padding:22px 18px 18px;flex-shrink:0;border-bottom:1px solid var(--nav-border);overflow:hidden}
+.logo-name{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--nav-active);line-height:1.05;font-style:italic;letter-spacing:0.04em;text-transform:uppercase;font-variation-settings:'opsz' 144;white-space:nowrap}
+.logo-mini{display:none;font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--nav-active);font-style:italic;font-variation-settings:'opsz' 144;text-align:center;line-height:1}
+.logo-shape{display:flex;gap:5px;margin-top:11px;opacity:0.22}
+.logo-shape svg{fill:var(--nav-active);flex-shrink:0}
+
+.sidenav-items{flex:1;padding:12px 8px 8px;display:flex;flex-direction:column;gap:1px;overflow:hidden}
+.snav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;cursor:pointer;border:none;background:transparent;font-family:'Lato',sans-serif;font-size:12px;font-weight:400;color:var(--nav-text);letter-spacing:0.04em;text-transform:uppercase;transition:background .12s,color .12s;width:100%;text-align:left;white-space:nowrap;overflow:hidden}
+.snav-item:hover{background:rgba(255,255,255,0.07);color:var(--nav-active)}
+.snav-item.active{background:rgba(160,51,24,0.35);color:var(--nav-active);font-weight:700}
+.snav-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5;flex-shrink:0;opacity:0.75}
+.snav-label{overflow:hidden;text-overflow:ellipsis}
+.snav-divider{height:1px;background:var(--nav-border);margin:8px 4px;flex-shrink:0}
+
+.collapse-btn{display:flex;align-items:center;justify-content:flex-end;padding:8px 14px;margin-top:4px;border:none;background:transparent;cursor:pointer;color:var(--nav-text);transition:color .12s;width:100%;flex-shrink:0}
+.collapse-btn:hover{color:var(--nav-active)}
+.collapse-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;transition:transform .22s}
+
+.sidenav-footer{padding:12px 8px 22px;border-top:1px solid var(--nav-border);flex-shrink:0}
+.btn-primary{background:var(--clay);color:var(--nav-active);border:none;border-radius:6px;padding:10px 14px;font-size:11px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;transition:opacity .15s;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;overflow:hidden}
 .btn-primary:hover{opacity:.86}
-.btn-primary.inv{visibility:hidden;pointer-events:none}
+.btn-primary svg{flex-shrink:0}
 
-/* HAMBURGER (mobile only) */
+/* Collapsed sidebar */
+.sidenav.collapsed{width:56px}
+.sidenav.collapsed .logo-name,.sidenav.collapsed .logo-shape{display:none}
+.sidenav.collapsed .logo-mini{display:block}
+.sidenav.collapsed .sidenav-logo{padding:16px 0 14px;text-align:center}
+.sidenav.collapsed .snav-item{justify-content:center;padding:10px 0}
+.sidenav.collapsed .snav-label{display:none}
+.sidenav.collapsed .collapse-btn{justify-content:center;padding:8px 0}
+.sidenav.collapsed .collapse-btn svg{transform:rotate(180deg)}
+.sidenav.collapsed .btn-primary .snav-label{display:none}
+.sidenav.collapsed .btn-primary{padding:10px 0}
+.sidenav.collapsed .sidenav-items{padding:12px 4px 8px}
+.sidenav.collapsed .snav-divider{margin:8px 4px}
+
+/* HAMBURGER (mobile) */
 .hamburger{display:none;position:fixed;top:13px;left:14px;z-index:50;background:var(--nav);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:8px 10px;cursor:pointer;flex-direction:column;gap:5px}
-.hamburger span{display:block;width:18px;height:1.5px;background:var(--nav-text-active);border-radius:2px;transition:all .2s}
-.sidenav-overlay{display:none;position:fixed;inset:0;background:rgba(40,38,31,.3);z-index:25}
+.hamburger span{display:block;width:18px;height:1.5px;background:var(--nav-active);border-radius:2px}
+.sidenav-overlay{display:none;position:fixed;inset:0;background:rgba(40,38,31,.35);z-index:25}
 .sidenav-overlay.show{display:block}
 
 /* MAIN CONTENT */
@@ -58,65 +81,98 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .view{display:none;flex:1;overflow:hidden;flex-direction:column}
 .view.active{display:flex}
 
-/* ══ KANBAN BOARD ══ */
-#view-board{flex-direction:column}
+/* ══ GALLERY (Ideas + Finished) ══ */
+.gallery-wrap{flex:1;overflow-y:auto;padding:20px 24px 48px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.gallery-wrap::-webkit-scrollbar{width:5px}
+.gallery-wrap::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
+.gallery-filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--sand-l)}
+.filter-group-label{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-right:2px;font-family:'Lato',sans-serif;flex-shrink:0}
+.filter-chip{font-size:10px;padding:5px 12px;border-radius:20px;border:1.5px solid var(--sand);cursor:pointer;background:transparent;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:0.05em;text-transform:uppercase;transition:all .12s;flex-shrink:0}
+.filter-chip:hover{border-color:var(--clay-m);color:var(--ink)}
+.filter-chip.on{background:var(--nav);border-color:var(--nav);color:var(--nav-active)}
+.filter-sep{width:1px;height:18px;background:var(--sand);flex-shrink:0;align-self:center;margin:0 4px}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:14px}
+.gallery-empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);font-family:'Playfair Display',serif;font-style:italic;font-size:15px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.gallery-empty svg{width:44px;height:44px;stroke:var(--sand);fill:none;stroke-width:1.1}
+
+/* Gallery card */
+.gal-card{background:var(--white);border:1.5px solid var(--sand);border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .12s;display:flex;flex-direction:column}
+.gal-card:hover{box-shadow:0 5px 20px rgba(0,0,0,.1);transform:translateY(-2px)}
+.gal-photo{height:165px;background:var(--sand-l);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.gal-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-photo-empty{color:var(--sand);opacity:.6;display:flex;flex-direction:column;align-items:center;gap:6px}
+.gal-photo-empty svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.2}
+.gal-photo-empty span{font-size:10px;font-family:'Lato',sans-serif}
+.gal-body{padding:12px 13px 10px;flex:1}
+.gal-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:500;margin-bottom:3px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gal-meta{font-size:11px;color:var(--muted);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:16px}
+.gal-badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px}
+.gal-badge{font-size:9px;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:20px;border:1px solid var(--sand);color:var(--muted);background:var(--sand-ll)}
+.gal-badge.diff-easy{background:var(--olive-l);border-color:var(--olive);color:#2E3D18}
+.gal-badge.diff-medium{background:var(--clay-l);border-color:var(--clay-m);color:var(--clay-d)}
+.gal-badge.diff-hard{background:var(--nav);border-color:var(--nav);color:var(--nav-active)}
+.gal-price{font-family:'Playfair Display',serif;font-size:16px;color:var(--ink);margin-top:5px}
+.gal-date{font-size:11px;color:var(--muted);margin-top:3px}
+.gal-action-bar{border-top:1.5px solid var(--sand);display:flex;flex-shrink:0}
+.gal-action{flex:1;padding:9px 8px;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;font-family:'Lato',sans-serif;font-weight:700;border:none;background:transparent;cursor:pointer;color:var(--clay);transition:background .12s}
+.gal-action:hover{background:var(--clay-l)}
+.gal-action.ready-btn{color:var(--teal)}
+.gal-action.ready-btn:hover{background:var(--teal-l)}
+
+/* ══ ACTIVE WORK KANBAN ══ */
+#view-active{flex-direction:column}
 .kanban-scroll{flex:1;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:16px 16px 20px;display:flex;gap:14px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
 .kanban-scroll::-webkit-scrollbar{height:6px}
-.kanban-scroll::-webkit-scrollbar-track{background:transparent}
 .kanban-scroll::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
-
-.kanban-col{flex-shrink:0;width:220px;display:flex;flex-direction:column;background:var(--sand-ll);border-radius:var(--rl);border:1.5px solid var(--sand);overflow:hidden}
+.kanban-col{flex-shrink:0;width:230px;display:flex;flex-direction:column;background:var(--sand-ll);border-radius:var(--rl);border:1.5px solid var(--sand);overflow:hidden}
 .col-header{padding:13px 14px 11px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .col-title-row{display:flex;align-items:center;gap:8px}
 .col-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .col-title{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;letter-spacing:0.02em}
 .col-count{font-size:10px;color:var(--muted);background:var(--white);border:1.5px solid var(--sand);padding:2px 8px;border-radius:20px;font-family:'Lato',sans-serif;letter-spacing:0.05em}
-
 .col-cards{flex:1;overflow-y:auto;padding:6px 10px 12px;display:flex;flex-direction:column;gap:9px;min-height:80px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
 .col-cards::-webkit-scrollbar{width:4px}
 .col-cards::-webkit-scrollbar-thumb{background:var(--sand);border-radius:2px}
-.col-cards.drag-over{background:rgba(196,84,31,.06);border-radius:var(--r)}
+.col-cards.drag-over{background:rgba(160,51,24,.07);border-radius:var(--r)}
+.col-empty{padding:10px 4px;font-size:12px;color:var(--sand);font-family:'Playfair Display',serif;font-style:italic;text-align:center}
 
-/* PROJECT CARD */
+/* Kanban card */
 .proj-card{background:var(--white);border:1.5px solid var(--sand);border-radius:var(--r);overflow:hidden;cursor:grab;transition:box-shadow .15s,opacity .15s,transform .15s;user-select:none}
 .proj-card:active{cursor:grabbing}
 .proj-card.dragging{opacity:.4;transform:scale(0.97);box-shadow:0 12px 28px rgba(0,0,0,0.15)}
-.pc-photo{height:120px;background:var(--sand-l);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pc-photo{height:110px;background:var(--sand-l);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .pc-photo img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 .pc-photo-empty{display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--sand);opacity:.7}
-.pc-photo-empty svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.2}
-.pc-photo-empty span{font-size:10px}
-.pc-body{padding:10px 11px 11px}
-.pc-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-photo-empty svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.2}
+.pc-body{padding:9px 11px 10px}
+.pc-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pc-clay{font-size:11px;color:var(--muted);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pc-glazes{display:flex;gap:4px}
 .g-dot{width:10px;height:10px;border-radius:50%;border:1px solid rgba(0,0,0,0.1)}
+.pc-finish-btn{width:100%;padding:8px;font-size:10px;letter-spacing:0.07em;text-transform:uppercase;font-family:'Lato',sans-serif;font-weight:700;border:none;border-top:1.5px solid var(--sand);background:transparent;cursor:pointer;color:var(--olive);transition:background .12s}
+.pc-finish-btn:hover{background:var(--olive-l)}
 
-/* Stage colors — earthy folk palette */
-.dot-idea{background:#9B8C7A}
-.col-idea .col-title{color:#5C4F42}
+/* Stage colours */
 .dot-wet{background:#4A7A8A}
 .col-wet .col-title{color:#2A4F5C}
 .dot-bisqued{background:#A03318}
 .col-bisqued .col-title{color:#6B2010}
 .dot-glazed{background:#4A5C2A}
 .col-glazed .col-title{color:#2E3D18}
+.dot-idea{background:#9B8C7A}
+.dot-finished{background:#4A5C2A}
 
 /* ══ DETAIL VIEW ══ */
 #view-detail{flex-direction:column;overflow:hidden}
-.detail-scroll{flex:1;overflow-y:auto;padding:16px 18px 40px}
-.back-btn{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:14px;transition:color .12s;background:none;border:none;font-family:'Lato',sans-serif;padding:0;letter-spacing:0.03em}
+.detail-scroll{flex:1;overflow-y:auto;padding:16px 20px 48px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.back-btn{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:14px;transition:color .12s;background:none;border:none;font-family:'Lato',sans-serif;padding:0;letter-spacing:0.04em;text-transform:uppercase}
 .back-btn:hover{color:var(--clay)}
-
-/* Hero */
 .detail-hero{height:220px;background:var(--sand-l);border-radius:var(--rl);overflow:hidden;margin-bottom:16px;position:relative;display:flex;align-items:center;justify-content:center}
 .detail-hero img{width:100%;height:100%;object-fit:cover;display:block}
 .dh-empty{color:var(--sand);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.6}
 .dh-empty svg{width:44px;height:44px;stroke:currentColor;fill:none;stroke-width:1.1}
 .hero-upload-btn{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,0.9);border:none;border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--ink);font-family:'Lato',sans-serif;display:none}
 .is-editing .hero-upload-btn{display:block}
-
-/* Detail header */
 .detail-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
 .detail-title-wrap{flex:1;min-width:0}
 .detail-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:500;line-height:1.15}
@@ -125,32 +181,22 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .edit-btn{background:var(--sand-l);border:none;border-radius:var(--r);padding:7px 14px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;transition:all .12s}
 .edit-btn:hover{background:var(--sand);color:var(--ink)}
 .edit-btn.save-mode{background:var(--clay);color:#fff}
-.edit-btn.save-mode:hover{opacity:.87}
-
-/* Stage badge */
 .stage-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px 5px 10px;border-radius:20px;background:var(--sand-l);margin-bottom:16px}
 .stage-badge-dot{width:8px;height:8px;border-radius:50%}
 .stage-badge-label{font-size:12px;color:var(--muted);letter-spacing:0.03em}
 .stage-select{font-size:12px;color:var(--muted);background:transparent;border:none;outline:none;font-family:'Lato',sans-serif;cursor:pointer;display:none;padding:0;letter-spacing:0.03em}
 .is-editing .stage-select{display:block}
 .is-editing .stage-badge-label{display:none}
-
-/* Info cards */
-.detail-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.detail-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .dcard{background:var(--sand-ll);border-radius:var(--r);padding:11px 14px}
 .dcard .dl{font-size:10px;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'Playfair Display',serif}
 .dcard .dv{font-size:14px;color:var(--ink)}
-.dcard input{width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:14px;color:var(--ink);outline:none;padding:0 0 2px;font-family:'Lato',sans-serif;font-weight:300}
-
-/* Shrinkage result */
-.build-result{background:var(--clay-l);border:1px solid rgba(196,84,31,.25);border-radius:var(--r);padding:12px 16px;display:flex;gap:26px;margin-bottom:16px}
+.dcard input,.dcard select{width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:14px;color:var(--ink);outline:none;padding:0 0 2px;font-family:'Lato',sans-serif;font-weight:300}
+.build-result{background:var(--clay-l);border:1px solid rgba(160,51,24,.25);border-radius:var(--r);padding:12px 16px;display:flex;gap:26px;margin-bottom:16px}
 .br-item .brl{font-size:10px;text-transform:uppercase;letter-spacing:0.09em;color:var(--clay);display:block;margin-bottom:2px}
 .br-item .brv{font-family:'Playfair Display',serif;font-size:19px;color:var(--clay-d)}
-
 .ds-label{font-family:'Playfair Display',serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);margin-bottom:9px}
 .detail-section{margin-bottom:18px}
-
-/* Glaze edit */
 .glaze-list{display:flex;flex-direction:column;gap:9px}
 .glaze-row-d{display:flex;align-items:center;gap:10px}
 .gswatch{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(0,0,0,0.1);flex-shrink:0;position:relative}
@@ -168,14 +214,10 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .is-editing .del-glaze-btn{display:block}
 .add-glaze-btn{font-size:12px;color:var(--clay);border:none;background:none;cursor:pointer;font-family:'Lato',sans-serif;padding:4px 0;display:none;margin-top:4px}
 .is-editing .add-glaze-btn{display:block}
-
-/* Notes */
 .detail-notes{background:var(--sand-ll);border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:1.75;color:var(--ink)}
 .detail-notes-input{width:100%;background:var(--sand-ll);border:1px solid var(--clay-m);border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:1.75;color:var(--ink);outline:none;font-family:'Lato',sans-serif;font-weight:300;resize:vertical;min-height:80px;display:none}
 .is-editing .detail-notes{display:none}
 .is-editing .detail-notes-input{display:block}
-
-/* Pinterest tile */
 .pin-tile{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--r);padding:12px 14px;text-decoration:none;transition:box-shadow .12s}
 .pin-tile:hover{box-shadow:0 4px 14px rgba(0,0,0,.08)}
 .pin-icon{width:36px;height:36px;border-radius:8px;background:#E60023;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -188,8 +230,6 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .is-editing .pin-input{display:block}
 .pin-empty{font-size:12px;color:var(--muted);font-style:italic}
 .is-editing .pin-empty{display:none}
-
-/* Photo strip */
 .photo-strip{display:flex;gap:9px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .photo-strip::-webkit-scrollbar{display:none}
 .photo-strip img{width:80px;height:80px;border-radius:var(--r);object-fit:cover;flex-shrink:0;border:1px solid rgba(0,0,0,.06)}
@@ -198,8 +238,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .is-editing .add-photo-btn{display:flex}
 
 /* ══ CALCULATOR ══ */
-#view-calc{flex-direction:column;overflow-y:auto;padding:18px 18px 40px}
-@media(max-width:680px){#view-calc,#view-library,#view-board{padding-top:54px}}
+#view-calc{flex-direction:column;overflow-y:auto;padding:20px 24px 48px}
 .calc-wrap{max-width:440px}
 .clay-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:15px}
 .clay-opt{background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:var(--r);padding:12px 10px;cursor:pointer;text-align:center;font-family:'Lato',sans-serif;transition:all .14s}
@@ -223,10 +262,10 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .cfi input{flex:1;border:none;background:transparent;padding:10px;font-family:'Playfair Display',serif;font-size:18px;color:var(--ink);outline:none;min-width:0}
 .cfi input::-webkit-inner-spin-button{-webkit-appearance:none}
 .cfi span{font-size:12px;color:var(--muted);padding:0 10px}
-.calc-out-box{background:var(--clay-l);border:1px solid rgba(196,84,31,.22);border-radius:var(--rl);padding:15px 18px}
+.calc-out-box{background:var(--clay-l);border:1px solid rgba(160,51,24,.22);border-radius:var(--rl);padding:15px 18px}
 .co-label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--clay);margin-bottom:9px;font-family:'Playfair Display',serif}
 .co-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.co-item{background:rgba(255,255,255,.65);border:1px solid rgba(196,84,31,.18);border-radius:var(--r);padding:11px 13px}
+.co-item{background:rgba(255,255,255,.65);border:1px solid rgba(160,51,24,.18);border-radius:var(--r);padding:11px 13px}
 .co-item .col{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--clay);margin-bottom:3px}
 .co-item .cov{font-family:'Playfair Display',serif;font-size:22px;color:var(--clay-d)}
 .co-item .cou{font-size:11px;color:var(--clay)}
@@ -234,13 +273,13 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .sec-label{font-family:'Playfair Display',serif;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 
 /* ══ LIBRARY ══ */
-#view-library{flex-direction:column;overflow-y:auto;padding:18px 18px 40px}
+#view-library{flex-direction:column;overflow-y:auto;padding:20px 24px 48px}
 .seg-ctrl{display:flex;background:var(--sand-l);border-radius:20px;padding:3px;margin-bottom:18px;width:fit-content}
 .seg-btn{font-size:12px;padding:6px 20px;border-radius:17px;border:none;background:transparent;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:0.03em;transition:all .15s}
 .seg-btn.active{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
 .lib-section{display:none}
 .lib-section.active{display:block}
-.lib-list{display:flex;flex-direction:column;gap:9px}
+.lib-list{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}
 .lib-item{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--r);padding:12px 15px;display:flex;align-items:center;justify-content:space-between}
 .li-info .ln{font-size:14px;color:var(--ink);margin-bottom:2px}
 .li-info .lm{font-size:12px;color:var(--muted)}
@@ -248,7 +287,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .li-swatch{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0}
 .li-del{background:none;border:none;cursor:pointer;color:var(--sand);font-size:14px;padding:4px 7px;transition:color .12s}
 .li-del:hover{color:var(--muted)}
-.add-form{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--rl);padding:16px;margin-top:14px}
+.add-form{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--rl);padding:16px}
 .add-form-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:500;margin-bottom:13px;color:var(--clay-d)}
 .add-grid-clay{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:end}
 .add-grid-glaze{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:9px;align-items:end}
@@ -260,15 +299,17 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .glaze-color-pick input{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%}
 .empty-state{text-align:center;padding:36px 20px;color:var(--muted);font-family:'Playfair Display',serif;font-style:italic;font-size:14px}
 
-/* Mobile nav */
+/* Mobile */
 @media(max-width:680px){
   .hamburger{display:flex}
-  .sidenav{position:fixed;top:0;left:0;height:100%;transform:translateX(-100%)}
+  .sidenav{position:fixed;top:0;left:0;height:100%;transform:translateX(-100%);width:220px!important}
   .sidenav.open{transform:translateX(0)}
   .main-content{width:100%}
+  .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr))}
+  .gallery-wrap{padding:54px 14px 48px}
 }
 
-/* MODAL (new project only) */
+/* ══ MODAL ══ */
 .modal-wrap{position:fixed;inset:0;background:rgba(40,38,31,.5);z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
 .modal-wrap.hidden{display:none}
 .modal{background:var(--cream);border-radius:20px 20px 0 0;max-height:93vh;display:flex;flex-direction:column}
@@ -288,10 +329,11 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .inline-field span{font-size:11px;color:var(--muted);padding:0 11px}
 .stage-picker{display:flex;flex-wrap:wrap;gap:6px}
 .spill{font-size:11px;padding:5px 13px;border-radius:20px;border:1px solid var(--sand);cursor:pointer;background:transparent;color:var(--muted);font-family:'Lato',sans-serif;transition:all .12s}
-.spill.sel-idea{background:#F1EFE8;border-color:#888780;color:#5F5E5A;border-width:1.5px}
-.spill.sel-wet{background:#E6F1FB;border-color:#378ADD;color:#185FA5;border-width:1.5px}
-.spill.sel-bisqued{background:#EAF3DE;border-color:#639922;color:#3B6D11;border-width:1.5px}
-.spill.sel-glazed{background:#EEEDFE;border-color:#7F77DD;color:#534AB7;border-width:1.5px}
+.spill.sel-idea{background:#F1EFE8;border-color:#9B8C7A;color:#5C4F42;border-width:1.5px}
+.spill.sel-wet{background:var(--teal-l);border-color:var(--teal);color:#2A4F5C;border-width:1.5px}
+.spill.sel-bisqued{background:var(--clay-l);border-color:var(--clay);color:var(--clay-d);border-width:1.5px}
+.spill.sel-glazed{background:var(--olive-l);border-color:var(--olive);color:#2E3D18;border-width:1.5px}
+.spill.sel-finished{background:var(--nav);border-color:var(--nav);color:var(--nav-active);border-width:1.5px}
 .gb-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
 .color-swatch{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0;position:relative;cursor:pointer}
 .color-swatch input{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%}
@@ -301,7 +343,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .gb-del:hover{color:var(--muted)}
 .btn-ghost{background:transparent;border:1px solid var(--sand);border-radius:var(--r);padding:7px 14px;font-size:12px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;transition:all .12s;margin-top:4px}
 .btn-ghost:hover{border-color:var(--clay-m);color:var(--clay)}
-.inline-calc{background:var(--clay-l);border:1px solid rgba(196,84,31,.2);border-radius:var(--r);padding:11px 15px;display:flex;gap:22px;margin-top:8px}
+.inline-calc{background:var(--clay-l);border:1px solid rgba(160,51,24,.2);border-radius:var(--r);padding:11px 15px;display:flex;gap:22px;margin-top:8px}
 .ic-item label{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--clay);display:block;margin-bottom:2px}
 .ic-item span{font-family:'Playfair Display',serif;font-size:18px;color:var(--clay-d)}
 .photo-zone{border:1.5px dashed var(--sand);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;position:relative;background:var(--white)}
@@ -313,15 +355,12 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .btn-cancel{background:transparent;border:1px solid var(--sand);border-radius:var(--r);padding:10px 18px;font-size:12px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif}
 .btn-save{background:var(--clay);color:#fff;border:none;border-radius:var(--r);padding:10px 24px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;transition:opacity .15s}
 .btn-save:hover{opacity:.87}
-
 .hidden{display:none!important}
 </style>
 </head>
 <body>
-<!-- Mobile overlay -->
-<div class="sidenav-overlay" id="sidenav-overlay" onclick="closeSidenav()"></div>
 
-<!-- Hamburger -->
+<div class="sidenav-overlay" id="sidenav-overlay" onclick="closeSidenav()"></div>
 <button class="hamburger" id="hamburger-btn" onclick="toggleSidenav()">
   <span></span><span></span><span></span>
 </button>
@@ -330,39 +369,48 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
   <!-- SIDE NAV -->
   <nav class="sidenav" id="sidenav">
     <div class="sidenav-logo">
-      <div class="logo-sub">Kiln Diary</div>
       <div class="logo-name">Toast Ceramics</div>
+      <div class="logo-mini">T</div>
       <div class="logo-shape">
-        <!-- pitcher -->
-        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M5 4h10a2 2 0 0 1 2 2v1h1a2 2 0 0 1 0 4h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M7 14v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5"/></svg>
-        <!-- bowl -->
-        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M4 10 Q4 18 12 18 Q20 18 20 10 Z"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <!-- vase -->
-        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M9 3h6l1 4c1 2 2 4 2 6 0 4-3 7-6 8-3-1-6-4-6-8 0-2 1-4 2-6z"/></svg>
-        <!-- mug -->
-        <svg width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="13" rx="2"/><path d="M16 9h2a2 2 0 0 1 0 4h-2"/></svg>
-        <!-- plate -->
-        <svg width="18" height="18" viewBox="0 0 24 24"><ellipse cx="12" cy="13" rx="9" ry="5"/><ellipse cx="12" cy="13" rx="5" ry="2.5"/><line x1="12" y1="8" x2="12" y2="4"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24"><path d="M5 4h10a2 2 0 0 1 2 2v1h1a2 2 0 0 1 0 4h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M7 14v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24"><path d="M4 10 Q4 18 12 18 Q20 18 20 10 Z"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24"><path d="M9 3h6l1 4c1 2 2 4 2 6 0 4-3 7-6 8-3-1-6-4-6-8 0-2 1-4 2-6z"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="13" rx="2"/><path d="M16 9h2a2 2 0 0 1 0 4h-2"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="8" ry="4"/><ellipse cx="12" cy="14" rx="4" ry="2"/><line x1="12" y1="10" x2="12" y2="6"/></svg>
       </div>
     </div>
+
     <div class="sidenav-items">
-      <button class="snav-item active" id="bnav-board" onclick="navTo('board')">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="18" rx="1.5"/><rect x="10" y="3" width="5" height="12" rx="1.5"/><rect x="17" y="3" width="5" height="15" rx="1.5"/></svg>
-        Board
+      <button class="snav-item active" id="bnav-ideas" onclick="navTo('ideas')">
+        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 3.5 13.1V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.9A7 7 0 0 1 12 2z"/><line x1="9.5" y1="21" x2="14.5" y2="21"/><line x1="9.5" y1="18" x2="14.5" y2="18"/></svg>
+        <span class="snav-label">Ideas</span>
       </button>
+      <button class="snav-item" id="bnav-active" onclick="navTo('active')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="5" height="18" rx="1.5"/><rect x="10" y="3" width="5" height="12" rx="1.5"/><rect x="17" y="3" width="5" height="15" rx="1.5"/></svg>
+        <span class="snav-label">Active Work</span>
+      </button>
+      <button class="snav-item" id="bnav-finished" onclick="navTo('finished')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="9 12 11 14 15 10"/></svg>
+        <span class="snav-label">Finished</span>
+      </button>
+      <div class="snav-divider"></div>
       <button class="snav-item" id="bnav-calc" onclick="navTo('calc')">
         <svg viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="8" ry="5"/><path d="M4 14 Q5 8 12 6 Q19 8 20 14" fill="none"/><path d="M10 6 Q11 2 12 2 Q13 2 14 6" fill="none"/></svg>
-        Calculator
+        <span class="snav-label">Calculator</span>
       </button>
       <button class="snav-item" id="bnav-library" onclick="navTo('library')">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="4" x2="8" y2="9"/></svg>
-        Library
+        <span class="snav-label">Library</span>
+      </button>
+      <button class="collapse-btn" id="collapse-btn" onclick="toggleCollapse()" title="Collapse sidebar">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
     </div>
+
     <div class="sidenav-footer">
       <button class="btn-primary" id="top-btn" onclick="topBtnClick()">
-        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        New Project
+        <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span class="snav-label">New Project</span>
       </button>
     </div>
   </nav>
@@ -370,89 +418,107 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
   <!-- MAIN CONTENT -->
   <div class="main-content">
 
-  <!-- KANBAN BOARD -->
-  <div class="view active" id="view-board">
-    <div class="kanban-scroll" id="kanban-scroll"></div>
-  </div>
-
-  <!-- DETAIL (inline edit) -->
-  <div class="view" id="view-detail">
-    <div class="detail-scroll" id="detail-scroll">
-      <button class="back-btn" onclick="goBack()">
-        <svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-        Back
-      </button>
-      <div id="detail-inner"></div>
+    <!-- ── IDEAS ── -->
+    <div class="view active" id="view-ideas">
+      <div class="gallery-wrap">
+        <div class="gallery-filters" id="ideas-filters"></div>
+        <div class="gallery-grid" id="ideas-grid"></div>
+      </div>
     </div>
-  </div>
 
-  <!-- CALCULATOR -->
-  <div class="view" id="view-calc">
-    <div class="calc-wrap">
-      <div class="sec-label" style="margin-bottom:11px">Clay Body</div>
-      <div class="clay-grid" id="calc-clay-grid">
-        <button class="clay-opt" data-s="10" onclick="calcClay(this)"><span class="cn">Earthenware</span><span class="cp">~10%</span></button>
-        <button class="clay-opt" data-s="12" onclick="calcClay(this)"><span class="cn">Stoneware</span><span class="cp">~12%</span></button>
-        <button class="clay-opt on" data-s="14" onclick="calcClay(this)"><span class="cn">Soldate</span><span class="cp">14% · high-fire</span></button>
-        <button class="clay-opt" data-s="custom" onclick="calcClay(this)"><span class="cn">Custom</span><span class="cp">enter manually</span></button>
-      </div>
-      <div class="custom-row hidden" id="calc-custom">
-        <label>Shrinkage</label>
-        <input type="range" min="5" max="25" step="0.5" value="14" id="calc-slider" oninput="calcCustom()">
-        <span class="cv" id="calc-cv">14.0%</span>
-      </div>
-      <div class="unit-row">
-        <span>Show in</span>
-        <button class="utbtn on" id="cu-in" onclick="calcUnitFn('in')">inches</button>
-        <button class="utbtn" id="cu-cm" onclick="calcUnitFn('cm')">cm</button>
-      </div>
-      <div class="sec-label">Finished Size (Goal)</div>
-      <div class="calc-2">
-        <div class="cfield"><label>Diameter / Width</label><div class="cfi"><input type="number" id="cd" min="0" step=".1" placeholder="6" oninput="calcRun()"><span id="cdu">in</span></div></div>
-        <div class="cfield"><label>Height</label><div class="cfi"><input type="number" id="ch" min="0" step=".1" placeholder="4" oninput="calcRun()"><span id="chu">in</span></div></div>
-      </div>
-      <div id="calc-out"></div>
+    <!-- ── ACTIVE WORK ── -->
+    <div class="view" id="view-active">
+      <div class="kanban-scroll" id="kanban-scroll"></div>
     </div>
-  </div>
 
-  <!-- LIBRARY -->
-  <div class="view" id="view-library">
-    <div class="seg-ctrl">
-      <button class="seg-btn active" onclick="libTab('clay')">Clay</button>
-      <button class="seg-btn" onclick="libTab('glaze')">Glazes</button>
+    <!-- ── FINISHED ── -->
+    <div class="view" id="view-finished">
+      <div class="gallery-wrap">
+        <div class="gallery-filters" id="finished-filters"></div>
+        <div class="gallery-grid" id="finished-grid"></div>
+      </div>
     </div>
-    <div class="lib-section active" id="lib-clay">
-      <div class="lib-list" id="clay-list"></div>
-      <div class="add-form">
-        <div class="add-form-title">Add Clay Body</div>
-        <div class="add-grid-clay">
-          <div class="af-field"><label>Name</label><input type="text" id="new-clay-name" placeholder="e.g. Soldate 60"></div>
-          <div class="af-field"><label>Shrinkage %</label><input type="number" id="new-clay-shrink" min="0" max="30" step="0.5" placeholder="14"></div>
-          <button class="btn-add-lib" onclick="addClay()">Add</button>
+
+    <!-- ── DETAIL ── -->
+    <div class="view" id="view-detail">
+      <div class="detail-scroll" id="detail-scroll">
+        <button class="back-btn" onclick="goBack()">
+          <svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          Back
+        </button>
+        <div id="detail-inner"></div>
+      </div>
+    </div>
+
+    <!-- ── CALCULATOR ── -->
+    <div class="view" id="view-calc">
+      <div class="calc-wrap" style="padding:20px 24px 48px;overflow-y:auto;flex:1">
+        <div class="sec-label" style="margin-bottom:11px">Clay Body</div>
+        <div class="clay-grid" id="calc-clay-grid">
+          <button class="clay-opt" data-s="10" onclick="calcClay(this)"><span class="cn">Earthenware</span><span class="cp">~10%</span></button>
+          <button class="clay-opt" data-s="12" onclick="calcClay(this)"><span class="cn">Stoneware</span><span class="cp">~12%</span></button>
+          <button class="clay-opt on" data-s="14" onclick="calcClay(this)"><span class="cn">Soldate</span><span class="cp">14% · high-fire</span></button>
+          <button class="clay-opt" data-s="custom" onclick="calcClay(this)"><span class="cn">Custom</span><span class="cp">enter manually</span></button>
         </div>
+        <div class="custom-row hidden" id="calc-custom">
+          <label>Shrinkage</label>
+          <input type="range" min="5" max="25" step="0.5" value="14" id="calc-slider" oninput="calcCustom()">
+          <span class="cv" id="calc-cv">14.0%</span>
+        </div>
+        <div class="unit-row">
+          <span>Show in</span>
+          <button class="utbtn on" id="cu-in" onclick="calcUnitFn('in')">inches</button>
+          <button class="utbtn" id="cu-cm" onclick="calcUnitFn('cm')">cm</button>
+        </div>
+        <div class="sec-label">Finished Size (Goal)</div>
+        <div class="calc-2">
+          <div class="cfield"><label>Diameter / Width</label><div class="cfi"><input type="number" id="cd" min="0" step=".1" placeholder="6" oninput="calcRun()"><span id="cdu">in</span></div></div>
+          <div class="cfield"><label>Height</label><div class="cfi"><input type="number" id="ch" min="0" step=".1" placeholder="4" oninput="calcRun()"><span id="chu">in</span></div></div>
+        </div>
+        <div id="calc-out"></div>
       </div>
     </div>
-    <div class="lib-section" id="lib-glaze">
-      <div class="lib-list" id="glaze-list"></div>
-      <div class="add-form">
-        <div class="add-form-title">Add Glaze</div>
-        <div class="add-grid-glaze">
-          <div class="af-field"><label>Color</label>
-            <div class="glaze-color-pick" id="new-glaze-swatch" style="background:#3B6D11">
-              <input type="color" value="#3B6D11" id="new-glaze-color" oninput="document.getElementById('new-glaze-swatch').style.background=this.value">
+
+    <!-- ── LIBRARY ── -->
+    <div class="view" id="view-library">
+      <div style="padding:20px 24px 48px;overflow-y:auto;flex:1">
+        <div class="seg-ctrl">
+          <button class="seg-btn active" onclick="libTab('clay')">Clay</button>
+          <button class="seg-btn" onclick="libTab('glaze')">Glazes</button>
+        </div>
+        <div class="lib-section active" id="lib-clay">
+          <div class="lib-list" id="clay-list"></div>
+          <div class="add-form">
+            <div class="add-form-title">Add Clay Body</div>
+            <div class="add-grid-clay">
+              <div class="af-field"><label>Name</label><input type="text" id="new-clay-name" placeholder="e.g. Soldate 60"></div>
+              <div class="af-field"><label>Shrinkage %</label><input type="number" id="new-clay-shrink" min="0" max="30" step="0.5" placeholder="14"></div>
+              <button class="btn-add-lib" onclick="addClay()">Add</button>
             </div>
           </div>
-          <div class="af-field"><label>Name</label><input type="text" id="new-glaze-name" placeholder="e.g. Celadon…"></div>
-          <div class="af-field"><label>Default Role</label>
-            <select id="new-glaze-role">
-              <option>Top coat</option><option>Bottom coat</option><option>Interior</option><option>Exterior</option><option>Accent</option>
-            </select>
+        </div>
+        <div class="lib-section" id="lib-glaze">
+          <div class="lib-list" id="glaze-list"></div>
+          <div class="add-form">
+            <div class="add-form-title">Add Glaze</div>
+            <div class="add-grid-glaze">
+              <div class="af-field"><label>Color</label>
+                <div class="glaze-color-pick" id="new-glaze-swatch" style="background:#3B6D11">
+                  <input type="color" value="#3B6D11" id="new-glaze-color" oninput="document.getElementById('new-glaze-swatch').style.background=this.value">
+                </div>
+              </div>
+              <div class="af-field"><label>Name</label><input type="text" id="new-glaze-name" placeholder="e.g. Celadon…"></div>
+              <div class="af-field"><label>Default Role</label>
+                <select id="new-glaze-role">
+                  <option>Top coat</option><option>Bottom coat</option><option>Interior</option><option>Exterior</option><option>Accent</option>
+                </select>
+              </div>
+              <button class="btn-add-lib" onclick="addGlazeToLib()">Add</button>
+            </div>
           </div>
-          <button class="btn-add-lib" onclick="addGlazeToLib()">Add</button>
         </div>
       </div>
     </div>
-  </div>
 
   </div><!-- end main-content -->
 </div><!-- end app -->
@@ -476,23 +542,31 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
         <div class="fr"><label>Goal Height</label><div class="inline-field"><input type="number" id="f-ht" min="0" step=".1" placeholder="4" oninput="modalCalc()"><span>in</span></div></div>
       </div>
       <div id="modal-calc-out"></div>
-      <div class="fr" style="margin-top:12px"><label>Stage</label><div class="stage-picker" id="f-stages"></div></div>
-      <div class="fr"><label>Build Method</label>
-        <select id="f-method"><option value="">Select…</option><option>Hand built</option><option>Thrown</option><option>Both</option></select>
+      <div class="fr" style="margin-top:8px"><label>Stage</label><div class="stage-picker" id="f-stages"></div></div>
+      <div class="f2">
+        <div class="fr"><label>Construction</label>
+          <select id="f-method"><option value="">Select…</option><option>Thrown</option><option>Hand built</option><option>Both</option></select>
+        </div>
+        <div class="fr"><label>Difficulty</label>
+          <select id="f-difficulty"><option value="">Select…</option><option>Easy</option><option>Medium</option><option>Hard</option></select>
+        </div>
+      </div>
+      <div class="f2">
+        <div class="fr"><label>Price (£)</label><input type="number" id="f-price" placeholder="0.00" step="0.01" min="0"></div>
+        <div class="fr"><label>Date Completed</label><input type="date" id="f-dateCompleted"></div>
       </div>
       <div class="fr">
         <label>Glazes</label>
         <div id="f-glazes"></div>
         <button class="btn-ghost" onclick="addGlazeRow()">+ Add glaze</button>
       </div>
-      <div class="fr"><label>Pinterest / Inspiration Link</label><input type="url" id="f-pin" placeholder="https://pinterest.com/…"></div>
+      <div class="fr"><label>Pinterest / Inspiration</label><input type="url" id="f-pin" placeholder="https://pinterest.com/…"></div>
       <div class="fr"><label>Notes</label><textarea id="f-notes" placeholder="Glaze tests, firing notes, ideas…"></textarea></div>
       <div class="fr">
         <label>Photos</label>
         <div class="photo-zone" onclick="document.getElementById('f-photos').click()">
-          <input type="file" id="f-photos" accept="image/*" multiple onchange="handlePhotos(event)" style="display:none">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8C5BB" stroke-width="1.4" style="display:block;margin:0 auto"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <p>Click to upload photos</p>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C2B4A0" stroke-width="1.4" style="display:block;margin:0 auto"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p>Tap to add photos</p>
         </div>
         <div class="thumb-strip-sm" id="f-thumbs"></div>
       </div>
@@ -504,102 +578,182 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
   </div>
 </div>
 
+<input type="file" id="f-photos" accept="image/*" multiple style="display:none" onchange="handlePhotos(event)">
 <input type="file" id="hero-photo-input" accept="image/*" multiple style="display:none" onchange="handleHeroPhotos(event)">
 
 <script>
-// ── DATA ──
-const STAGES=[
-  {key:'idea',   label:'Idea'},
-  {key:'wet',    label:'Wet work'},
-  {key:'bisqued',label:'Bisqued'},
-  {key:'glazed', label:'Glazed'}
+// ── CONSTANTS ──
+const ACTIVE_STAGES=[
+  {key:'wet',     label:'Wet work'},
+  {key:'bisqued', label:'Bisqued'},
+  {key:'glazed',  label:'Glazed'}
+];
+const ALL_STAGES=[
+  {key:'idea',    label:'Idea'},
+  ...ACTIVE_STAGES,
+  {key:'finished',label:'Finished'}
 ];
 const STAGE_BY_LABEL={};
-STAGES.forEach(s=>STAGE_BY_LABEL[s.label]=s.key);
-const GLAZE_DEFAULTS=['#3B6D11','#185FA5','#C4541F','#534AB7','#B4B2A9','#854F0B','#993556','#085041'];
+ALL_STAGES.forEach(s=>STAGE_BY_LABEL[s.label]=s.key);
+const GLAZE_DEFAULTS=['#3B6D11','#185FA5','#A03318','#534AB7','#B4B2A9','#854F0B','#993556','#085041'];
 
+// ── STATE ──
 let projects=[],clays=[],glazeLib=[],formGlazes=[],formPhotos=[];
 let calcShrinkRate=14,calcUnitVal='in';
 let dragId=null;
-let detailId=null,isEditing=false;
-let editState={};
+let detailId=null,isEditing=false,editState={};
+let currentView='ideas',prevView='ideas';
+let ideaDiffFilter='All',ideaMethodFilter='All';
+let finishedSort='date';
+let sidenavCollapsed=false;
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 
+// ── HELPERS ──
+function stageToView(stage){
+  if(stage==='Idea')return 'ideas';
+  if(stage==='Finished')return 'finished';
+  return 'active';
+}
+function formatDate(d){
+  if(!d)return '';
+  try{return new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+  catch(e){return d;}
+}
+
 // ── STORAGE ──
-function save(){try{localStorage.setItem('kd_v4',JSON.stringify({projects,clays,glazeLib}))}catch(e){}}
+function save(){try{localStorage.setItem('kd_v5',JSON.stringify({projects,clays,glazeLib}))}catch(e){}}
+function defaultClays(){return [{id:'c1',name:'Soldate 60',shrink:14,note:'High-fire'},{id:'c2',name:'B-Mix',shrink:12,note:'Mid-fire'}];}
+function defaultGlazes(){return [{id:'g1',name:'Celadon',color:'#5DCAA5',role:'Top coat'},{id:'g2',name:'Tenmoku',color:'#28261F',role:'Top coat'},{id:'g3',name:'Shino',color:'#E8845A',role:'Top coat'}];}
 function load(){
   try{
-    const d=JSON.parse(localStorage.getItem('kd_v4')||'{}');
-    projects=d.projects||[];
-    clays=d.clays||[{id:'c1',name:'Soldate 60',shrink:14,note:'High-fire'},{id:'c2',name:'B-Mix',shrink:12,note:'Mid-fire'}];
-    glazeLib=d.glazeLib||[
-      {id:'g1',name:'Celadon',color:'#5DCAA5',role:'Top coat'},
-      {id:'g2',name:'Tenmoku',color:'#28261F',role:'Top coat'},
-      {id:'g3',name:'Shino',color:'#E8845A',role:'Top coat'}
-    ];
-  }catch(e){projects=[];clays=[{id:'c1',name:'Soldate 60',shrink:14,note:'High-fire'}];glazeLib=[];}
+    let d=JSON.parse(localStorage.getItem('kd_v5')||'null');
+    if(!d){
+      // migrate from v4
+      const old=JSON.parse(localStorage.getItem('kd_v4')||'{}');
+      projects=(old.projects||[]).map(p=>({difficulty:'',price:0,dateCompleted:'',...p}));
+      clays=old.clays||defaultClays();
+      glazeLib=old.glazeLib||defaultGlazes();
+    } else {
+      projects=d.projects||[];
+      clays=d.clays||defaultClays();
+      glazeLib=d.glazeLib||defaultGlazes();
+    }
+  }catch(e){projects=[];clays=defaultClays();glazeLib=defaultGlazes();}
 }
 
 // ── NAV ──
-let currentView='board';
 function navTo(v){
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
   document.querySelectorAll('.snav-item').forEach(e=>e.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
   const nb=document.getElementById('bnav-'+v);if(nb)nb.classList.add('active');
   const tb=document.getElementById('top-btn');
-  if(v==='board'){tb.style.visibility='visible';}
-  else{tb.style.visibility='hidden';}
+  tb.style.visibility=['calc','library'].includes(v)?'hidden':'visible';
   currentView=v;
   closeSidenav();
+  if(v==='ideas')renderIdeas();
+  if(v==='active')renderActive();
+  if(v==='finished')renderFinished();
 }
 function goBack(){
   isEditing=false;editState={};
-  navTo('board');
+  navTo(prevView||'ideas');
 }
-function topBtnClick(){openNewProjectModal()}
+function topBtnClick(){
+  const def=currentView==='finished'?'Finished':currentView==='active'?'Wet work':'Idea';
+  openNewProjectModal(def);
+}
 
-// ── MOBILE SIDENAV ──
+// ── SIDEBAR COLLAPSE ──
+function toggleCollapse(){
+  sidenavCollapsed=!sidenavCollapsed;
+  document.getElementById('sidenav').classList.toggle('collapsed',sidenavCollapsed);
+  localStorage.setItem('kd_collapsed',sidenavCollapsed?'1':'0');
+}
 function toggleSidenav(){
-  const nav=document.getElementById('sidenav');
-  const overlay=document.getElementById('sidenav-overlay');
-  nav.classList.toggle('open');
-  overlay.classList.toggle('show');
+  document.getElementById('sidenav').classList.toggle('open');
+  document.getElementById('sidenav-overlay').classList.toggle('show');
 }
 function closeSidenav(){
   document.getElementById('sidenav').classList.remove('open');
   document.getElementById('sidenav-overlay').classList.remove('show');
 }
 
-// ── KANBAN RENDER ──
-function renderBoard(){
+// ── IDEAS GALLERY ──
+function renderIdeas(){
+  renderIdeasFilters();
+  const grid=document.getElementById('ideas-grid');
+  let ps=projects.filter(p=>(p.stage||'Idea')==='Idea');
+  if(ideaDiffFilter!=='All')ps=ps.filter(p=>p.difficulty===ideaDiffFilter);
+  if(ideaMethodFilter!=='All')ps=ps.filter(p=>p.method===ideaMethodFilter);
+  if(!ps.length){
+    grid.innerHTML=`<div class="gallery-empty"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 3.5 13.1V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.9A7 7 0 0 1 12 2z"/><line x1="9.5" y1="21" x2="14.5" y2="21"/></svg>${ideaDiffFilter!=='All'||ideaMethodFilter!=='All'?'No ideas match those filters':'No ideas yet — start dreaming'}</div>`;
+    return;
+  }
+  grid.innerHTML=ps.map(ideaCardHTML).join('');
+}
+function renderIdeasFilters(){
+  const el=document.getElementById('ideas-filters');
+  const diffs=['All','Easy','Medium','Hard'];
+  const methods=['All','Thrown','Hand built','Both'];
+  el.innerHTML=`<span class="filter-group-label">Difficulty</span>${diffs.map(d=>`<button class="filter-chip${ideaDiffFilter===d?' on':''}" onclick="setIdeaDiff('${d}')">${d}</button>`).join('')}<div class="filter-sep"></div><span class="filter-group-label">Construction</span>${methods.map(m=>`<button class="filter-chip${ideaMethodFilter===m?' on':''}" onclick="setIdeaMethod('${m}')">${m}</button>`).join('')}`;
+}
+function setIdeaDiff(d){ideaDiffFilter=d;renderIdeas();}
+function setIdeaMethod(m){ideaMethodFilter=m;renderIdeas();}
+
+function ideaCardHTML(p){
+  const thumb=p.photos&&p.photos.length
+    ?`<img src="${p.photos[0]}" alt="">`
+    :`<div class="gal-photo-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>no photo</span></div>`;
+  const diffClass=p.difficulty?`diff-${p.difficulty.toLowerCase()}`:'';
+  const badges=[
+    p.difficulty?`<span class="gal-badge ${diffClass}">${p.difficulty}</span>`:'',
+    p.method?`<span class="gal-badge">${p.method}</span>`:''
+  ].filter(Boolean).join('');
+  return `<div class="gal-card" onclick="openDetail('${p.id}')">
+    <div class="gal-photo">${thumb}</div>
+    <div class="gal-body">
+      <div class="gal-name">${p.name||'Untitled'}</div>
+      <div class="gal-meta">${p.clay||'&nbsp;'}</div>
+      ${badges?`<div class="gal-badges">${badges}</div>`:''}
+    </div>
+    <div class="gal-action-bar">
+      <button class="gal-action ready-btn" onclick="moveToActive('${p.id}',event)">Ready to work →</button>
+    </div>
+  </div>`;
+}
+function moveToActive(id,e){
+  e.stopPropagation();
+  const p=projects.find(x=>x.id===id);
+  if(p){p.stage='Wet work';save();renderIdeas();}
+}
+
+// ── ACTIVE WORK KANBAN ──
+function renderActive(){
   const ks=document.getElementById('kanban-scroll');
-  ks.innerHTML=STAGES.map(s=>{
-    const ps=projects.filter(p=>(p.stage||'Idea')===s.label);
+  ks.innerHTML=ACTIVE_STAGES.map(s=>{
+    const ps=projects.filter(p=>p.stage===s.label);
     return `<div class="kanban-col col-${s.key}" id="col-${s.key}"
       ondragover="onDragOver(event,'${s.key}')"
       ondragleave="onDragLeave(event,'${s.key}')"
       ondrop="onDrop(event,'${s.key}')">
       <div class="col-header">
-        <div class="col-title-row">
-          <span class="col-dot dot-${s.key}"></span>
-          <span class="col-title">${s.label}</span>
-        </div>
+        <div class="col-title-row"><span class="col-dot dot-${s.key}"></span><span class="col-title">${s.label}</span></div>
         <span class="col-count">${ps.length}</span>
       </div>
       <div class="col-cards" id="cards-${s.key}">
-        ${ps.length?ps.map(p=>cardHTML(p)).join(''):`<div style="padding:8px 4px;font-size:12px;color:var(--sand);font-family:'Playfair Display',serif;font-style:italic;text-align:center">Drop here</div>`}
+        ${ps.length?ps.map(p=>activeCardHTML(p,s.key)).join(''):`<div class="col-empty">Drop here</div>`}
       </div>
     </div>`;
   }).join('');
 }
-
-function cardHTML(p){
+function activeCardHTML(p,stageKey){
   const thumb=p.photos&&p.photos.length
     ?`<div class="pc-photo"><img src="${p.photos[0]}" alt="" draggable="false"></div>`
-    :`<div class="pc-photo"><div class="pc-photo-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>no photo</span></div></div>`;
+    :`<div class="pc-photo"><div class="pc-photo-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>`;
   const glazeDots=(p.glazes&&p.glazes.length)?`<div class="pc-glazes">${p.glazes.map(g=>`<span class="g-dot" style="background:${g.color}" title="${g.name}"></span>`).join('')}</div>`:'';
+  const finishBtn=stageKey==='glazed'?`<button class="pc-finish-btn" onclick="markFinished('${p.id}',event)">✓ Mark as Finished</button>`:'';
   return `<div class="proj-card" id="card-${p.id}" draggable="true"
     ondragstart="onDragStart(event,'${p.id}')"
     ondragend="onDragEnd(event)"
@@ -610,7 +764,17 @@ function cardHTML(p){
       ${p.clay?`<div class="pc-clay">${p.clay}</div>`:''}
       ${glazeDots}
     </div>
+    ${finishBtn}
   </div>`;
+}
+function markFinished(id,e){
+  e.stopPropagation();
+  const p=projects.find(x=>x.id===id);
+  if(p){
+    p.stage='Finished';
+    if(!p.dateCompleted)p.dateCompleted=new Date().toISOString().split('T')[0];
+    save();renderActive();
+  }
 }
 
 // ── DRAG & DROP ──
@@ -636,37 +800,68 @@ function onDragLeave(e,key){
 function onDrop(e,key){
   e.preventDefault();
   if(!dragId)return;
-  const newLabel=STAGES.find(s=>s.key===key)?.label||'Idea';
+  const newLabel=ACTIVE_STAGES.find(s=>s.key===key)?.label||'Wet work';
   const p=projects.find(x=>x.id===dragId);
-  if(p){p.stage=newLabel;save();renderBoard();}
+  if(p){p.stage=newLabel;save();renderActive();}
   document.querySelectorAll('.col-cards').forEach(c=>c.classList.remove('drag-over'));
   dragId=null;
 }
 
-// ── DETAIL WITH INLINE EDIT ──
+// ── FINISHED GALLERY ──
+function renderFinished(){
+  renderFinishedFilters();
+  const grid=document.getElementById('finished-grid');
+  let ps=projects.filter(p=>p.stage==='Finished');
+  if(finishedSort==='price')ps=[...ps].sort((a,b)=>(parseFloat(b.price)||0)-(parseFloat(a.price)||0));
+  else if(finishedSort==='size')ps=[...ps].sort((a,b)=>(parseFloat(b.dia)||0)-(parseFloat(a.dia)||0));
+  else ps=[...ps].sort((a,b)=>(b.dateCompleted||'')>(a.dateCompleted||'')?1:-1);
+  if(!ps.length){
+    grid.innerHTML=`<div class="gallery-empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="9 12 11 14 15 10"/></svg>Nothing finished yet — keep throwing!</div>`;
+    return;
+  }
+  grid.innerHTML=ps.map(finishedCardHTML).join('');
+}
+function renderFinishedFilters(){
+  const el=document.getElementById('finished-filters');
+  const sorts=[['date','Date'],['price','Price'],['size','Size']];
+  el.innerHTML=`<span class="filter-group-label">Sort by</span>${sorts.map(([v,l])=>`<button class="filter-chip${finishedSort===v?' on':''}" onclick="setFinishedSort('${v}')">${l}</button>`).join('')}`;
+}
+function setFinishedSort(s){finishedSort=s;renderFinished();}
+function finishedCardHTML(p){
+  const thumb=p.photos&&p.photos.length
+    ?`<img src="${p.photos[0]}" alt="">`
+    :`<div class="gal-photo-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>no photo</span></div>`;
+  return `<div class="gal-card" onclick="openDetail('${p.id}')">
+    <div class="gal-photo">${thumb}</div>
+    <div class="gal-body">
+      <div class="gal-name">${p.name||'Untitled'}</div>
+      <div class="gal-meta">${p.clay||'&nbsp;'}</div>
+      ${p.price?`<div class="gal-price">£${parseFloat(p.price).toFixed(2)}</div>`:''}
+      ${p.dateCompleted?`<div class="gal-date">${formatDate(p.dateCompleted)}</div>`:''}
+    </div>
+  </div>`;
+}
+
+// ── DETAIL VIEW ──
 function openDetail(id){
+  prevView=currentView;
   detailId=id;isEditing=false;
   renderDetail();
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
   document.getElementById('view-detail').classList.add('active');
   document.querySelectorAll('.snav-item').forEach(e=>e.classList.remove('active'));
-  document.getElementById('bnav-board').classList.add('active');
+  const nb=document.getElementById('bnav-'+prevView);if(nb)nb.classList.add('active');
   document.getElementById('top-btn').style.visibility='hidden';
   document.getElementById('detail-scroll').scrollTop=0;
   currentView='detail';
 }
-
 function renderDetail(){
   const p=projects.find(x=>x.id===detailId);if(!p)return;
   const es=isEditing?editState:p;
   const stageKey=STAGE_BY_LABEL[es.stage||'Idea']||'idea';
   const heroSrc=(es.photos&&es.photos.length)?es.photos[0]:null;
-
-  // Build shrink calc
   let calcHtml='';
-  const sr=parseFloat(es.shrink)||0;
-  const dd=parseFloat(es.dia)||0;
-  const hh=parseFloat(es.ht)||0;
+  const sr=parseFloat(es.shrink)||0,dd=parseFloat(es.dia)||0,hh=parseFloat(es.ht)||0;
   if(sr&&(dd||hh)){
     const f=1/(1-sr/100);
     calcHtml=`<div class="detail-section"><div class="ds-label">Build Dimensions</div><div class="build-result">
@@ -674,36 +869,19 @@ function renderDetail(){
       ${hh?`<div class="br-item"><span class="brl">Build Height</span><span class="brv">${(hh*f).toFixed(2)}"</span></div>`:''}
     </div></div>`;
   }
-
-  // Glazes
   const glazes=es.glazes||[];
   const glazeRows=glazes.map((g,i)=>`
     <div class="glaze-row-d">
-      <div class="gswatch" style="background:${g.color}">
-        <input type="color" value="${g.color}" onchange="editGlaze(${i},'color',this.value);this.parentElement.style.background=this.value">
-      </div>
+      <div class="gswatch" style="background:${g.color}"><input type="color" value="${g.color}" onchange="editGlaze(${i},'color',this.value);this.parentElement.style.background=this.value"></div>
       <span class="gname">${g.name}</span>
       <input class="gname-input" type="text" value="${g.name}" oninput="editGlaze(${i},'name',this.value)" placeholder="Glaze name">
       <span class="grole">${g.role}</span>
-      <select class="grole-select" onchange="editGlaze(${i},'role',this.value)">
-        ${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}
-      </select>
+      <select class="grole-select" onchange="editGlaze(${i},'role',this.value)">${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}</select>
       <button class="del-glaze-btn" onclick="removeDetailGlaze(${i})">✕</button>
     </div>`).join('');
-
-  // Extra photos
-  const extraPhotos=(es.photos&&es.photos.length>1)
-    ?es.photos.slice(1).map(ph=>`<img src="${ph}">`).join(''):'';
-
-  // Pinterest
   const pinHtml=es.pin
-    ?`<a href="${es.pin}" target="_blank" class="pin-tile">
-        <div class="pin-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.641 1.267 1.408 0 .858-.546 2.141-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.132-1.867 3.132-4.562 0-2.387-1.715-4.054-4.163-4.054-2.838 0-4.503 2.128-4.503 4.327 0 .856.33 1.775.741 2.276a.3.3 0 0 1 .069.286c-.076.312-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.522 0 10-4.477 10-10S17.522 2 12 2z"/></svg></div>
-        <div class="pin-text"><div class="pt">Pinterest Board</div><div class="ps">${es.pin}</div></div>
-        <div class="pin-arrow">›</div>
-      </a>`
+    ?`<a href="${es.pin}" target="_blank" class="pin-tile"><div class="pin-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.641 1.267 1.408 0 .858-.546 2.141-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.132-1.867 3.132-4.562 0-2.387-1.715-4.054-4.163-4.054-2.838 0-4.503 2.128-4.503 4.327 0 .856.33 1.775.741 2.276a.3.3 0 0 1 .069.286c-.076.312-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.522 0 10-4.477 10-10S17.522 2 12 2z"/></svg></div><div class="pin-text"><div class="pt">Pinterest Board</div><div class="ps">${es.pin}</div></div><div class="pin-arrow">›</div></a>`
     :`<span class="pin-empty">No link added</span>`;
-
   const editClass=isEditing?'is-editing':'';
   document.getElementById('detail-inner').innerHTML=`
     <div class="${editClass}" id="detail-body">
@@ -711,7 +889,6 @@ function renderDetail(){
         ${heroSrc?`<img src="${heroSrc}" id="hero-img" alt="">`:`<div class="dh-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
         <button class="hero-upload-btn" onclick="document.getElementById('hero-photo-input').click()">+ Add Photo</button>
       </div>
-
       <div class="detail-top">
         <div class="detail-title-wrap">
           <div class="detail-title" id="d-title-view">${es.name||'Untitled'}</div>
@@ -720,133 +897,114 @@ function renderDetail(){
         </div>
         <button class="edit-btn" id="edit-toggle-btn" onclick="toggleEdit()">${isEditing?'Save':'Edit'}</button>
       </div>
-
       <div class="stage-badge">
         <span class="stage-badge-dot dot-${stageKey}" id="d-stage-dot"></span>
         <span class="stage-badge-label">${es.stage||'Idea'}</span>
         <select class="stage-select" id="d-stage-select" onchange="editField('stage',this.value);updateStageDot()">
-          ${STAGES.map(s=>`<option value="${s.label}"${(es.stage||'Idea')===s.label?' selected':''}>${s.label}</option>`).join('')}
+          ${ALL_STAGES.map(s=>`<option value="${s.label}"${(es.stage||'Idea')===s.label?' selected':''}>${s.label}</option>`).join('')}
         </select>
       </div>
-
       <div class="detail-2col">
-        <div class="dcard">
-          <div class="dl">Clay</div>
+        <div class="dcard"><div class="dl">Clay</div>
           <div class="dv" id="d-clay-view">${es.clay||'—'}</div>
           <input class="hidden" id="d-clay-input" type="text" value="${es.clay||''}" oninput="editField('clay',this.value)" placeholder="Clay body">
         </div>
-        <div class="dcard">
-          <div class="dl">Shrinkage</div>
+        <div class="dcard"><div class="dl">Shrinkage</div>
           <div class="dv" id="d-shrink-view">${es.shrink?es.shrink+'%':'—'}</div>
           <input class="hidden" id="d-shrink-input" type="number" value="${es.shrink||''}" step=".5" oninput="editField('shrink',this.value);refreshCalcDisplay()" placeholder="14">
         </div>
       </div>
-
       <div class="detail-2col">
-        <div class="dcard">
-          <div class="dl">Goal Diameter</div>
+        <div class="dcard"><div class="dl">Goal Diameter</div>
           <div class="dv" id="d-dia-view">${es.dia?es.dia+' in':'—'}</div>
           <input class="hidden" id="d-dia-input" type="number" value="${es.dia||''}" step=".1" oninput="editField('dia',this.value);refreshCalcDisplay()" placeholder="6">
         </div>
-        <div class="dcard">
-          <div class="dl">Goal Height</div>
+        <div class="dcard"><div class="dl">Goal Height</div>
           <div class="dv" id="d-ht-view">${es.ht?es.ht+' in':'—'}</div>
           <input class="hidden" id="d-ht-input" type="number" value="${es.ht||''}" step=".1" oninput="editField('ht',this.value);refreshCalcDisplay()" placeholder="4">
         </div>
       </div>
-
-      ${calcHtml?calcHtml:`<div id="build-calc-section"></div>`}
-
-      <div class="detail-section">
-        <div class="ds-label">Build Method</div>
-        <div class="dv" id="d-method-view">${es.method||'—'}</div>
-        <select class="hidden" id="d-method-input" onchange="editField('method',this.value)">
-          <option value="">Select…</option>
-          ${['Hand built','Thrown','Both'].map(m=>`<option${es.method===m?' selected':''}>${m}</option>`).join('')}
-        </select>
+      <div class="detail-2col">
+        <div class="dcard"><div class="dl">Construction</div>
+          <div class="dv" id="d-method-view">${es.method||'—'}</div>
+          <select class="hidden" id="d-method-input" onchange="editField('method',this.value)"><option value="">Select…</option>${['Thrown','Hand built','Both'].map(m=>`<option${es.method===m?' selected':''}>${m}</option>`).join('')}</select>
+        </div>
+        <div class="dcard"><div class="dl">Difficulty</div>
+          <div class="dv" id="d-difficulty-view">${es.difficulty||'—'}</div>
+          <select class="hidden" id="d-difficulty-input" onchange="editField('difficulty',this.value)"><option value="">Select…</option>${['Easy','Medium','Hard'].map(m=>`<option${es.difficulty===m?' selected':''}>${m}</option>`).join('')}</select>
+        </div>
       </div>
-
+      ${es.price||es.dateCompleted?`<div class="detail-2col">
+        <div class="dcard"><div class="dl">Price</div>
+          <div class="dv" id="d-price-view">${es.price?'£'+parseFloat(es.price).toFixed(2):'—'}</div>
+          <input class="hidden" id="d-price-input" type="number" step="0.01" min="0" value="${es.price||''}" oninput="editField('price',this.value)" placeholder="0.00">
+        </div>
+        <div class="dcard"><div class="dl">Date Completed</div>
+          <div class="dv" id="d-date-view">${es.dateCompleted?formatDate(es.dateCompleted):'—'}</div>
+          <input class="hidden" id="d-date-input" type="date" value="${es.dateCompleted||''}" oninput="editField('dateCompleted',this.value)">
+        </div>
+      </div>`:`<div class="detail-2col" id="price-date-row" style="${isEditing?'':'display:none'}">
+        <div class="dcard"><div class="dl">Price</div>
+          <input id="d-price-input" type="number" step="0.01" min="0" value="" oninput="editField('price',this.value)" placeholder="0.00">
+        </div>
+        <div class="dcard"><div class="dl">Date Completed</div>
+          <input id="d-date-input" type="date" value="" oninput="editField('dateCompleted',this.value)">
+        </div>
+      </div>`}
+      ${calcHtml?calcHtml:`<div id="build-calc-section"></div>`}
       <div class="detail-section">
         <div class="ds-label">Glazes</div>
         <div class="glaze-list" id="d-glazes">${glazeRows||'<span style="font-size:12px;color:var(--muted)">No glazes added</span>'}</div>
         <button class="add-glaze-btn" onclick="addDetailGlaze()">+ Add glaze</button>
       </div>
-
       <div class="detail-section">
         <div class="ds-label">Inspiration</div>
         ${pinHtml}
         <input class="pin-input" type="url" value="${es.pin||''}" oninput="editField('pin',this.value)" placeholder="https://pinterest.com/…">
       </div>
-
       <div class="detail-section">
         <div class="ds-label">Notes</div>
         <div class="detail-notes">${es.notes||'<span style="color:var(--muted);font-style:italic">No notes yet</span>'}</div>
         <textarea class="detail-notes-input" oninput="editField('notes',this.value)" placeholder="Glaze tests, firing notes, ideas…">${es.notes||''}</textarea>
       </div>
-
-      ${(es.photos&&es.photos.length>0)?`<div class="detail-section">
+      <div class="detail-section">
         <div class="ds-label">Photos</div>
         <div class="photo-strip" id="d-photo-strip">
-          ${es.photos.map(ph=>`<img src="${ph}">`).join('')}
+          ${(es.photos&&es.photos.length)?es.photos.map(ph=>`<img src="${ph}">`).join(''):''}
           <button class="add-photo-btn" onclick="document.getElementById('hero-photo-input').click()">+</button>
         </div>
-      </div>`:
-      `<div class="detail-section">
-        <div class="ds-label">Photos</div>
-        <div class="photo-strip" id="d-photo-strip">
-          <button class="add-photo-btn" onclick="document.getElementById('hero-photo-input').click()">+</button>
-        </div>
-      </div>`}
+      </div>
     </div>`;
 }
-
 function toggleEdit(){
   if(!isEditing){
-    // Enter edit mode
     const p=projects.find(x=>x.id===detailId);if(!p)return;
-    editState=JSON.parse(JSON.stringify(p)); // deep copy
+    editState=JSON.parse(JSON.stringify(p));
     isEditing=true;
     applyEditMode();
   } else {
-    // Save
     const p=projects.find(x=>x.id===detailId);if(!p)return;
     Object.assign(p,editState);
     save();isEditing=false;editState={};
-    renderBoard();
     renderDetail();
   }
 }
-
 function applyEditMode(){
-  const body=document.getElementById('detail-body');
-  if(!body)return;
+  const body=document.getElementById('detail-body');if(!body)return;
   body.classList.add('is-editing');
-  // Title
   const tv=document.getElementById('d-title-view');const ti=document.getElementById('d-title-input');
   if(tv)tv.classList.add('hidden');if(ti)ti.classList.remove('hidden');
-  // Clay, shrink, dia, ht, method
-  ['clay','shrink','dia','ht','method'].forEach(f=>{
-    const v=document.getElementById('d-'+f+'-view');
-    const i=document.getElementById('d-'+f+'-input');
+  ['clay','shrink','dia','ht','method','difficulty','price','date'].forEach(f=>{
+    const v=document.getElementById('d-'+f+'-view');const i=document.getElementById('d-'+f+'-input');
     if(v)v.classList.add('hidden');if(i)i.classList.remove('hidden');
   });
-  // Edit btn text
+  const pr=document.getElementById('price-date-row');if(pr)pr.style.display='';
   const eb=document.getElementById('edit-toggle-btn');
   if(eb){eb.textContent='Save';eb.classList.add('save-mode');}
 }
-
-function editField(key,val){
-  editState[key]=val;
-}
-function editGlaze(i,key,val){
-  if(!editState.glazes)editState.glazes=[];
-  if(editState.glazes[i])editState.glazes[i][key]=val;
-}
-function removeDetailGlaze(i){
-  if(!editState.glazes)return;
-  editState.glazes.splice(i,1);
-  rerenderDetailGlazes();
-}
+function editField(key,val){editState[key]=val;}
+function editGlaze(i,key,val){if(!editState.glazes)editState.glazes=[];if(editState.glazes[i])editState.glazes[i][key]=val;}
+function removeDetailGlaze(i){if(!editState.glazes)return;editState.glazes.splice(i,1);rerenderDetailGlazes();}
 function addDetailGlaze(){
   if(!editState.glazes)editState.glazes=[];
   editState.glazes.push({id:uid(),name:'',color:GLAZE_DEFAULTS[editState.glazes.length%GLAZE_DEFAULTS.length],role:'Top coat'});
@@ -857,15 +1015,11 @@ function rerenderDetailGlazes(){
   const glazes=editState.glazes||[];
   el.innerHTML=glazes.map((g,i)=>`
     <div class="glaze-row-d">
-      <div class="gswatch" style="background:${g.color}">
-        <input type="color" value="${g.color}" onchange="editGlaze(${i},'color',this.value);this.parentElement.style.background=this.value">
-      </div>
+      <div class="gswatch" style="background:${g.color}"><input type="color" value="${g.color}" onchange="editGlaze(${i},'color',this.value);this.parentElement.style.background=this.value"></div>
       <span class="gname">${g.name}</span>
       <input class="gname-input" type="text" value="${g.name}" oninput="editGlaze(${i},'name',this.value)" placeholder="Glaze name">
       <span class="grole">${g.role}</span>
-      <select class="grole-select" onchange="editGlaze(${i},'role',this.value)">
-        ${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}
-      </select>
+      <select class="grole-select" onchange="editGlaze(${i},'role',this.value)">${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}</select>
       <button class="del-glaze-btn" onclick="removeDetailGlaze(${i})">✕</button>
     </div>`).join('')||'<span style="font-size:12px;color:var(--muted)">No glazes added</span>';
 }
@@ -875,11 +1029,9 @@ function updateStageDot(){
   const dot=document.getElementById('d-stage-dot');if(dot){dot.className='stage-badge-dot dot-'+key;}
 }
 function refreshCalcDisplay(){
-  const sr=parseFloat(editState.shrink)||0;
-  const dd=parseFloat(editState.dia)||0;
-  const hh=parseFloat(editState.ht)||0;
+  const sr=parseFloat(editState.shrink)||0,dd=parseFloat(editState.dia)||0,hh=parseFloat(editState.ht)||0;
   const sec=document.getElementById('build-calc-section');if(!sec)return;
-  if(!sr||((!dd)&&(!hh))){sec.innerHTML='';return;}
+  if(!sr||(!dd&&!hh)){sec.innerHTML='';return;}
   const f=1/(1-sr/100);
   sec.innerHTML=`<div class="detail-section"><div class="ds-label">Build Dimensions</div><div class="build-result">
     ${dd?`<div class="br-item"><span class="brl">Build Diameter</span><span class="brv">${(dd*f).toFixed(2)}"</span></div>`:''}
@@ -892,16 +1044,10 @@ function handleHeroPhotos(e){
     r.onload=ev=>{
       if(!editState.photos)editState.photos=[];
       editState.photos.push(ev.target.result);
-      // Update hero
       const hero=document.getElementById('detail-hero');
       if(hero){const img=hero.querySelector('img')||document.createElement('img');img.id='hero-img';img.src=editState.photos[0];if(!hero.querySelector('img'))hero.prepend(img);}
-      // Update strip
       const strip=document.getElementById('d-photo-strip');
-      if(strip){
-        const addBtn=strip.querySelector('.add-photo-btn');
-        const newImg=document.createElement('img');newImg.src=ev.target.result;
-        strip.insertBefore(newImg,addBtn||null);
-      }
+      if(strip){const addBtn=strip.querySelector('.add-photo-btn');const newImg=document.createElement('img');newImg.src=ev.target.result;strip.insertBefore(newImg,addBtn||null);}
     };
     r.readAsDataURL(f);
   });
@@ -909,24 +1055,26 @@ function handleHeroPhotos(e){
 }
 
 // ── NEW PROJECT MODAL ──
-function openNewProjectModal(){
+function openNewProjectModal(defaultStage='Idea'){
   ['f-name','f-pin','f-notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-clay').value='Soldate 60';
   document.getElementById('f-shrink').value='14';
   document.getElementById('f-dia').value='';
   document.getElementById('f-ht').value='';
   document.getElementById('f-method').value='';
+  document.getElementById('f-difficulty').value='';
+  document.getElementById('f-price').value='';
+  document.getElementById('f-dateCompleted').value='';
   document.getElementById('modal-calc-out').innerHTML='';
   document.getElementById('f-thumbs').innerHTML='';
   formGlazes=[];formPhotos=[];
-  renderFormGlazes();buildFormStages('Idea');
+  renderFormGlazes();buildFormStages(defaultStage);
   document.getElementById('modal-wrap').classList.remove('hidden');
 }
-function closeModal(){document.getElementById('modal-wrap').classList.add('hidden')}
-
+function closeModal(){document.getElementById('modal-wrap').classList.add('hidden');}
 function buildFormStages(sel){
   const el=document.getElementById('f-stages');
-  el.innerHTML=STAGES.map(s=>{
+  el.innerHTML=ALL_STAGES.map(s=>{
     const active=s.label===(sel||'Idea');
     return `<button class="spill${active?' sel-'+s.key:''}" onclick="pickStage(this,'${s.label}','${s.key}')">${s.label}</button>`;
   }).join('');
@@ -950,9 +1098,7 @@ function renderFormGlazes(){
     <div class="gb-row">
       <div class="color-swatch" style="background:${g.color}"><input type="color" value="${g.color}" onchange="upFormGlaze(${i},'color',this.value)"></div>
       <input type="text" value="${g.name}" placeholder="Glaze name" oninput="upFormGlaze(${i},'name',this.value)">
-      <select onchange="upFormGlaze(${i},'role',this.value)">
-        ${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}
-      </select>
+      <select onchange="upFormGlaze(${i},'role',this.value)">${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}</select>
       <button class="gb-del" onclick="delFormGlaze(${i})">✕</button>
     </div>`).join('');
 }
@@ -978,6 +1124,7 @@ function modalCalc(){
   el.innerHTML=html+'</div>';
 }
 function saveNewProject(){
+  const stage=getFormStage();
   const p={
     id:uid(),
     name:document.getElementById('f-name').value.trim()||'Untitled',
@@ -988,12 +1135,14 @@ function saveNewProject(){
     pin:document.getElementById('f-pin').value.trim(),
     notes:document.getElementById('f-notes').value.trim(),
     method:document.getElementById('f-method').value,
-    stage:getFormStage(),
-    glazes:[...formGlazes],
-    photos:[...formPhotos]
+    difficulty:document.getElementById('f-difficulty').value,
+    price:parseFloat(document.getElementById('f-price').value)||0,
+    dateCompleted:document.getElementById('f-dateCompleted').value,
+    stage,glazes:[...formGlazes],photos:[...formPhotos]
   };
   projects.unshift(p);
-  save();closeModal();renderBoard();
+  save();closeModal();
+  navTo(stageToView(stage));
 }
 
 // ── CALCULATOR ──
@@ -1024,7 +1173,7 @@ function calcRun(){
   let html=`<div class="calc-out-box"><div class="co-label">Build your piece at</div><div class="co-grid">`;
   if(hd)html+=`<div class="co-item"><div class="col">Diameter / Width</div><div class="cov">${(d*f).toFixed(2)}<span class="cou"> ${u}</span></div></div>`;
   if(hh)html+=`<div class="co-item"><div class="col">Height</div><div class="cov">${(h*f).toFixed(2)}<span class="cou"> ${u}</span></div></div>`;
-  html+=`</div><div class="calc-note">Using ${calcShrinkRate}% · Soldate high-fire default.</div></div>`;
+  html+=`</div><div class="calc-note">Using ${calcShrinkRate}% shrinkage rate.</div></div>`;
   el.innerHTML=html;
 }
 
@@ -1074,13 +1223,19 @@ function addGlazeToLib(){
 function deleteGlaze(id){glazeLib=glazeLib.filter(g=>g.id!==id);save();renderGlazeList();}
 
 // ── INIT ──
-load();renderBoard();renderClayList();renderGlazeList();calcRun();
-
-// Register service worker for PWA
+load();
+renderIdeas();
+renderActive();
+renderFinished();
+renderClayList();
+renderGlazeList();
+calcRun();
+if(localStorage.getItem('kd_collapsed')==='1'){
+  sidenavCollapsed=true;
+  document.getElementById('sidenav').classList.add('collapsed');
+}
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
-  });
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
 }
 </script>
 </body>
