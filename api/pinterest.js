@@ -27,13 +27,13 @@ export default async function handler(req, res) {
     const boardId = extractBoardId(html);
     if (!boardId) {
       // No board ID found — return whatever we scraped from the page
-      return res.json({ images: [...allImages.keys()], pages: 1 });
+      return res.json({ images: [...allImages.keys()], pages: 1, debug: 'no_board_id' });
     }
 
     // Step 4: Paginate through ALL pins via BoardFeedResource
     let bookmark;
     let pageCount = 0;
-    const MAX_PAGES = 60; // safety cap (60 × 25 = 1500 pins max)
+    const MAX_PAGES = 20; // safety cap (20 × 100 = 2000 pins max)
 
     while (pageCount < MAX_PAGES) {
       const feed = await fetchFeedPage(boardId, bookmark, HEADERS);
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
       pageCount++;
     }
 
-    res.json({ images: [...allImages.keys()], total: allImages.size, pages: pageCount + 1 });
+    res.json({ images: [...allImages.keys()], total: allImages.size, pages: pageCount + 1, boardId });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -64,7 +64,7 @@ export default async function handler(req, res) {
 
 // Fetch one page of pins from Pinterest's internal BoardFeedResource API
 async function fetchFeedPage(boardId, bookmark, headers) {
-  const options = { board_id: boardId, page_size: 25 };
+  const options = { board_id: boardId, page_size: 100 };
   if (bookmark) options.bookmarks = [bookmark];
 
   const apiUrl =
@@ -110,6 +110,14 @@ function extractBoardId(html) {
     /"board"\s*:\s*\{[^}]*"id"\s*:\s*"(\d+)"/,
     /data-board-id="(\d+)"/,
     /"id"\s*:\s*"(\d+)"[^}]*"type"\s*:\s*"board"/,
+    // Next.js / PWS data blob patterns
+    /"board":\{"id":"(\d+)"/,
+    /"boardId":"(\d+)"/,
+    /"board_id":"(\d+)"/,
+    /"entityId":"(\d+)","type":"board"/,
+    // Pinterest sometimes puts it in a script tag as plain JSON
+    /,"id":"(\d{10,})",.*?"type":"board"/,
+    /board\/(\d{10,})/,
   ];
   for (const p of patterns) {
     const m = html.match(p);
