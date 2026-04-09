@@ -733,15 +733,40 @@ function toggleInspo(){
 }
 function setInspoBoard(){
   const url=document.getElementById('inspo-url-input').value.trim();
+  if(!url)return;
   localStorage.setItem('kd_pinboard',url);
   renderPinEmbed(url);
+}
+function parsePinBoard(url){
+  try{
+    const p=new URL(url).pathname.replace(/^\/|\/$/g,'').split('/');
+    if(p.length>=2)return p[0]+' / '+p.slice(1).join('/');
+    return url;
+  }catch(e){return url;}
 }
 function renderPinEmbed(url){
   const el=document.getElementById('inspo-embed');
   if(!url){el.innerHTML='<p class="inspo-hint">Paste a Pinterest board URL above to preview your inspiration pins</p>';return;}
-  el.innerHTML=`<a data-pin-do="embedBoard" data-pin-scale-height="280" data-pin-board-width="400" href="${url}"></a>`;
+  const label=parsePinBoard(url);
+  // Always show a clickable card immediately
+  el.innerHTML=`<a href="${url}" target="_blank" class="pin-tile" style="margin-bottom:10px">
+    <div class="pin-icon"><svg viewBox="0 0 24 24" fill="#fff" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.641 1.267 1.408 0 .858-.546 2.141-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.132-1.867 3.132-4.562 0-2.387-1.715-4.054-4.163-4.054-2.838 0-4.503 2.128-4.503 4.327 0 .856.33 1.775.741 2.276a.3.3 0 0 1 .069.286c-.076.312-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.522 0 10-4.477 10-10S17.522 2 12 2z"/></svg></div>
+    <div class="pin-text"><div class="pt">${label}</div><div class="ps">Open board on Pinterest ↗</div></div>
+  </a>
+  <div id="pin-widget-area"></div>`;
+  // Attempt live board widget
+  const wa=document.getElementById('pin-widget-area');
+  const a=document.createElement('a');
+  a.setAttribute('data-pin-do','embedBoard');
+  a.setAttribute('data-pin-scale-height','260');
+  a.setAttribute('data-pin-scale-width','80');
+  a.href=url;
+  wa.appendChild(a);
   const old=document.getElementById('pin-widget-js');if(old)old.remove();
-  const s=document.createElement('script');s.id='pin-widget-js';s.async=true;s.src='//assets.pinterest.com/js/pinit.js';
+  try{delete window.PinUtils;}catch(e){}
+  const s=document.createElement('script');
+  s.id='pin-widget-js';
+  s.src='https://assets.pinterest.com/js/pinit.js';
   document.body.appendChild(s);
 }
 
