@@ -319,6 +319,53 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .pin-more-link{display:block;font-size:11px;color:var(--clay);text-decoration:none;letter-spacing:0.05em;font-family:'Lato',sans-serif;text-align:right;padding-bottom:2px}
 .pin-more-link:hover{opacity:.7}
 
+/* ══ INSPO PAGE ══ */
+#view-inspo{flex-direction:column}
+.inspo-page-header{padding:13px 20px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid var(--sand-l);background:var(--cream)}
+.inspo-board-label{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;letter-spacing:0.02em;font-family:'Lato',sans-serif}
+.inspo-hdr-btn{background:var(--sand-l);border:none;border-radius:var(--r);padding:6px 11px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:0.05em;text-transform:uppercase;flex-shrink:0;transition:all .12s}
+.inspo-hdr-btn:hover{background:var(--sand);color:var(--ink)}
+.inspo-url-bar{display:flex;gap:8px;padding:10px 20px;border-bottom:1px solid var(--sand-l);flex-shrink:0;background:var(--cream)}
+.inspo-page-scroll{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.inspo-page-scroll::-webkit-scrollbar{width:5px}
+.inspo-page-scroll::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
+.inspo-full-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:3px;padding:3px}
+.inspo-pin{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;background:var(--sand-l)}
+.inspo-pin img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s}
+.inspo-pin:hover img{transform:scale(1.07)}
+.inspo-pin-ov{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .18s;display:flex;align-items:center;justify-content:center}
+.inspo-pin:hover .inspo-pin-ov{background:rgba(0,0,0,.3)}
+.inspo-pin-plus{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .16s;font-size:24px;color:var(--ink);line-height:1}
+.inspo-pin:hover .inspo-pin-plus{opacity:1}
+.inspo-page-msg{padding:52px 20px;text-align:center;color:var(--muted);font-family:'Playfair Display',serif;font-style:italic;font-size:15px}
+.inspo-setup{padding:40px 24px;max-width:420px;margin:0 auto}
+.inspo-setup p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+
+/* ══ PIN ACTION SHEET ══ */
+.pin-sheet-wrap{position:fixed;inset:0;background:rgba(40,38,31,.52);z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
+.pin-sheet-wrap.hidden{display:none}
+.pin-sheet{background:var(--cream);border-radius:20px 20px 0 0;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.pin-sheet-hero{height:200px;background:var(--sand-l);flex-shrink:0;overflow:hidden}
+.pin-sheet-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.pin-sheet-body{padding:20px 20px 32px;flex:1;overflow-y:auto}
+.pin-sheet-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;margin-bottom:15px;color:var(--ink)}
+.pin-sheet-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.psb{padding:15px 8px;border-radius:var(--rl);font-family:'Lato',sans-serif;font-size:11px;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;border:1.5px solid var(--sand);background:var(--white);color:var(--ink);transition:all .14s;text-align:center}
+.psb:hover{border-color:var(--clay-m);color:var(--clay)}
+.psb.psb-p{background:var(--clay);border-color:var(--clay);color:#fff}
+.psb.psb-p:hover{opacity:.86}
+.pin-proj-list{display:flex;flex-direction:column;gap:7px;max-height:260px;overflow-y:auto;margin-bottom:8px}
+.pin-proj-row{display:flex;align-items:center;gap:11px;padding:9px 12px;background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--r);cursor:pointer;transition:box-shadow .12s}
+.pin-proj-row:hover{box-shadow:0 3px 12px rgba(0,0,0,.08);border-color:var(--sand)}
+.pin-proj-thumb{width:38px;height:38px;border-radius:6px;background:var(--sand-l);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.pin-proj-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pin-proj-thumb svg{width:16px;height:16px;stroke:var(--sand);fill:none;stroke-width:1.2}
+.pin-proj-name{font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pin-proj-stage{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em}
+.pin-sheet-status{font-size:12px;color:var(--clay);text-align:center;padding:6px 0;font-style:italic;min-height:26px}
+.pin-sheet-cancel{width:100%;padding:12px;background:transparent;border:1px solid var(--sand);border-radius:var(--r);cursor:pointer;font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);margin-top:4px;transition:all .12s}
+.pin-sheet-cancel:hover{border-color:var(--muted);color:var(--ink)}
+
 /* Mobile */
 @media(max-width:680px){
   .hamburger{display:flex}
@@ -329,6 +376,8 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
   .gallery-wrap{padding:14px 14px 48px}
   .inspo-toggle-row{padding:10px 14px}
   .inspo-body{padding:0 14px 12px}
+  .inspo-full-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  .inspo-page-header,.inspo-url-bar{padding-left:14px;padding-right:14px}
 }
 
 /* ══ MODAL ══ */
@@ -420,6 +469,10 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
         <svg viewBox="0 0 24 24"><path d="M6 8h12"/><path d="M6 8a7 7 0 0 0 14 0" fill="none"/><path d="M9 19h6"/><path d="M12 15v4"/></svg>
         <span class="snav-label">Finished</span>
       </button>
+      <button class="snav-item" id="bnav-inspo" onclick="navTo('inspo')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="snav-label">Inspiration</span>
+      </button>
       <div class="snav-divider"></div>
       <button class="snav-item" id="bnav-calc" onclick="navTo('calc')">
         <svg viewBox="0 0 24 24"><path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg>
@@ -476,6 +529,23 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
       <div class="gallery-wrap">
         <div class="gallery-filters" id="finished-filters"></div>
         <div class="gallery-grid" id="finished-grid"></div>
+      </div>
+    </div>
+
+    <!-- ── INSPIRATION PAGE ── -->
+    <div class="view" id="view-inspo">
+      <div class="inspo-page-header" id="inspo-page-header">
+        <span class="inspo-board-label" id="inspo-page-label">Inspiration Board</span>
+        <button class="inspo-hdr-btn" onclick="refreshInspoPage()">↺ Refresh</button>
+        <button class="inspo-hdr-btn" onclick="toggleInspoBoardBar()">Change Board</button>
+      </div>
+      <div class="inspo-url-bar hidden" id="inspo-url-bar">
+        <input class="inspo-url-input" id="inspo-page-url" type="url" placeholder="Paste Pinterest board or pin.it URL…" style="flex:1">
+        <button class="inspo-set-btn" onclick="setInspoBoardFromPage()">Load</button>
+      </div>
+      <div class="inspo-page-scroll" id="inspo-page-scroll">
+        <div class="inspo-full-grid" id="inspo-full-grid"></div>
+        <div class="inspo-page-msg" id="inspo-page-msg"></div>
       </div>
     </div>
 
@@ -563,6 +633,23 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
   </div><!-- end main-content -->
 </div><!-- end app -->
 
+<!-- PIN ACTION SHEET -->
+<div class="pin-sheet-wrap hidden" id="pin-sheet-wrap" onclick="pinSheetBgClick(event)">
+  <div class="pin-sheet">
+    <div class="pin-sheet-hero"><img id="pin-sheet-img" src="" alt=""></div>
+    <div class="pin-sheet-body">
+      <div class="pin-sheet-title">Add this to a project</div>
+      <div class="pin-sheet-btns">
+        <button class="psb psb-p" onclick="pinToNewProject()">+ New Project</button>
+        <button class="psb" id="psb-existing" onclick="togglePinProjectPicker()">Add to Existing</button>
+      </div>
+      <div class="pin-proj-list hidden" id="pin-proj-list"></div>
+      <div class="pin-sheet-status" id="pin-sheet-status"></div>
+      <button class="pin-sheet-cancel" onclick="closePinSheet()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- NEW PROJECT MODAL -->
 <div class="modal-wrap hidden" id="modal-wrap">
   <div class="modal">
@@ -646,6 +733,7 @@ let currentView='ideas',prevView='ideas';
 let ideaDiffFilter='All',ideaMethodFilter='All';
 let finishedSort='date';
 let sidenavCollapsed=false;
+let currentPinUrl='',inspoLoaded=false,pendingPhoto=null;
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 
@@ -695,6 +783,7 @@ function navTo(v){
   if(v==='ideas')renderIdeas();
   if(v==='active')renderActive();
   if(v==='finished')renderFinished();
+  if(v==='inspo')renderInspoPage();
 }
 function goBack(){
   isEditing=false;editState={};
@@ -761,6 +850,115 @@ async function fetchPinImages(boardUrl){
 function renderPinEmbed(url){
   if(url)fetchPinImages(url);
   else document.getElementById('inspo-embed').innerHTML='<p class="inspo-hint">Paste a Pinterest board URL above to preview your inspiration pins</p>';
+}
+
+// ── INSPO PAGE ──
+function renderInspoPage(){
+  const saved=localStorage.getItem('kd_pinboard')||'';
+  if(!saved){
+    document.getElementById('inspo-page-msg').innerHTML='<div class="inspo-setup"><p>Paste a Pinterest board or <code>pin.it</code> link below to fill this page with your inspiration pins. Tap any image to add it to a project.</p></div>';
+    document.getElementById('inspo-full-grid').innerHTML='';
+    document.getElementById('inspo-url-bar').classList.remove('hidden');
+    document.getElementById('inspo-page-url').value='';
+    return;
+  }
+  document.getElementById('inspo-page-label').textContent=saved.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'');
+  if(!inspoLoaded)loadInspoPage(saved);
+}
+async function loadInspoPage(url){
+  const grid=document.getElementById('inspo-full-grid');
+  const msg=document.getElementById('inspo-page-msg');
+  grid.innerHTML='';
+  msg.textContent='Fetching pins…';
+  try{
+    const res=await fetch(`/api/pinterest?url=${encodeURIComponent(url)}`);
+    const data=await res.json();
+    const imgs=data.images||[];
+    if(!imgs.length){msg.textContent='No images found — make sure the board is public.';return;}
+    msg.textContent='';
+    grid.innerHTML=imgs.map(u=>`<div class="inspo-pin" onclick="openPinSheet('${u}')">
+      <img src="${u}" loading="lazy" onerror="this.closest('.inspo-pin').remove()">
+      <div class="inspo-pin-ov"><div class="inspo-pin-plus">+</div></div>
+    </div>`).join('');
+    inspoLoaded=true;
+  }catch(e){msg.textContent='Couldn\'t load pins. Try refreshing.';}
+}
+function refreshInspoPage(){
+  inspoLoaded=false;
+  const saved=localStorage.getItem('kd_pinboard')||'';
+  if(saved)loadInspoPage(saved);
+}
+function toggleInspoBoardBar(){
+  const bar=document.getElementById('inspo-url-bar');
+  bar.classList.toggle('hidden');
+  if(!bar.classList.contains('hidden'))document.getElementById('inspo-page-url').focus();
+}
+function setInspoBoardFromPage(){
+  const url=document.getElementById('inspo-page-url').value.trim();
+  if(!url)return;
+  localStorage.setItem('kd_pinboard',url);
+  inspoLoaded=false;
+  document.getElementById('inspo-url-bar').classList.add('hidden');
+  document.getElementById('inspo-page-label').textContent=url.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'');
+  loadInspoPage(url);
+}
+
+// ── PIN SHEET ──
+function openPinSheet(url){
+  currentPinUrl=url;
+  document.getElementById('pin-sheet-img').src=url;
+  document.getElementById('pin-proj-list').classList.add('hidden');
+  document.getElementById('pin-proj-list').innerHTML='';
+  document.getElementById('pin-sheet-status').textContent='';
+  document.getElementById('psb-existing').textContent='Add to Existing';
+  document.getElementById('pin-sheet-wrap').classList.remove('hidden');
+}
+function closePinSheet(){document.getElementById('pin-sheet-wrap').classList.add('hidden');currentPinUrl='';}
+function pinSheetBgClick(e){if(e.target===document.getElementById('pin-sheet-wrap'))closePinSheet();}
+function togglePinProjectPicker(){
+  const list=document.getElementById('pin-proj-list');
+  if(!list.classList.contains('hidden')){list.classList.add('hidden');return;}
+  list.innerHTML=projects.length
+    ?projects.map(p=>`<div class="pin-proj-row" onclick="addPinToProject('${p.id}')">
+      <div class="pin-proj-thumb">${p.photos&&p.photos.length?`<img src="${p.photos[0]}">`:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/></svg>'}</div>
+      <div><div class="pin-proj-name">${p.name||'Untitled'}</div><div class="pin-proj-stage">${p.stage||'Idea'}</div></div>
+    </div>`).join('')
+    :'<p style="font-size:12px;color:var(--muted);padding:8px 0">No projects yet</p>';
+  list.classList.remove('hidden');
+}
+async function pinToNewProject(){
+  const url=currentPinUrl;if(!url)return;
+  setSheetStatus('Fetching image…');
+  try{
+    pendingPhoto=await fetchPinBase64(url);
+    closePinSheet();
+    topBtnClick();
+  }catch(e){setSheetStatus('Couldn\'t fetch image, try again');}
+}
+async function addPinToProject(id){
+  const url=currentPinUrl;if(!url)return;
+  const p=projects.find(x=>x.id===id);if(!p)return;
+  setSheetStatus('Adding image…');
+  try{
+    const b64=await fetchPinBase64(url);
+    if(!p.photos)p.photos=[];
+    p.photos.push(b64);
+    save();
+    setSheetStatus(`Added to "${p.name||'Untitled'}" ✓`);
+    setTimeout(closePinSheet,1200);
+  }catch(e){setSheetStatus('Couldn\'t fetch image, try again');}
+}
+function setSheetStatus(msg){document.getElementById('pin-sheet-status').textContent=msg;}
+async function fetchPinBase64(imgUrl){
+  const res=await fetch(`/api/image?url=${encodeURIComponent(imgUrl)}`);
+  if(!res.ok)throw new Error('image fetch failed');
+  const blob=await res.blob();
+  return new Promise((resolve,reject)=>{
+    const r=new FileReader();
+    r.onload=()=>resolve(r.result);
+    r.onerror=reject;
+    r.readAsDataURL(blob);
+  });
 }
 
 // ── IDEAS GALLERY ──
@@ -1149,8 +1347,9 @@ function openNewProjectModal(defaultStage='Idea'){
   document.getElementById('f-price').value='';
   document.getElementById('f-dateCompleted').value='';
   document.getElementById('modal-calc-out').innerHTML='';
-  document.getElementById('f-thumbs').innerHTML='';
-  formGlazes=[];formPhotos=[];
+  formGlazes=[];
+  if(pendingPhoto){formPhotos=[pendingPhoto];document.getElementById('f-thumbs').innerHTML=`<img src="${pendingPhoto}" style="width:56px;height:56px;border-radius:8px;object-fit:cover">`;pendingPhoto=null;}
+  else{formPhotos=[];document.getElementById('f-thumbs').innerHTML='';}
   renderFormGlazes();buildFormStages(defaultStage);
   document.getElementById('modal-wrap').classList.remove('hidden');
 }
@@ -1306,6 +1505,10 @@ function addGlazeToLib(){
 function deleteGlaze(id){glazeLib=glazeLib.filter(g=>g.id!==id);save();renderGlazeList();}
 
 // ── INIT ──
+// Set default inspiration board if none saved
+if(!localStorage.getItem('kd_pinboard')){
+  localStorage.setItem('kd_pinboard','https://pin.it/61apEtaeG');
+}
 load();
 renderIdeas();
 renderActive();
