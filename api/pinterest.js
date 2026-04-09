@@ -45,20 +45,30 @@ export default async function handler(req, res) {
       // Try to get board ID and board path from HTML
       boardId = extractBoardId(html);
 
-      // Extract board user/slug from the page (needed to call pidgets)
-      const pathMatch = html.match(/"board","path":"(\/([^\/\"]+)\/([^\/\"]+)\/)"/) ||
-                        html.match(/"path":"(\/([^\/\"]+)\/([^\/\"]+)\/)"[^}]*"type":"board"/);
-      if (pathMatch) {
-        boardUser = pathMatch[2];
-        boardSlug = pathMatch[3];
+      // Extract board user/slug from the final URL after redirect (most reliable)
+      // pageRes.url is the real pinterest.com URL after pin.it redirect
+      const finalUrl = pageRes.url || url;
+      const finalUrlMatch = finalUrl.match(/pinterest\.com\/([^\/\?#]+)\/([^\/\?#]+)/);
+      if (finalUrlMatch) {
+        boardUser = finalUrlMatch[1];
+        boardSlug = finalUrlMatch[2];
+      }
+
+      // Fallback: try to extract from the HTML if URL didn't work
+      if (!boardUser || !boardSlug) {
+        const pathMatch = html.match(/"board","path":"(\/([^\/\"]+)\/([^\/\"]+)\/)"/) ||
+                          html.match(/"path":"(\/([^\/\"]+)\/([^\/\"]+)\/)"[^}]*"type":"board"/);
+        if (pathMatch) {
+          boardUser = pathMatch[2];
+          boardSlug = pathMatch[3];
+        }
       }
     }
 
     // ── Step 2: Always try the pidgets API (public, no auth, 50 pins) ──
-    // This is our most reliable source. Extract board user/slug from pin.it if
-    // we didn't get them from the HTML.
+    // This is our most reliable source.
     if (!boardUser || !boardSlug) {
-      // Try to extract from the URL itself if it already looks like a board URL
+      // Last resort: try to extract from the original URL
       const boardUrlMatch = url.match(/pinterest\.com\/([^\/]+)\/([^\/]+)/);
       if (boardUrlMatch) {
         boardUser = boardUrlMatch[1];
