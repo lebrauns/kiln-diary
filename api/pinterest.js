@@ -3,19 +3,32 @@ export default async function handler(req, res) {
   const { url } = req.query;
   if (!url) return res.status(400).json({ error: 'No URL provided' });
 
-  const HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Cache-Control': 'no-cache',
-  };
+  const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
   try {
-    // Step 1: Fetch the board page (follows pin.it redirects automatically)
+    // Step 1: Fetch the board page — follows pin.it redirects automatically
+    // Capture the Set-Cookie headers so we can use them for API calls
     const pageRes = await fetch(url, {
       redirect: 'follow',
-      headers: { ...HEADERS, 'Accept': 'text/html,application/xhtml+xml,*/*;q=0.9' },
+      headers: {
+        'User-Agent': UA,
+        'Accept': 'text/html,application/xhtml+xml,*/*;q=0.9',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Cache-Control': 'no-cache',
+      },
     });
     if (!pageRes.ok) return res.status(pageRes.status).json({ error: `Pinterest returned ${pageRes.status}` });
+
+    // Build a cookie string from the response Set-Cookie headers
+    const setCookieHeaders = pageRes.headers.getSetCookie ? pageRes.headers.getSetCookie() : [];
+    const cookieMap = {};
+    for (const c of setCookieHeaders) {
+      const [pair] = c.split(';');
+      const [name, ...rest] = pair.split('=');
+      cookieMap[name.trim()] = rest.join('=').trim();
+    }
+    const cookieStr = Object.entries(cookieMap).map(([k, v]) => `${k}=${v}`).join('; ');
+    const csrfToken = cookieMap['csrftoken'] || '';
 
     const html = await pageRes.text();
 
@@ -23,20 +36,31 @@ export default async function handler(req, res) {
     const allImages = new Map();
     for (const img of extractHtmlImages(html)) allImages.set(img, true);
 
-    // Step 3: Find the board ID so we can paginate
+    // Step 3: Find the board ID
     const boardId = extractBoardId(html);
     if (!boardId) {
-      // No board ID found — return whatever we scraped from the page
       return res.json({ images: [...allImages.keys()], pages: 1, debug: 'no_board_id' });
     }
 
     // Step 4: Paginate through ALL pins via BoardFeedResource
+    // Use the session cookies we captured from the page load
+    const API_HEADERS = {
+      'User-Agent': UA,
+      'Accept': 'application/json, text/javascript, */*; q=0.01',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-Pinterest-AppState': 'active',
+      'X-CSRFToken': csrfToken,
+      'Referer': `https://www.pinterest.com/`,
+      'Cookie': cookieStr,
+    };
+
     let bookmark;
     let pageCount = 0;
-    const MAX_PAGES = 20; // safety cap (20 × 100 = 2000 pins max)
+    const MAX_PAGES = 20;
 
     while (pageCount < MAX_PAGES) {
-      const feed = await fetchFeedPage(boardId, bookmark, HEADERS);
+      const feed = await fetchFeedPage(boardId, bookmark, API_HEADERS);
       if (!feed) break;
 
       const pins = feed.resource_response?.data;
@@ -73,15 +97,7 @@ async function fetchFeedPage(boardId, bookmark, headers) {
     `&_=${Date.now()}`;
 
   try {
-    const res = await fetch(apiUrl, {
-      headers: {
-        ...headers,
-        Accept: 'application/json, text/javascript, */*; q=0.01',
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-Pinterest-AppState': 'active',
-        Referer: 'https://www.pinterest.com/',
-      },
-    });
+    const res = await fetch(apiUrl, { headers });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -105,19 +121,20 @@ function extractHtmlImages(html) {
 // Extract the numeric board ID from the page HTML
 function extractBoardId(html) {
   const patterns = [
+    // Most reliable: the boardfeed key in the Redux state
+    /boardfeed:(\d+)/,
+    // Common JSON patterns
     /"board_id"\s*:\s*"(\d+)"/,
     /"boardId"\s*:\s*"(\d+)"/,
-    /"board"\s*:\s*\{[^}]*"id"\s*:\s*"(\d+)"/,
-    /data-board-id="(\d+)"/,
-    /"id"\s*:\s*"(\d+)"[^}]*"type"\s*:\s*"board"/,
-    // Next.js / PWS data blob patterns
     /"board":\{"id":"(\d+)"/,
-    /"boardId":"(\d+)"/,
     /"board_id":"(\d+)"/,
+    /"boardId":"(\d+)"/,
     /"entityId":"(\d+)","type":"board"/,
-    // Pinterest sometimes puts it in a script tag as plain JSON
-    /,"id":"(\d{10,})",.*?"type":"board"/,
-    /board\/(\d{10,})/,
+    // Attribute patterns
+    /data-board-id="(\d+)"/,
+    // Fallback: large numeric ID near seo_description (board metadata)
+    /"id":"(\d{15,})"[^}]*"seo_description"/,
+    /"seo_description"[^}]*"id":"(\d{15,})"/,
   ];
   for (const p of patterns) {
     const m = html.match(p);
