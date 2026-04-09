@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   try {
     // Step 1: Fetch the board page — follows pin.it redirects automatically
-    // Capture the Set-Cookie headers so we can use them for API calls
+    // Capture the final URL (after redirect) and session cookies
     const pageRes = await fetch(url, {
       redirect: 'follow',
       headers: {
@@ -31,19 +31,47 @@ export default async function handler(req, res) {
     const csrfToken = cookieMap['csrftoken'] || '';
 
     const html = await pageRes.text();
+    const htmlLen = html.length;
+
+    // Extract the final board URL from the HTML (after pin.it redirect)
+    const boardPathMatch = html.match(/"board","path":"(\/[^\/]+\/[^\/\"]+\/)"/) ||
+                           html.match(/"path":"(\/[^\/]+\/[^\/\"]+\/)"[^}]*"type":"board"/);
+    const boardPath = boardPathMatch ? boardPathMatch[1] : null;
 
     // Step 2: Extract images visible in the initial page HTML
     const allImages = new Map();
     for (const img of extractHtmlImages(html)) allImages.set(img, true);
 
-    // Step 3: Find the board ID
-    const boardId = extractBoardId(html);
+    // Step 3: Find the board ID — try HTML first, then fall back to pidgets API
+    let boardId = extractBoardId(html);
+    let boardUser = null;
+    let boardSlug = null;
+
+    if (!boardId && boardPath) {
+      // Extract username/boardname from path like /lebraunz/ceramics/
+      const parts = boardPath.split('/').filter(Boolean);
+      if (parts.length >= 2) {
+        boardUser = parts[0];
+        boardSlug = parts[1];
+        // Try pidgets API — it returns board.id and doesn't require auth
+        const pidgetsData = await fetchPidgets(boardUser, boardSlug, UA);
+        if (pidgetsData) {
+          boardId = pidgetsData.boardId;
+          // Also add the 50 images from pidgets
+          for (const img of pidgetsData.images) allImages.set(img, true);
+        }
+      }
+    }
+
     if (!boardId) {
-      return res.json({ images: [...allImages.keys()], pages: 1, debug: 'no_board_id' });
+      return res.json({
+        images: [...allImages.keys()],
+        pages: 1,
+        debug: `no_board_id | html_len=${htmlLen} | board_path=${boardPath}`,
+      });
     }
 
     // Step 4: Paginate through ALL pins via BoardFeedResource
-    // Use the session cookies we captured from the page load
     const API_HEADERS = {
       'User-Agent': UA,
       'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -58,6 +86,7 @@ export default async function handler(req, res) {
     let bookmark;
     let pageCount = 0;
     const MAX_PAGES = 20;
+    let feedApiWorked = false;
 
     while (pageCount < MAX_PAGES) {
       const feed = await fetchFeedPage(boardId, bookmark, API_HEADERS);
@@ -66,6 +95,7 @@ export default async function handler(req, res) {
       const pins = feed.resource_response?.data;
       if (!Array.isArray(pins) || pins.length === 0) break;
 
+      feedApiWorked = true;
       for (const pin of pins) {
         const imgUrl =
           pin?.images?.['564x']?.url ||
@@ -80,9 +110,43 @@ export default async function handler(req, res) {
       pageCount++;
     }
 
-    res.json({ images: [...allImages.keys()], total: allImages.size, pages: pageCount + 1, boardId });
+    // Step 5: If BoardFeedResource didn't work, try fetching more from pidgets
+    // (pidgets caps at 50, but better than nothing)
+    if (!feedApiWorked && boardUser && boardSlug) {
+      const pidgetsData = await fetchPidgets(boardUser, boardSlug, UA);
+      if (pidgetsData) {
+        for (const img of pidgetsData.images) allImages.set(img, true);
+      }
+    }
+
+    res.json({
+      images: [...allImages.keys()],
+      total: allImages.size,
+      pages: pageCount + 1,
+      boardId,
+      feedApiWorked,
+    });
   } catch (e) {
     res.status(500).json({ error: e.message });
+  }
+}
+
+// Fetch pins from Pinterest's public widget API (no auth, max 50 pins)
+async function fetchPidgets(user, board, ua) {
+  try {
+    const r = await fetch(`https://api.pinterest.com/v3/pidgets/boards/${user}/${board}/pins/?page_size=50`, {
+      headers: { 'User-Agent': ua, 'Accept': 'application/json' },
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    const pins = data?.data?.pins || [];
+    const boardId = data?.data?.board?.id || null;
+    const images = pins
+      .map(p => p?.images?.['564x']?.url || p?.images?.['237x']?.url)
+      .filter(Boolean);
+    return { boardId, images };
+  } catch {
+    return null;
   }
 }
 
