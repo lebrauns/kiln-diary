@@ -869,7 +869,7 @@ async function loadInspoPage(url){
   const grid=document.getElementById('inspo-full-grid');
   const msg=document.getElementById('inspo-page-msg');
   grid.innerHTML='';
-  msg.textContent='Fetching pins…';
+  msg.textContent='Fetching all pins — this takes a few seconds for large boards…';
   try{
     const res=await fetch(`/api/pinterest?url=${encodeURIComponent(url)}`);
     const data=await res.json();
