@@ -1,7 +1,9 @@
+export const config = { api: { bodyParser: true } };
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-app-secret');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
@@ -32,9 +34,11 @@ export default async function handler(req, res) {
 
   // ── PUT: save all data ──
   if (req.method === 'PUT') {
-    let body;
-    try { body = await readBody(req); }
-    catch (e) { return res.status(400).json({ error: 'Invalid JSON body' }); }
+    // Vercel auto-parses JSON body when bodyParser: true
+    const body = req.body;
+    if (!body || typeof body !== 'object') {
+      return res.status(400).json({ error: 'Invalid JSON body' });
+    }
 
     const r = await fetch(`${SUPABASE_URL}/rest/v1/store`, {
       method: 'POST',
@@ -51,13 +55,4 @@ export default async function handler(req, res) {
   }
 
   res.status(405).json({ error: 'Method not allowed' });
-}
-
-function readBody(req) {
-  return new Promise((resolve, reject) => {
-    let raw = '';
-    req.on('data', chunk => raw += chunk);
-    req.on('end', () => { try { resolve(JSON.parse(raw)); } catch (e) { reject(e); } });
-    req.on('error', reject);
-  });
 }
