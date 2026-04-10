@@ -1,43 +1,52 @@
-const CACHE = 'kiln-diary-v1';
-const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
-  'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lato:wght@300;400&display=swap'
-];
+const CACHE = 'kiln-diary-v6';
 
 self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())
-  );
+  e.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', e => {
+  // Delete all old caches
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', e => {
-  // For navigation requests, serve index.html from cache
+  const url = new URL(e.request.url);
+
+  // API calls — always go to network, never cache
+  if (url.pathname.startsWith('/api/')) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
+
+  // HTML pages — network first, fall back to cache
   if (e.request.mode === 'navigate') {
     e.respondWith(
-      caches.match('/index.html').then(r => r || fetch(e.request))
+      fetch(e.request)
+        .then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+          return res;
+        })
+        .catch(() => caches.match('/index.html'))
     );
     return;
   }
-  // For everything else: cache-first, fall back to network
+
+  // Everything else (fonts, icons) — cache first, then network
   e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-      if (res && res.status === 200 && e.request.method === 'GET') {
-        const clone = res.clone();
-        caches.open(CACHE).then(cache => cache.put(e.request, clone));
-      }
-      return res;
-    }))
+    caches.match(e.request).then(cached => {
+      const networkFetch = fetch(e.request).then(res => {
+        if (res && res.status === 200) {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+        }
+        return res;
+      });
+      return cached || networkFetch;
+    })
   );
 });
