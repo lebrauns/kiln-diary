@@ -428,20 +428,6 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .btn-save:hover{opacity:.87}
 .hidden{display:none!important}
 
-/* ══ CLOUD SETUP OVERLAY ══ */
-.setup-overlay{position:fixed;inset:0;background:rgba(28,18,8,.9);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.setup-overlay.hidden{display:none}
-.setup-card{background:var(--cream);border-radius:22px;padding:38px 32px 28px;max-width:340px;width:90%}
-.setup-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.22em;color:var(--ink);margin-bottom:2px}
-.setup-sub{font-size:11px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:28px}
-.setup-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-family:'Lato',sans-serif;display:block}
-.setup-input{width:100%;background:var(--white);border:1.5px solid var(--sand);border-radius:var(--r);padding:12px 14px;font-size:16px;font-family:'Lato',sans-serif;color:var(--ink);outline:none;margin-bottom:6px;transition:border-color .12s;-webkit-appearance:none}
-.setup-input:focus{border-color:var(--clay-m)}
-.setup-err{font-size:12px;color:var(--clay);min-height:20px;margin-bottom:10px;line-height:1.4}
-.setup-btn{width:100%;background:var(--clay);color:#fff;border:none;border-radius:var(--r);padding:13px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:9px;transition:opacity .15s}
-.setup-btn:hover{opacity:.86}
-.setup-offline{width:100%;background:transparent;border:1px solid var(--sand);border-radius:var(--r);padding:11px;font-size:12px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;transition:all .12s}
-.setup-offline:hover{border-color:var(--muted);color:var(--ink)}
 /* Sync indicator */
 .sync-row{display:flex;align-items:center;gap:6px;padding:8px 8px 0;opacity:.55}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--sand);flex-shrink:0;transition:background .3s}
@@ -454,18 +440,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 </head>
 <body>
 
-<!-- CLOUD SETUP OVERLAY -->
-<div class="setup-overlay hidden" id="setup-overlay">
-  <div class="setup-card">
-    <div class="setup-logo">TOAST</div>
-    <div class="setup-sub">Ceramics Studio</div>
-    <label class="setup-label" for="setup-pwd">App Password</label>
-    <input class="setup-input" type="password" id="setup-pwd" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')connectCloud()">
-    <div class="setup-err" id="setup-err"></div>
-    <button class="setup-btn" onclick="connectCloud()">Connect to Cloud →</button>
-    <button class="setup-offline" onclick="useOffline()">Continue offline (data stays in this browser only)</button>
-  </div>
-</div>
+<!-- (setup overlay removed — no password needed) -->
 
 <div class="sidenav-overlay" id="sidenav-overlay" onclick="closeSidenav()"></div>
 <button class="hamburger" id="hamburger-btn" onclick="toggleSidenav()">
@@ -775,7 +750,7 @@ let finishedSort='date';
 let sidenavCollapsed=false;
 let currentPinUrl='',inspoLoaded=false,pendingPhoto=null;
 // Cloud sync state
-let appSecret='',cloudEnabled=false,saveTimer=null;
+let cloudEnabled=false,saveTimer=null;
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 
@@ -842,7 +817,7 @@ async function pushToCloud(){
     setSyncState('saving','Saving…');
     const r=await fetch('/api/data',{
       method:'PUT',
-      headers:{'Content-Type':'application/json','x-app-secret':appSecret},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({projects,clays,glazeLib})
     });
     if(!r.ok) throw new Error(await r.text());
@@ -856,8 +831,7 @@ async function pushToCloud(){
 
 async function pullFromCloud(){
   setSyncState('saving','Loading…');
-  const r=await fetch('/api/data',{headers:{'x-app-secret':appSecret}});
-  if(r.status===401){showSetupOverlay();return false;}
+  const r=await fetch('/api/data');
   if(!r.ok) throw new Error('Cloud unavailable');
   const data=await r.json();
   projects=data.projects||[];
@@ -866,57 +840,6 @@ async function pullFromCloud(){
   saveLocal();
   setSyncState('ok','Cloud sync on');
   return true;
-}
-
-// ── SETUP OVERLAY ──
-function showSetupOverlay(){document.getElementById('setup-overlay').classList.remove('hidden');}
-function hideSetupOverlay(){document.getElementById('setup-overlay').classList.add('hidden');}
-
-async function connectCloud(){
-  const pwd=document.getElementById('setup-pwd').value.trim();
-  const errEl=document.getElementById('setup-err');
-  if(!pwd){errEl.textContent='Please enter your password.';return;}
-  errEl.textContent='';
-  document.querySelector('.setup-btn').textContent='Connecting…';
-  try{
-    const r=await fetch('/api/data',{headers:{'x-app-secret':pwd}});
-    if(r.status===401){
-      errEl.textContent='Incorrect password — check your APP_SECRET in Vercel.';
-      document.querySelector('.setup-btn').textContent='Connect to Cloud →';
-      return;
-    }
-    if(!r.ok) throw new Error(`Server error ${r.status}`);
-    // Password works — save it
-    appSecret=pwd;
-    cloudEnabled=true;
-    localStorage.setItem('kd_secret',pwd);
-    hideSetupOverlay();
-    const cloudData=await r.json();
-    const cloudHasData=cloudData.projects&&cloudData.projects.length>0;
-    if(cloudHasData){
-      // Cloud wins — pull it down
-      projects=cloudData.projects;
-      clays=cloudData.clays||defaultClays();
-      glazeLib=cloudData.glazeLib||defaultGlazes();
-      saveLocal();
-      renderAll();
-      setSyncState('ok','Cloud sync on');
-    } else {
-      // Cloud is empty — push local data up (first-time migration)
-      setSyncState('saving','Migrating your data…');
-      await pushToCloud();
-      renderAll();
-    }
-  }catch(e){
-    errEl.textContent='Connection failed. Check that your Vercel environment variables are set.';
-    document.querySelector('.setup-btn').textContent='Connect to Cloud →';
-    console.error(e);
-  }
-}
-
-function useOffline(){
-  hideSetupOverlay();
-  setSyncState('','Offline mode');
 }
 
 function renderAll(){
@@ -1689,18 +1612,31 @@ if('serviceWorker' in navigator){
 loadLocal();
 renderAll();
 
-// 2. Try to connect to cloud
+// 2. Try to connect to cloud automatically
 (async()=>{
-  const stored=localStorage.getItem('kd_secret');
-  if(!stored){
-    showSetupOverlay();
-    return;
-  }
-  appSecret=stored;
-  cloudEnabled=true;
   try{
-    const ok=await pullFromCloud();
-    if(ok) renderAll();
+    const r=await fetch('/api/data');
+    if(r.ok){
+      cloudEnabled=true;
+      const data=await r.json();
+      const cloudHasData=data.projects&&data.projects.length>0;
+      if(cloudHasData){
+        // Cloud has data — use it
+        projects=data.projects;
+        clays=data.clays||defaultClays();
+        glazeLib=data.glazeLib||defaultGlazes();
+        saveLocal();
+        renderAll();
+        setSyncState('ok','Cloud sync on');
+      } else {
+        // Cloud is empty — push local data up (first-time migration)
+        setSyncState('saving','Migrating your data to cloud…');
+        await pushToCloud();
+        setSyncState('ok','Cloud sync on');
+      }
+    } else {
+      setSyncState('','Offline mode');
+    }
   }catch(e){
     setSyncState('err','Offline — using local data');
     console.warn('Cloud unavailable:',e);

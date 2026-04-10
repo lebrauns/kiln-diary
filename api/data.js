@@ -6,14 +6,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
-  const APP_SECRET   = process.env.APP_SECRET;
-
-  // Auth — require the shared secret
-  const secret = req.headers['x-app-secret'];
-  if (!APP_SECRET || secret !== APP_SECRET) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_KEY) {
     return res.status(500).json({ error: 'Supabase env vars not configured' });
