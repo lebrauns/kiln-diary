@@ -309,30 +309,52 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .sec-label{font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 
 /* ══ LIBRARY ══ */
-#view-library{flex-direction:column;overflow-y:auto;padding:20px 24px 48px}
-.seg-ctrl{display:flex;background:var(--sand-l);border-radius:20px;padding:3px;margin-bottom:18px;width:fit-content}
+#view-library{flex-direction:column;overflow:hidden}
+.lib-header{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 0;flex-shrink:0}
+.lib-header-left{flex:1}
+.lib-header-actions{display:flex;gap:8px;align-items:center}
+.lib-edit-btn{background:var(--sand-l);border:none;border-radius:var(--r);padding:7px 14px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:.04em;white-space:nowrap;transition:all .12s}
+.lib-edit-btn:hover{background:var(--sand);color:var(--ink)}
+.lib-edit-btn.active{background:var(--clay);color:#fff}
+.seg-ctrl{display:flex;background:var(--sand-l);border-radius:20px;padding:3px;margin:14px 24px 0;width:fit-content;flex-shrink:0}
 .seg-btn{font-size:12px;padding:6px 20px;border-radius:17px;border:none;background:transparent;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:0.03em;transition:all .15s}
 .seg-btn.active{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.lib-scroll{flex:1;overflow-y:auto;padding:16px 24px 48px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.lib-scroll::-webkit-scrollbar{width:5px}
+.lib-scroll::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
 .lib-section{display:none}
 .lib-section.active{display:block}
-.lib-list{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}
-.lib-item{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--rl);padding:0;display:flex;flex-direction:column;overflow:hidden;transition:box-shadow .15s}
-.lib-item:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
-.li-top{display:flex;align-items:center;padding:12px 15px;gap:12px;cursor:pointer;width:100%;background:none;border:none;text-align:left;font-family:inherit}
-.li-top:hover{background:var(--sand-ll)}
-.li-info{flex:1;min-width:0}
-.li-info .ln{font-size:14px;color:var(--ink);margin-bottom:2px;font-family:'Outfit',sans-serif;font-weight:500}
-.li-info .lm{font-size:12px;color:var(--muted)}
-.li-badge{font-size:11px;padding:3px 11px;border-radius:20px;background:var(--clay-l);color:var(--clay-d)}
-.li-swatch{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0}
-.li-del{background:none;border:none;cursor:pointer;color:var(--sand);font-size:14px;padding:4px 7px;transition:color .12s;flex-shrink:0}
-.li-del:hover{color:var(--muted)}
-.li-expand-caret{width:14px;height:14px;stroke:var(--sand);fill:none;stroke-width:2;transition:transform .2s;flex-shrink:0}
-.li-expand-caret.open{transform:rotate(90deg)}
-.li-detail{display:none;padding:0 15px 14px;border-top:1px solid var(--sand-l)}
-.li-detail.open{display:block;padding-top:12px}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:14px;margin-bottom:18px}
+/* Library gallery card */
+.lib-card{background:var(--white);border:none;border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .12s;display:flex;flex-direction:column;box-shadow:0 2px 10px rgba(0,0,0,.09);position:relative}
+.lib-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.14);transform:translateY(-2px)}
+.lib-card-photo{height:155px;background:var(--sand-l);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;position:relative}
+.lib-card-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.lib-card-swatch{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.lib-card-swatch-circle{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,.3);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.lib-card-tags{position:absolute;top:9px;left:9px;display:flex;gap:5px;z-index:2;flex-wrap:wrap;max-width:calc(100% - 18px)}
+.lib-card-tag{background:rgba(255,255,255,0.93);backdrop-filter:blur(6px);border-radius:20px;padding:3px 9px;font-size:10px;font-family:'Outfit',sans-serif;font-weight:500;color:var(--ink);letter-spacing:0.02em}
+.lib-card-body{background:var(--white);border-radius:12px 12px 0 0;margin-top:-18px;position:relative;z-index:1;padding:12px 13px 10px;flex:1}
+.lib-card-name{font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;margin-bottom:2px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lib-card-meta{font-size:11px;color:var(--muted);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:15px}
+.lib-card-badges{display:flex;gap:4px;flex-wrap:wrap}
+.lib-card-badge{font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:20px;border:1px solid var(--sand);color:var(--muted);background:var(--sand-ll)}
+.lib-card-badge.stable{background:var(--olive-l);border-color:var(--olive);color:#2E3D18}
+.lib-card-badge.moderate{background:#F5EAC8;border-color:#C4A94D;color:#6B5A1E}
+.lib-card-badge.runny{background:var(--clay-l);border-color:var(--clay-m);color:var(--clay-d)}
+.lib-card-check{position:absolute;top:9px;right:9px;width:22px;height:22px;border-radius:50%;border:2px solid var(--sand);background:rgba(255,255,255,.9);display:none;align-items:center;justify-content:center;z-index:3;cursor:pointer}
+.lib-card-check.show{display:flex}
+.lib-card-check.on{background:var(--clay);border-color:var(--clay)}
+.lib-card-check svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2.5}
+/* Library detail view */
+#view-lib-detail{flex-direction:column;overflow:hidden}
+.lib-detail-scroll{flex:1;overflow-y:auto;padding:16px 24px 48px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.lib-detail-scroll::-webkit-scrollbar{width:5px}
+.lib-detail-scroll::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
+.lib-detail-photo-strip{display:flex;gap:10px;overflow-x:auto;padding:0 24px 16px;margin:0 -24px 4px;scrollbar-width:none}
+.lib-detail-photo-strip::-webkit-scrollbar{display:none}
 /* Stability bar */
-.stability-bar-wrap{margin-bottom:10px}
+.stability-bar-wrap{margin-bottom:12px}
 .stability-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
 .stability-label span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'Outfit',sans-serif}
 .stability-label .stab-val{font-weight:600;color:var(--ink);text-transform:none;letter-spacing:0}
@@ -346,22 +368,35 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .stability-endpoints{display:flex;justify-content:space-between;margin-top:3px}
 .stability-endpoints span{font-size:9px;color:var(--sand);font-family:'Outfit',sans-serif;letter-spacing:.06em;text-transform:uppercase}
 /* Glaze notes */
-.glaze-notes{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px;white-space:pre-line}
+.glaze-notes{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
 .glaze-notes strong{color:var(--ink);font-weight:600}
+/* Info grid */
+.glaze-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.glaze-info-item{background:var(--sand-ll);border-radius:var(--r);padding:10px 12px}
+.glaze-info-label{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-family:'Outfit',sans-serif;margin-bottom:3px}
+.glaze-info-val{font-size:13px;color:var(--ink);font-family:'Outfit',sans-serif;font-weight:500}
 /* Test tile photos */
+.tt-section-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'Outfit',sans-serif;margin-bottom:6px}
 .tt-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 0 2px;scrollbar-width:none}
 .tt-strip::-webkit-scrollbar{display:none}
-.tt-item{position:relative;width:72px;height:72px;flex-shrink:0;border-radius:8px;overflow:hidden;background:var(--sand-l)}
-.tt-item img{width:100%;height:100%;object-fit:cover;display:block}
-.tt-del{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.55);border:none;cursor:pointer;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1}
-.tt-add{width:72px;height:72px;flex-shrink:0;border-radius:8px;border:1.5px dashed var(--sand);background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:3px;transition:border-color .12s}
+.tt-item{position:relative;width:100px;height:100px;flex-shrink:0;border-radius:10px;overflow:hidden;background:var(--sand-l)}
+.tt-item img{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
+.tt-del{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.55);border:none;cursor:pointer;color:#fff;font-size:12px;display:none;align-items:center;justify-content:center;line-height:1}
+.is-editing .tt-del{display:flex}
+.tt-add{width:100px;height:100px;flex-shrink:0;border-radius:10px;border:1.5px dashed var(--sand);background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:4px;transition:border-color .12s}
 .tt-add:hover{border-color:var(--clay-m)}
-.tt-add svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.4}
-.tt-add span{font-size:8px;font-family:'Lato',sans-serif;letter-spacing:.04em;text-transform:uppercase}
-.tt-section-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'Outfit',sans-serif;margin-bottom:6px}
+.tt-add svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.4}
+.tt-add span{font-size:9px;font-family:'Lato',sans-serif;letter-spacing:.04em;text-transform:uppercase}
 /* Lightbox */
 .tt-lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
 .tt-lightbox img{max-width:90%;max-height:90%;object-fit:contain;border-radius:8px}
+/* Delete bar at bottom */
+.lib-delete-bar{position:sticky;bottom:0;background:var(--white);border-top:1px solid var(--sand-l);padding:12px 24px;display:none;justify-content:center;z-index:10;box-shadow:0 -4px 16px rgba(0,0,0,.06)}
+.lib-delete-bar.show{display:flex}
+.lib-delete-count{font-size:12px;color:var(--muted);font-family:'Lato',sans-serif;margin-right:12px;align-self:center}
+.lib-delete-btn{background:#c0392b;color:#fff;border:none;border-radius:var(--r);padding:9px 20px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:.04em;text-transform:uppercase;font-weight:700;transition:opacity .15s}
+.lib-delete-btn:hover{opacity:.87}
+/* Add form */
 .add-form{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--rl);padding:16px}
 .add-form-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;margin-bottom:13px;color:var(--clay-d)}
 .add-grid-clay{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:end}
@@ -378,6 +413,15 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .glaze-color-pick{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);position:relative;cursor:pointer;align-self:end}
 .glaze-color-pick input{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%}
 .empty-state{text-align:center;padding:36px 20px;color:var(--muted);font-family:'Outfit',sans-serif;font-style:italic;font-size:14px}
+/* Detail edit fields */
+.lib-detail-field{margin-bottom:12px}
+.lib-detail-field label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;font-family:'Outfit',sans-serif}
+.lib-detail-field input,.lib-detail-field select,.lib-detail-field textarea{width:100%;background:var(--cream);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:'Lato',sans-serif;color:var(--ink);outline:none}
+.lib-detail-field textarea{resize:vertical;min-height:80px}
+.lib-detail-actions{display:flex;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--sand-l)}
+.lib-detail-actions button{flex:1}
+.lib-detail-del{background:none;border:1px solid #c0392b;border-radius:var(--r);padding:10px;font-size:12px;cursor:pointer;color:#c0392b;font-family:'Lato',sans-serif;letter-spacing:.04em;text-transform:uppercase;transition:all .12s}
+.lib-detail-del:hover{background:#c0392b;color:#fff}
 
 /* ══ INSPIRATION PANEL ══ */
 .inspo-panel{flex-shrink:0;background:var(--white);border-bottom:1px solid var(--sand-l)}
@@ -752,17 +796,22 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 
     <!-- ── LIBRARY ── -->
     <div class="view" id="view-library">
-      <div style="padding:0 24px 48px;overflow-y:auto;flex:1">
-        <div class="page-header" style="padding:22px 0 16px">
+      <div class="lib-header">
+        <div class="lib-header-left">
           <div class="page-header-title">Library</div>
           <div class="page-header-sub">Your clay bodies &amp; glazes</div>
         </div>
-        <div class="seg-ctrl">
-          <button class="seg-btn active" onclick="libTab('clay')">Clay</button>
-          <button class="seg-btn" onclick="libTab('glaze')">Glazes</button>
+        <div class="lib-header-actions">
+          <button class="lib-edit-btn" id="lib-edit-toggle" onclick="toggleLibEdit()">Edit</button>
         </div>
+      </div>
+      <div class="seg-ctrl">
+        <button class="seg-btn active" onclick="libTab('clay')">Clay</button>
+        <button class="seg-btn" onclick="libTab('glaze')">Glazes</button>
+      </div>
+      <div class="lib-scroll">
         <div class="lib-section active" id="lib-clay">
-          <div class="lib-list" id="clay-list"></div>
+          <div class="lib-grid" id="clay-list"></div>
           <div class="add-form">
             <div class="add-form-title">Add Clay Body</div>
             <div class="add-grid-clay">
@@ -773,7 +822,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
           </div>
         </div>
         <div class="lib-section" id="lib-glaze">
-          <div class="lib-list" id="glaze-list"></div>
+          <div class="lib-grid" id="glaze-list"></div>
           <div class="add-form">
             <div class="add-form-title">Add Glaze</div>
             <div class="add-grid-glaze">
@@ -802,6 +851,15 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
           </div>
         </div>
       </div>
+      <div class="lib-delete-bar" id="lib-delete-bar">
+        <span class="lib-delete-count" id="lib-delete-count">0 selected</span>
+        <button class="lib-delete-btn" onclick="deleteSelectedLib()">Delete Selected</button>
+      </div>
+    </div>
+
+    <!-- ── LIBRARY DETAIL ── -->
+    <div class="view" id="view-lib-detail">
+      <div class="lib-detail-scroll" id="lib-detail-scroll"></div>
     </div>
 
   </div><!-- end main-content -->
@@ -947,6 +1005,7 @@ let projects=[],clays=[],glazeLib=[],formGlazes=[],formPhotos=[],inspoPhotos=[];
 let calcShrinkRate=14,calcUnitVal='in',calcShape='cylinder';
 let dragId=null;
 let detailId=null,isEditing=false,editState={};
+let libEditing=false,libSelected=new Set(),libDetailId=null,libDetailType=null,libDetailEditing=false,libDetailState={};
 let currentView='ideas',prevView='ideas';
 let ideaDiffFilter='All',ideaMethodFilter='All',ideaSort='date';
 let finishedSort='date';
@@ -976,32 +1035,32 @@ function formatDate(d){
 // ── STORAGE ──
 function defaultClays(){return [{id:'c1',name:'Soldate 60',shrink:14,note:'High-fire'},{id:'c2',name:'B-Mix',shrink:12,note:'Mid-fire'}];}
 function defaultGlazes(){return [
-{id:'g1',name:"Alfred's Clear",color:'#E8E4D8',role:'Top coat',stability:1,notes:"Clear glaze, good for layering over other glazes or showing clay body.",testTilePhotos:[]},
-{id:'g2',name:'Blue Celadon',color:'#7BA7B8',role:'Top coat',stability:1,notes:"Can crawl if applied too thickly on porcelain clay bodies. Keep coats even.",testTilePhotos:[]},
-{id:'g3',name:"Coleman's Purple",color:'#6B4C7A',role:'Top coat',stability:1,notes:"May hardpan in the bucket — mix with electric drill mixer if needed. Stir frequently between dips.",testTilePhotos:[]},
-{id:'g4',name:"Denise's Blue Black",color:'#2C3E50',role:'Top coat',stability:1,notes:"Stable dark glaze with blue-black tones.",testTilePhotos:[]},
-{id:'g5',name:'Eggshell Matte',color:'#F0E8D8',role:'Top coat',stability:1,notes:"Can blush pink if applied too thickly. Aim for an even, moderate coat.",testTilePhotos:[]},
-{id:'g6',name:'Gloss White',color:'#F5F2EA',role:'Top coat',stability:1,notes:"Can be applied under Shino glazes (exception to the usual Shino-first rule).",testTilePhotos:[]},
-{id:'g7',name:"Jeff's Red",color:'#A83232',role:'Top coat',stability:2,notes:"Apply two full-length dips for correct color. Can run — best used on interiors, or apply second coat only ⅔ down the outside until you get a feel for it.",testTilePhotos:[]},
-{id:'g8',name:"Kathleen's Aquamarine Celadon",color:'#68B8A7',role:'Top coat',stability:2,notes:"Designed to have a crackled surface — this is intentional, not a defect.",testTilePhotos:[]},
-{id:'g9',name:'Kawai Blue',color:'#4A6FA5',role:'Top coat',stability:1,notes:"Stable blue glaze, good for general use.",testTilePhotos:[]},
-{id:'g10',name:'Mason Red',color:'#B03A2E',role:'Top coat',stability:1,notes:"May hardpan in the bucket — mix with electric drill mixer if needed.",testTilePhotos:[]},
-{id:'g11',name:'Moonlight',color:'#D4CFC4',role:'Top coat',stability:4,notes:"When used in combination with any glaze, will be even more runny. Can be applied under Shino glazes. Use with caution on exteriors.",testTilePhotos:[]},
-{id:'g12',name:'Mystery',color:'#8B7D6B',role:'Top coat',stability:2,notes:"Unique surface effects. Test before committing to a piece.",testTilePhotos:[]},
-{id:'g13',name:"Randy's Shino",color:'#E8845A',role:'Top coat',stability:2,notes:"Designed to have a crackled surface with two coats (results in white color). Crackle can be enhanced to orange by refiring in a bisque kiln. Can carbon trap gray-black, especially with wax resist over the surface. Apply Shino first when combining with other glazes (except Gloss White & Moonlight, which can go under). Sometimes crawls if not fully dry before firing.",testTilePhotos:[]},
-{id:'g14',name:'Satin Black',color:'#1C1C1C',role:'Top coat',stability:1,notes:"Smooth satin surface. Stable and reliable.",testTilePhotos:[]},
-{id:'g15',name:'Satin White',color:'#EDE8DC',role:'Top coat',stability:1,notes:"Smooth satin finish. Good all-purpose white.",testTilePhotos:[]},
-{id:'g16',name:'SF State Celadon',color:'#9DB8A0',role:'Top coat',stability:1,notes:"Classic celadon green. Stable application.",testTilePhotos:[]},
-{id:'g17',name:'SF State Shino',color:'#D4A574',role:'Top coat',stability:2,notes:"Same Shino rules apply: apply first when layering (except under Gloss White & Moonlight). Can carbon trap gray-black with wax resist. Must be completely dry before loading into kiln or may crawl.",testTilePhotos:[]},
-{id:'g18',name:'Shaner Blue',color:'#3B6D8C',role:'Top coat',stability:2,notes:"Rich blue glaze with visual depth.",testTilePhotos:[]},
-{id:'g19',name:'Sleeper Copper Red',color:'#C0544E',role:'Top coat',stability:3,notes:"Apply two full-length dips for correct color. Can run — best on interiors, or apply second coat only ⅔ down the outside until you get a feel for it.",testTilePhotos:[]},
-{id:'g20',name:"Taffy's Oatmeal",color:'#C8B99A',role:'Top coat',stability:2,notes:"Warm, toasty matte surface with oatmeal texture.",testTilePhotos:[]},
-{id:'g21',name:'Tenmoku',color:'#28261F',role:'Top coat',stability:2,notes:"Needs at least two coats for dark black-brown color. Breaks along edges, texture, and throwing marks to a chocolatey brown.",testTilePhotos:[]},
-{id:'g22',name:'Turquoise Matte',color:'#5AAFA0',role:'Top coat',stability:2,notes:"Matte turquoise surface. Moderate stability.",testTilePhotos:[]},
-{id:'g23',name:"Val's Blue",color:'#4169A0',role:'Top coat',stability:2,notes:"Vivid blue glaze.",testTilePhotos:[]},
-{id:'g24',name:'Yellow Gold',color:'#C8A84E',role:'Top coat',stability:3,notes:"Rich gold color. Watch thickness on vertical surfaces.",testTilePhotos:[]},
-{id:'g25',name:'Yellow Orange Matte',color:'#D4A03C',role:'Top coat',stability:4,notes:"Becomes quite runny when applied in combination with other glazes. Use with caution on exteriors when layering.",testTilePhotos:[]},
-{id:'g26',name:'Yellow Salt',color:'#D4C05A',role:'Top coat',stability:4,notes:"Becomes quite runny when applied in combination with other glazes. Use with caution on exteriors when layering.",testTilePhotos:[]}
+{id:'g1',name:"Alfred's Clear",color:'#E8E4D8',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"Clear glaze — shows the clay body through. On dark clay: gray. On light clay: white. Good for layering over other glazes or showing underglazes and slips.",testTilePhotos:[]},
+{id:'g2',name:'Blue Celadon',color:'#7BA7B8',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"Transparent/translucent light blue. Great for showing texture, underglazes, and slips. Can crawl if applied too thickly on porcelain. Stable for outside of pieces.",testTilePhotos:[]},
+{id:'g3',name:"Coleman's Purple",color:'#6B4C7A',role:'Top coat',stability:3,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"May hardpan in the bucket — use the electric drill mixer if needed. Stir frequently between dips. Can be runny.",testTilePhotos:[]},
+{id:'g4',name:"Denise's Blue Black",color:'#2C3E50',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:false,badForBase:true,notes:"Stable dark blue-black glaze. Bad for use as a base/bottom coat.",testTilePhotos:[]},
+{id:'g5',name:'Eggshell Matte',color:'#F0E8D8',role:'Top coat',stability:1,dips:1,finish:'Matte',goodForBase:false,badForBase:false,notes:"Can blush pink if applied too thickly. Aim for an even, moderate coat.",testTilePhotos:[]},
+{id:'g6',name:'Gloss White',color:'#F5F2EA',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"Can be applied under Shino glazes (exception to the usual Shino-first rule).",testTilePhotos:[]},
+{id:'g7',name:"Jeff's Red",color:'#A83232',role:'Top coat',stability:3,dips:2,finish:'Glossy',goodForBase:false,badForBase:true,notes:"Apply two full-length dips for correct color. Can run — best used on interiors, or apply second coat only ⅔ down the outside. Bad for use as a base/bottom coat.",testTilePhotos:[]},
+{id:'g8',name:"Kathleen's Aquamarine Celadon",color:'#68B8A7',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:true,badForBase:false,notes:"On dark clay: green. On light clay: blue. Designed to have a crackled surface — intentional, not a defect. Good for base coat. Stable for outside. Shows underglazes well.",testTilePhotos:[]},
+{id:'g9',name:'Kawai Blue',color:'#4A6FA5',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"Stable blue glaze, good for general use.",testTilePhotos:[]},
+{id:'g10',name:'Mason Red',color:'#B03A2E',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"May hardpan in the bucket — use the electric drill mixer if needed.",testTilePhotos:[]},
+{id:'g11',name:'Moonlight',color:'#D4CFC4',role:'Top coat',stability:4,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"When used in combination with any glaze, will be even more runny. Can be applied under Shino glazes. Use with caution on exteriors.",testTilePhotos:[]},
+{id:'g12',name:'Mystery',color:'#8B7D6B',role:'Top coat',stability:2,dips:1,finish:'Satin',goodForBase:false,badForBase:false,notes:"Unique surface effects. Test before committing to a piece.",testTilePhotos:[]},
+{id:'g13',name:"Randy's Shino",color:'#E8845A',role:'Top coat',stability:1,dips:2,finish:'Satin',goodForBase:true,badForBase:false,notes:"Thin: orange/brown. Thick (2 coats): white with crackle. Crackle can be enhanced to orange by refiring in a bisque kiln. Can carbon trap gray-black, especially with wax resist. Apply Shino first when layering (except Gloss White & Moonlight can go under). Must be completely dry before firing or may crawl. Stable for outside. Good for base coat.",testTilePhotos:[]},
+{id:'g14',name:'Satin Black',color:'#1C1C1C',role:'Top coat',stability:1,dips:1,finish:'Satin',goodForBase:false,badForBase:false,notes:"Smooth satin surface. Stable and reliable.",testTilePhotos:[]},
+{id:'g15',name:'Satin White',color:'#EDE8DC',role:'Top coat',stability:1,dips:1,finish:'Satin',goodForBase:false,badForBase:false,notes:"Smooth satin finish. Good all-purpose white.",testTilePhotos:[]},
+{id:'g16',name:'SF State Celadon',color:'#9DB8A0',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"Thin: mostly green with blue/gray tones. Thick: green. Can run. Stable for outside of pieces.",testTilePhotos:[]},
+{id:'g17',name:'SF State Shino',color:'#D4A574',role:'Top coat',stability:1,dips:1,finish:'Satin',goodForBase:false,badForBase:false,notes:"On dark clay: orange. On light clay: metallic. Thick: green. Same Shino rules: apply first when layering. Can carbon trap with wax resist. Must be fully dry before firing. Stable for outside.",testTilePhotos:[]},
+{id:'g18',name:'Shaner Blue',color:'#3B6D8C',role:'Top coat',stability:3,dips:1,finish:'Matte',goodForBase:true,badForBase:false,notes:"Color: purple. Dull/matte finish. Can run. Good for base coat.",testTilePhotos:[]},
+{id:'g19',name:'Sleeper Copper Red',color:'#C0544E',role:'Top coat',stability:3,dips:2,finish:'Glossy',goodForBase:false,badForBase:false,notes:"Apply two full-length dips for correct color. Can run — best on interiors, or apply second coat only ⅔ down the outside.",testTilePhotos:[]},
+{id:'g20',name:"Taffy's Oatmeal",color:'#C8B99A',role:'Top coat',stability:1,dips:1,finish:'Matte',goodForBase:true,badForBase:false,notes:"Warm, toasty matte surface. Good for base coat.",testTilePhotos:[]},
+{id:'g21',name:'Tenmoku',color:'#28261F',role:'Top coat',stability:2,dips:2,finish:'Glossy',goodForBase:true,badForBase:false,notes:"Thin: brown. Thick: black. Needs at least two coats for dark black-brown. Breaks along edges and throwing marks to chocolatey brown. Good for base coat.",testTilePhotos:[]},
+{id:'g22',name:'Turquoise Matte',color:'#5AAFA0',role:'Top coat',stability:1,dips:1,finish:'Matte',goodForBase:false,badForBase:false,notes:"Matte turquoise surface. Stable for outside of pieces.",testTilePhotos:[]},
+{id:'g23',name:"Val's Blue",color:'#4169A0',role:'Top coat',stability:1,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"Vivid blue glaze. Stable.",testTilePhotos:[]},
+{id:'g24',name:'Yellow Gold',color:'#C8A84E',role:'Top coat',stability:3,dips:1,finish:'Glossy',goodForBase:false,badForBase:false,notes:"Glossy gold. Can run. Good for texture. Watch thickness on vertical surfaces.",testTilePhotos:[]},
+{id:'g25',name:'Yellow Orange Matte',color:'#D4A03C',role:'Top coat',stability:4,dips:1,finish:'Matte',goodForBase:false,badForBase:false,notes:"Becomes quite runny when applied in combination with other glazes. Use with caution on exteriors when layering.",testTilePhotos:[]},
+{id:'g26',name:'Yellow Salt',color:'#D4C05A',role:'Top coat',stability:2,dips:1,finish:'Glossy',goodForBase:true,badForBase:false,notes:"Thin: brown. Thick: yellow. Good for base coat. Becomes quite runny when combined with other glazes.",testTilePhotos:[]}
 ];}
 
 function migrateGlazes(lib){
@@ -1009,7 +1068,16 @@ function migrateGlazes(lib){
   const existing=lib||[];
   const names=new Set(existing.map(g=>g.name.toLowerCase()));
   defaults.forEach(dg=>{if(!names.has(dg.name.toLowerCase()))existing.push(dg);});
-  existing.forEach(g=>{if(g.stability===undefined){const match=defaults.find(d=>d.name.toLowerCase()===g.name.toLowerCase());g.stability=match?match.stability:1;g.notes=g.notes||(match?match.notes:'');g.testTilePhotos=g.testTilePhotos||[];}});
+  existing.forEach(g=>{
+    const match=defaults.find(d=>d.name.toLowerCase()===g.name.toLowerCase());
+    if(g.stability===undefined)g.stability=match?match.stability:1;
+    if(!g.notes&&match)g.notes=match.notes;
+    if(!g.testTilePhotos)g.testTilePhotos=[];
+    if(g.dips===undefined)g.dips=match?match.dips:1;
+    if(g.finish===undefined)g.finish=match?match.finish:'';
+    if(g.goodForBase===undefined)g.goodForBase=match?match.goodForBase:false;
+    if(g.badForBase===undefined)g.badForBase=match?match.badForBase:false;
+  });
   return existing;
 }
 function loadLocal(){
@@ -2111,14 +2179,6 @@ function libTab(tab){
   document.getElementById('lib-clay').classList.toggle('active',tab==='clay');
   document.getElementById('lib-glaze').classList.toggle('active',tab==='glaze');
 }
-function renderClayList(){
-  const el=document.getElementById('clay-list');
-  if(!clays.length){el.innerHTML='<div class="empty-state">No clay bodies yet</div>';return;}
-  el.innerHTML=clays.map(c=>`<div class="lib-item">
-    <div class="li-info"><div class="ln">${c.name}</div>${c.note?`<div class="lm">${c.note}</div>`:''}</div>
-    <div style="display:flex;align-items:center;gap:9px"><span class="li-badge">${c.shrink}%</span><button class="li-del" onclick="deleteClay('${c.id}')">✕</button></div>
-  </div>`).join('');
-}
 function addClay(){
   const n=document.getElementById('new-clay-name').value.trim();
   const s=parseFloat(document.getElementById('new-clay-shrink').value);
@@ -2127,47 +2187,203 @@ function addClay(){
   document.getElementById('new-clay-name').value='';document.getElementById('new-clay-shrink').value='';
   save();renderClayList();
 }
-function deleteClay(id){clays=clays.filter(c=>c.id!==id);save();renderClayList();}
 const STAB_LABELS=['Stable','Mostly Stable','Moderate','Runny','Very Runny'];
+function stabBadgeClass(s){return s<=1?'stable':s<=3?'moderate':'runny';}
+
+// ── GLAZE GALLERY ──
 function renderGlazeList(){
   const el=document.getElementById('glaze-list');
-  if(!glazeLib.length){el.innerHTML='<div class="empty-state">No glazes yet</div>';return;}
+  if(!glazeLib.length){el.innerHTML='<div class="gallery-empty" style="grid-column:1/-1"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>No glazes yet</div>';return;}
   el.innerHTML=glazeLib.map(g=>{
     const s=g.stability||1;
     const stabLabel=STAB_LABELS[s-1]||'Stable';
-    const photos=g.testTilePhotos||[];
-    const notes=g.notes||'';
-    return `<div class="lib-item" id="gli-${g.id}">
-    <div class="li-top" onclick="toggleGlazeDetail('${g.id}')">
-      <span class="li-swatch" style="background:${g.color}"></span>
-      <div class="li-info"><div class="ln">${g.name}</div><div class="lm">${g.role} · ${stabLabel}</div></div>
-      <svg class="li-expand-caret" id="caret-${g.id}" viewBox="0 0 16 16"><polyline points="6 3 11 8 6 13" stroke="currentColor" fill="none"/></svg>
-      <button class="li-del" onclick="event.stopPropagation();deleteGlaze('${g.id}')">✕</button>
-    </div>
-    <div class="li-detail" id="detail-${g.id}">
-      <div class="stability-bar-wrap">
-        <div class="stability-label"><span>Stability</span><span class="stab-val">${stabLabel}</span></div>
-        <div class="stability-bar"><div class="stability-fill s${s}"></div></div>
-        <div class="stability-endpoints"><span>Stable</span><span>Runny</span></div>
+    const photo=(g.testTilePhotos&&g.testTilePhotos.length)?g.testTilePhotos[0]:null;
+    const badges=[];
+    badges.push(`<span class="lib-card-badge ${stabBadgeClass(s)}">${stabLabel}</span>`);
+    if(g.dips&&g.dips>1)badges.push(`<span class="lib-card-badge">${g.dips} dips</span>`);
+    if(g.finish)badges.push(`<span class="lib-card-badge">${g.finish}</span>`);
+    if(g.goodForBase)badges.push(`<span class="lib-card-badge stable">Good base</span>`);
+    if(g.badForBase)badges.push(`<span class="lib-card-badge runny">Bad base</span>`);
+    const sel=libSelected.has(g.id);
+    return `<div class="lib-card" onclick="${libEditing?`toggleLibSelect('${g.id}')`:`openLibDetail('${g.id}','glaze')`}">
+      <div class="lib-card-photo">${photo?`<img src="${photo}" alt="${g.name}">`:`<div class="lib-card-swatch" style="background:${g.color}"><div class="lib-card-swatch-circle" style="background:${g.color}"></div></div>`}</div>
+      <div class="lib-card-check ${libEditing?'show':''} ${sel?'on':''}"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+      <div class="lib-card-body">
+        <div class="lib-card-name">${g.name}</div>
+        <div class="lib-card-meta">${g.role}</div>
+        <div class="lib-card-badges">${badges.join('')}</div>
       </div>
-      ${notes?`<div class="glaze-notes">${notes}</div>`:''}
-      <div class="tt-section-label">Test Tiles</div>
-      <div class="tt-strip">
-        ${photos.map((p,i)=>`<div class="tt-item"><img src="${p}" onclick="openTTLightbox('${p}')" alt="Test tile"><button class="tt-del" onclick="removeTTPhoto('${g.id}',${i})">✕</button></div>`).join('')}
-        <button class="tt-add" onclick="addTTPhoto('${g.id}')">
-          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Add</span>
-        </button>
-      </div>
-    </div>
-  </div>`;}).join('');
+    </div>`;
+  }).join('');
 }
-function toggleGlazeDetail(id){
-  const det=document.getElementById('detail-'+id);
-  const car=document.getElementById('caret-'+id);
-  if(!det)return;
-  det.classList.toggle('open');
-  if(car)car.classList.toggle('open');
+
+// ── CLAY GALLERY ──
+function renderClayList(){
+  const el=document.getElementById('clay-list');
+  if(!clays.length){el.innerHTML='<div class="gallery-empty" style="grid-column:1/-1"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>No clay bodies yet</div>';return;}
+  el.innerHTML=clays.map(c=>{
+    const sel=libSelected.has(c.id);
+    return `<div class="lib-card" onclick="${libEditing?`toggleLibSelect('${c.id}')`:`openLibDetail('${c.id}','clay')`}">
+      <div class="lib-card-photo"><div class="lib-card-swatch" style="background:#8B7D6B"><div class="lib-card-swatch-circle" style="background:#6B5D4B"></div></div></div>
+      <div class="lib-card-check ${libEditing?'show':''} ${sel?'on':''}"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+      <div class="lib-card-body">
+        <div class="lib-card-name">${c.name}</div>
+        <div class="lib-card-meta">${c.shrink}% shrinkage</div>
+        ${c.note?`<div class="lib-card-badges"><span class="lib-card-badge">${c.note}</span></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── EDIT MODE ──
+function toggleLibEdit(){
+  libEditing=!libEditing;libSelected.clear();
+  document.getElementById('lib-edit-toggle').classList.toggle('active',libEditing);
+  document.getElementById('lib-edit-toggle').textContent=libEditing?'Done':'Edit';
+  updateLibDeleteBar();renderClayList();renderGlazeList();
+}
+function toggleLibSelect(id){
+  if(libSelected.has(id))libSelected.delete(id);else libSelected.add(id);
+  updateLibDeleteBar();renderClayList();renderGlazeList();
+}
+function updateLibDeleteBar(){
+  const bar=document.getElementById('lib-delete-bar');
+  const cnt=document.getElementById('lib-delete-count');
+  if(libEditing&&libSelected.size>0){bar.classList.add('show');cnt.textContent=libSelected.size+' selected';}
+  else{bar.classList.remove('show');}
+}
+function deleteSelectedLib(){
+  glazeLib=glazeLib.filter(g=>!libSelected.has(g.id));
+  clays=clays.filter(c=>!libSelected.has(c.id));
+  libSelected.clear();save();updateLibDeleteBar();renderClayList();renderGlazeList();
+}
+
+// ── DETAIL VIEW ──
+function openLibDetail(id,type){
+  libDetailId=id;libDetailType=type;libDetailEditing=false;
+  renderLibDetail();
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-lib-detail').classList.add('active');
+}
+function closeLibDetail(){
+  libDetailId=null;libDetailEditing=false;
+  document.getElementById('view-lib-detail').classList.remove('active');
+  document.getElementById('view-library').classList.add('active');
+  renderClayList();renderGlazeList();
+}
+function renderLibDetail(){
+  const el=document.getElementById('lib-detail-scroll');
+  if(libDetailType==='glaze'){
+    const g=glazeLib.find(gl=>gl.id===libDetailId);if(!g){closeLibDetail();return;}
+    const s=g.stability||1;const stabLabel=STAB_LABELS[s-1]||'Stable';
+    const photos=g.testTilePhotos||[];
+    if(libDetailEditing){
+      const ds=libDetailState;
+      el.innerHTML=`
+        <button class="back-btn" onclick="closeLibDetail()"><svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Back</button>
+        <div class="detail-top"><div class="detail-title-wrap">
+          <input class="detail-title-input" type="text" value="${ds.name||''}" oninput="libDetailState.name=this.value" placeholder="Glaze name">
+        </div>
+        <button class="edit-btn save-mode" onclick="saveLibDetail()">Save</button></div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:12px;margin-bottom:14px;align-items:end">
+          <div class="af-field"><label>Color</label><div class="glaze-color-pick" id="ld-swatch" style="background:${ds.color}"><input type="color" value="${ds.color}" oninput="libDetailState.color=this.value;document.getElementById('ld-swatch').style.background=this.value"></div></div>
+          <div class="af-field"><label>Role</label><select onchange="libDetailState.role=this.value">${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${ds.role===r?' selected':''}>${r}</option>`).join('')}</select></div>
+        </div>
+        <div class="lib-detail-field"><label>Stability <span style="color:var(--ink);font-weight:600;text-transform:none;letter-spacing:0" id="ld-stab-val">${STAB_LABELS[(ds.stability||1)-1]}</span></label>
+          <input type="range" min="1" max="5" value="${ds.stability||1}" oninput="libDetailState.stability=parseInt(this.value);document.getElementById('ld-stab-val').textContent=STAB_LABELS[this.value-1]" style="width:100%;accent-color:var(--clay)">
+          <div class="range-labels"><span>Stable</span><span>Runny</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="lib-detail-field"><label>Dips</label><select onchange="libDetailState.dips=parseInt(this.value)">${[1,2,3].map(d=>`<option${ds.dips===d?' selected':''}>${d}</option>`).join('')}</select></div>
+          <div class="lib-detail-field"><label>Finish</label><select onchange="libDetailState.finish=this.value">${['Glossy','Matte','Satin',''].map(f=>`<option value="${f}"${ds.finish===f?' selected':''}>${f||'—'}</option>`).join('')}</select></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="lib-detail-field"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${ds.goodForBase?'checked':''} onchange="libDetailState.goodForBase=this.checked"> Good for base coat</label></div>
+          <div class="lib-detail-field"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${ds.badForBase?'checked':''} onchange="libDetailState.badForBase=this.checked"> Bad for base coat</label></div>
+        </div>
+        <div class="lib-detail-field"><label>Notes</label><textarea oninput="libDetailState.notes=this.value" rows="4">${ds.notes||''}</textarea></div>
+        <div class="tt-section-label">Test Tiles</div>
+        <div class="tt-strip is-editing">
+          ${photos.map((p,i)=>`<div class="tt-item"><img src="${p}" alt="Test tile"><button class="tt-del" onclick="removeTTPhoto('${g.id}',${i});renderLibDetail()">✕</button></div>`).join('')}
+          <button class="tt-add" onclick="addTTPhotoDetail('${g.id}')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add</span></button>
+        </div>
+        <div class="lib-detail-actions">
+          <button class="lib-detail-del" onclick="deleteGlaze('${g.id}');closeLibDetail()">Delete Glaze</button>
+        </div>`;
+    } else {
+      el.innerHTML=`
+        <button class="back-btn" onclick="closeLibDetail()"><svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Back</button>
+        <div class="detail-top"><div class="detail-title-wrap">
+          <div class="detail-title">${g.name}</div>
+          <div class="detail-sub">${g.role}${g.finish?' · '+g.finish:''}</div>
+        </div>
+        <button class="edit-btn" onclick="startLibDetailEdit()">Edit</button></div>
+        <div class="stability-bar-wrap">
+          <div class="stability-label"><span>Stability</span><span class="stab-val">${stabLabel}</span></div>
+          <div class="stability-bar"><div class="stability-fill s${s}"></div></div>
+          <div class="stability-endpoints"><span>Stable</span><span>Runny</span></div>
+        </div>
+        <div class="glaze-info-grid">
+          <div class="glaze-info-item"><div class="glaze-info-label">Dips</div><div class="glaze-info-val">${g.dips||1}</div></div>
+          <div class="glaze-info-item"><div class="glaze-info-label">Finish</div><div class="glaze-info-val">${g.finish||'—'}</div></div>
+          <div class="glaze-info-item"><div class="glaze-info-label">Base coat</div><div class="glaze-info-val">${g.goodForBase?'Good':g.badForBase?'Bad':'Neutral'}</div></div>
+          <div class="glaze-info-item"><div class="glaze-info-label">Color</div><div class="glaze-info-val" style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:${g.color};border:1px solid rgba(0,0,0,.1);flex-shrink:0"></span>${g.color}</div></div>
+        </div>
+        ${g.notes?`<div class="glaze-notes">${g.notes}</div>`:''}
+        <div class="tt-section-label">Test Tiles</div>
+        <div class="tt-strip">
+          ${photos.map(p=>`<div class="tt-item"><img src="${p}" onclick="openTTLightbox('${p}')" alt="Test tile"></div>`).join('')}
+          <button class="tt-add" onclick="addTTPhotoDetail('${g.id}')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add</span></button>
+        </div>`;
+    }
+  } else {
+    // Clay detail
+    const c=clays.find(cl=>cl.id===libDetailId);if(!c){closeLibDetail();return;}
+    if(libDetailEditing){
+      const ds=libDetailState;
+      el.innerHTML=`
+        <button class="back-btn" onclick="closeLibDetail()"><svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Back</button>
+        <div class="detail-top"><div class="detail-title-wrap">
+          <input class="detail-title-input" type="text" value="${ds.name||''}" oninput="libDetailState.name=this.value" placeholder="Clay name">
+        </div>
+        <button class="edit-btn save-mode" onclick="saveLibDetail()">Save</button></div>
+        <div class="lib-detail-field"><label>Shrinkage %</label><input type="number" min="0" max="30" step="0.5" value="${ds.shrink||0}" oninput="libDetailState.shrink=parseFloat(this.value)"></div>
+        <div class="lib-detail-field"><label>Notes</label><textarea oninput="libDetailState.note=this.value" rows="3">${ds.note||''}</textarea></div>
+        <div class="lib-detail-actions">
+          <button class="lib-detail-del" onclick="deleteClay('${c.id}');closeLibDetail()">Delete Clay</button>
+        </div>`;
+    } else {
+      el.innerHTML=`
+        <button class="back-btn" onclick="closeLibDetail()"><svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Back</button>
+        <div class="detail-top"><div class="detail-title-wrap">
+          <div class="detail-title">${c.name}</div>
+          <div class="detail-sub">${c.shrink}% shrinkage</div>
+        </div>
+        <button class="edit-btn" onclick="startLibDetailEdit()">Edit</button></div>
+        ${c.note?`<div class="glaze-notes">${c.note}</div>`:''}`;
+    }
+  }
+}
+function startLibDetailEdit(){
+  libDetailEditing=true;
+  if(libDetailType==='glaze'){
+    const g=glazeLib.find(gl=>gl.id===libDetailId);
+    libDetailState={...g};
+  } else {
+    const c=clays.find(cl=>cl.id===libDetailId);
+    libDetailState={...c};
+  }
+  renderLibDetail();
+}
+function saveLibDetail(){
+  if(libDetailType==='glaze'){
+    const g=glazeLib.find(gl=>gl.id===libDetailId);if(!g)return;
+    Object.assign(g,libDetailState);
+  } else {
+    const c=clays.find(cl=>cl.id===libDetailId);if(!c)return;
+    Object.assign(c,libDetailState);
+  }
+  libDetailEditing=false;save();renderLibDetail();
 }
 function openTTLightbox(src){
   const lb=document.createElement('div');lb.className='tt-lightbox';
@@ -2175,18 +2391,14 @@ function openTTLightbox(src){
   lb.innerHTML=`<img src="${src}" alt="Test tile">`;
   document.body.appendChild(lb);
 }
-function addTTPhoto(glazeId){
+function addTTPhotoDetail(glazeId){
   const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
   inp.onchange=()=>{
     const g=glazeLib.find(gl=>gl.id===glazeId);if(!g)return;
     if(!g.testTilePhotos)g.testTilePhotos=[];
     Array.from(inp.files).forEach(f=>{
       const reader=new FileReader();
-      reader.onload=e=>{g.testTilePhotos.push(e.target.result);save();renderGlazeList();
-        const det=document.getElementById('detail-'+glazeId);
-        const car=document.getElementById('caret-'+glazeId);
-        if(det)det.classList.add('open');if(car)car.classList.add('open');
-      };
+      reader.onload=e=>{g.testTilePhotos.push(e.target.result);save();renderLibDetail();};
       reader.readAsDataURL(f);
     });
   };
@@ -2194,10 +2406,7 @@ function addTTPhoto(glazeId){
 }
 function removeTTPhoto(glazeId,idx){
   const g=glazeLib.find(gl=>gl.id===glazeId);if(!g||!g.testTilePhotos)return;
-  g.testTilePhotos.splice(idx,1);save();renderGlazeList();
-  const det=document.getElementById('detail-'+glazeId);
-  const car=document.getElementById('caret-'+glazeId);
-  if(det)det.classList.add('open');if(car)car.classList.add('open');
+  g.testTilePhotos.splice(idx,1);save();
 }
 function addGlazeToLib(){
   const n=document.getElementById('new-glaze-name').value.trim();
@@ -2206,7 +2415,7 @@ function addGlazeToLib(){
   const s=parseInt(document.getElementById('new-glaze-stability').value)||1;
   const notes=document.getElementById('new-glaze-notes').value.trim();
   if(!n)return;
-  glazeLib.push({id:uid(),name:n,color:c,role:r,stability:s,notes:notes,testTilePhotos:[]});
+  glazeLib.push({id:uid(),name:n,color:c,role:r,stability:s,notes:notes,dips:1,finish:'',goodForBase:false,badForBase:false,testTilePhotos:[]});
   document.getElementById('new-glaze-name').value='';
   document.getElementById('new-glaze-notes').value='';
   document.getElementById('new-glaze-stability').value='1';
@@ -2214,6 +2423,7 @@ function addGlazeToLib(){
   save();renderGlazeList();
 }
 function deleteGlaze(id){glazeLib=glazeLib.filter(g=>g.id!==id);save();renderGlazeList();}
+function deleteClay(id){clays=clays.filter(c=>c.id!==id);save();renderClayList();}
 
 // ── INIT ──
 if(!localStorage.getItem('kd_pinboard')){

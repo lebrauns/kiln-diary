@@ -1,4 +1,4 @@
-const CACHE = 'kiln-diary-v7';
+const CACHE = 'kiln-diary-v8';
 
 self.addEventListener('install', e => {
   e.waitUntil(self.skipWaiting());
