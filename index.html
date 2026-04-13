@@ -9,10 +9,11 @@
 <meta name="apple-mobile-web-app-title" content="Toast Ceramics">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#211608">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="apple-touch-startup-image" href="icon-512.png">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -80,8 +81,13 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .view{display:none;flex:1;overflow:hidden;flex-direction:column}
 .view.active{display:flex}
 
+/* ══ PAGE HEADERS ══ */
+.page-header{padding:22px 24px 0;flex-shrink:0}
+.page-header-title{font-family:'Outfit',sans-serif;font-size:26px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;line-height:1}
+.page-header-sub{font-size:12px;color:var(--muted);margin-top:4px;font-family:'Lato',sans-serif}
+
 /* ══ GALLERY (Ideas + Finished) ══ */
-.gallery-wrap{flex:1;overflow-y:auto;padding:20px 24px 48px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.gallery-wrap{flex:1;overflow-y:auto;padding:16px 24px 48px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
 .gallery-wrap::-webkit-scrollbar{width:5px}
 .gallery-wrap::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
 .gallery-filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--sand-l)}
@@ -91,65 +97,70 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .filter-chip.on{background:var(--nav);border-color:var(--nav);color:var(--nav-active)}
 .filter-sep{width:1px;height:18px;background:var(--sand);flex-shrink:0;align-self:center;margin:0 4px}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:14px}
-.gallery-empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.gallery-empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);font-family:'Outfit',sans-serif;font-style:italic;font-size:15px;display:flex;flex-direction:column;align-items:center;gap:12px}
 .gallery-empty svg{width:44px;height:44px;stroke:var(--sand);fill:none;stroke-width:1.1}
 
 /* Gallery card */
-.gal-card{background:var(--white);border:none;border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .12s;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,.07)}
-.gal-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.13);transform:translateY(-2px)}
-.gal-photo{height:165px;background:var(--sand-l);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.gal-card{background:var(--white);border:none;border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .12s;display:flex;flex-direction:column;box-shadow:0 2px 10px rgba(0,0,0,.09);position:relative}
+.gal-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.14);transform:translateY(-2px)}
+.gal-photo{height:175px;background:var(--sand-l);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;position:relative}
 .gal-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .gal-photo-empty{color:var(--sand);opacity:.6;display:flex;flex-direction:column;align-items:center;gap:6px}
 .gal-photo-empty svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.2}
 .gal-photo-empty span{font-size:10px;font-family:'Lato',sans-serif}
-.gal-body{padding:12px 13px 10px;flex:1}
-.gal-name{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;margin-bottom:3px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.gal-meta{font-size:11px;color:var(--muted);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:16px}
+.gal-tags{position:absolute;top:9px;left:9px;display:flex;gap:5px;z-index:2}
+.gal-tag{background:rgba(255,255,255,0.93);backdrop-filter:blur(6px);border-radius:20px;padding:3px 9px;font-size:10px;font-family:'Outfit',sans-serif;font-weight:500;color:var(--ink);letter-spacing:0.02em}
+.gal-body{background:var(--white);border-radius:12px 12px 0 0;margin-top:-18px;position:relative;z-index:1;padding:12px 13px 10px;flex:1}
+.gal-name{font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;margin-bottom:2px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gal-meta{font-size:11px;color:var(--muted);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:15px}
+.gal-card-date{font-size:11px;color:var(--muted);margin-bottom:6px}
 .gal-badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px}
 .gal-badge{font-size:9px;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:20px;border:1px solid var(--sand);color:var(--muted);background:var(--sand-ll)}
 .gal-badge.diff-easy{background:var(--olive-l);border-color:var(--olive);color:#2E3D18}
 .gal-badge.diff-medium{background:var(--clay-l);border-color:var(--clay-m);color:var(--clay-d)}
 .gal-badge.diff-hard{background:var(--nav);border-color:var(--nav);color:var(--nav-active)}
-.gal-price{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--ink);margin-top:5px}
+.gal-price{font-family:'Outfit',sans-serif;font-size:16px;color:var(--ink);margin-top:5px}
 .gal-date{font-size:11px;color:var(--muted);margin-top:3px}
-.gal-action-bar{border-top:1.5px solid var(--sand);display:flex;flex-shrink:0}
-.gal-action{flex:1;padding:9px 8px;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;font-family:'Lato',sans-serif;font-weight:700;border:none;background:transparent;cursor:pointer;color:var(--clay);transition:background .12s}
+.gal-action-bar{padding:5px 10px 10px;display:flex;justify-content:center;background:var(--white);border-radius:0 0 var(--rl) var(--rl)}
+.gal-action{padding:7px 18px;font-size:11px;letter-spacing:0.04em;font-family:'Outfit',sans-serif;font-weight:600;border:none;background:transparent;cursor:pointer;color:var(--clay);transition:background .12s;border-radius:20px}
 .gal-action:hover{background:var(--clay-l)}
-.gal-action.ready-btn{color:var(--teal)}
-.gal-action.ready-btn:hover{background:var(--teal-l)}
+.gal-action.ready-btn{color:var(--teal);background:var(--teal-l)}
+.gal-action.ready-btn:hover{background:#c8e6ec}
 
 /* ══ ACTIVE WORK KANBAN ══ */
 #view-active{flex-direction:column}
-.kanban-scroll{flex:1;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:16px 16px 20px;display:flex;gap:14px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
-.kanban-scroll::-webkit-scrollbar{height:6px}
-.kanban-scroll::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
-.kanban-col{flex-shrink:0;width:230px;display:flex;flex-direction:column;background:var(--sand-ll);border-radius:var(--rl);border:1.5px solid var(--sand);overflow:hidden}
-.col-header{padding:13px 14px 11px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.col-title-row{display:flex;align-items:center;gap:8px}
-.col-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.col-title{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:500;letter-spacing:0.02em}
-.col-count{font-size:10px;color:var(--muted);background:var(--white);border:1.5px solid var(--sand);padding:2px 8px;border-radius:20px;font-family:'Lato',sans-serif;letter-spacing:0.05em}
+.kanban-scroll{flex:1;overflow-x:hidden;overflow-y:hidden;padding:16px 16px 20px;display:flex;gap:12px}
+.kanban-col{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--sand-ll);border-radius:var(--rl);border:1.5px solid var(--sand);overflow:hidden}
+.col-header{padding:15px 16px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1.5px solid var(--sand)}
+.col-title-row{display:flex;align-items:center;gap:9px}
+.col-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.col-title{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+.col-count{font-size:11px;font-weight:600;color:var(--muted);background:var(--white);border:1.5px solid var(--sand);padding:2px 9px;border-radius:20px;font-family:'Outfit',sans-serif}
 .col-cards{flex:1;overflow-y:auto;padding:6px 10px 12px;display:flex;flex-direction:column;gap:9px;min-height:80px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
 .col-cards::-webkit-scrollbar{width:4px}
 .col-cards::-webkit-scrollbar-thumb{background:var(--sand);border-radius:2px}
 .col-cards.drag-over{background:rgba(160,51,24,.07);border-radius:var(--r)}
-.col-empty{padding:10px 4px;font-size:12px;color:var(--sand);font-family:'Cormorant Garamond',serif;font-style:italic;text-align:center}
+.col-empty{padding:10px 4px;font-size:12px;color:var(--sand);font-family:'Outfit',sans-serif;font-style:italic;text-align:center}
 
 /* Kanban card */
-.proj-card{background:var(--white);border:none;border-radius:var(--r);overflow:hidden;cursor:grab;transition:box-shadow .15s,opacity .15s,transform .15s;user-select:none;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.proj-card{background:var(--white);border:none;border-radius:var(--rl);overflow:hidden;cursor:grab;transition:box-shadow .15s,opacity .15s,transform .15s;user-select:none;box-shadow:0 2px 10px rgba(0,0,0,.09);position:relative}
 .proj-card:active{cursor:grabbing}
 .proj-card.dragging{opacity:.4;transform:scale(0.97);box-shadow:0 12px 28px rgba(0,0,0,0.15)}
-.pc-photo{height:110px;background:var(--sand-l);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pc-photo{height:140px;background:var(--sand-l);overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
 .pc-photo img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 .pc-photo-empty{display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--sand);opacity:.7}
 .pc-photo-empty svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.2}
-.pc-body{padding:9px 11px 10px}
-.pc-name{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pc-clay{font-size:11px;color:var(--muted);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pc-glazes{display:flex;gap:4px}
-.g-dot{width:10px;height:10px;border-radius:50%;border:1px solid rgba(0,0,0,0.1)}
-.pc-finish-btn{width:100%;padding:8px;font-size:10px;letter-spacing:0.07em;text-transform:uppercase;font-family:'Lato',sans-serif;font-weight:700;border:none;border-top:1.5px solid var(--sand);background:transparent;cursor:pointer;color:var(--olive);transition:background .12s}
-.pc-finish-btn:hover{background:var(--olive-l)}
+.pc-tags{position:absolute;top:8px;left:8px;display:flex;gap:5px;z-index:2}
+.pc-tag{background:rgba(255,255,255,0.93);backdrop-filter:blur(6px);border-radius:20px;padding:3px 9px;font-size:10px;font-family:'Outfit',sans-serif;font-weight:500;color:var(--ink)}
+.pc-content{background:var(--white);border-radius:12px 12px 0 0;margin-top:-16px;position:relative;z-index:1;padding:10px 11px 0}
+.pc-name{font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-clay{font-size:11px;color:var(--muted);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-card-date{font-size:11px;color:var(--muted);margin-bottom:5px}
+.pc-glazes{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.glaze-chip{display:flex;align-items:center;gap:4px;background:var(--sand-ll);border:1px solid var(--sand);border-radius:20px;padding:2px 7px 2px 5px;font-size:10px;font-family:'Outfit',sans-serif;color:var(--ink)}
+.g-dot{width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,0.12);flex-shrink:0}
+.pc-finish-btn{margin:4px 10px 10px;display:block;padding:8px 18px;font-size:11px;letter-spacing:0.04em;font-family:'Outfit',sans-serif;font-weight:600;border:none;border-radius:20px;background:var(--olive-l);cursor:pointer;color:#2E3D18;transition:background .12s;text-align:center}
+.pc-finish-btn:hover{background:#c4d9b0}
 
 /* Stage colours */
 .dot-wet{background:#4A7A8A}
@@ -162,21 +173,28 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .dot-finished{background:#4A5C2A}
 
 /* ══ DETAIL VIEW ══ */
-#view-detail{flex-direction:column;overflow:hidden}
+#view-detail{flex-direction:column;overflow:hidden;position:relative}
 .detail-scroll{flex:1;overflow-y:auto;padding:16px 20px 48px;scrollbar-width:thin;scrollbar-color:var(--sand) transparent}
+.edit-btn-fixed{position:absolute;top:14px;right:16px;z-index:10}
 .back-btn{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:14px;transition:color .12s;background:none;border:none;font-family:'Lato',sans-serif;padding:0;letter-spacing:0.04em;text-transform:uppercase}
 .back-btn:hover{color:var(--clay)}
-.detail-hero{height:220px;background:var(--sand-l);border-radius:var(--rl);overflow:hidden;margin-bottom:16px;position:relative;display:flex;align-items:center;justify-content:center}
-.detail-hero img{width:100%;height:100%;object-fit:cover;display:block}
-.dh-empty{color:var(--sand);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.6}
-.dh-empty svg{width:44px;height:44px;stroke:currentColor;fill:none;stroke-width:1.1}
-.hero-upload-btn{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,0.9);border:none;border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--ink);font-family:'Lato',sans-serif;display:none}
-.is-editing .hero-upload-btn{display:block}
+.detail-photo-strip{display:flex;gap:10px;overflow-x:auto;padding:0 20px 16px;margin:0 -20px 4px;scrollbar-width:none}
+.detail-photo-strip::-webkit-scrollbar{display:none}
+.dps-item{position:relative;width:160px;height:160px;flex-shrink:0;border-radius:12px;overflow:hidden;cursor:pointer;background:var(--sand-l)}
+.dps-item img{width:100%;height:100%;object-fit:cover;display:block}
+.dps-del{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.55);border:none;cursor:pointer;color:#fff;font-size:13px;display:none;align-items:center;justify-content:center;line-height:1}
+.is-editing .dps-del{display:flex}
+.dps-add{width:160px;height:160px;flex-shrink:0;border-radius:12px;border:1.5px dashed var(--sand);background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:6px;transition:border-color .12s}
+.dps-add:hover{border-color:var(--clay-m)}
+.dps-add svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.4}
+.dps-add span{font-size:11px;font-family:'Lato',sans-serif;letter-spacing:.04em;text-transform:uppercase}
 .detail-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
 .detail-title-wrap{flex:1;min-width:0}
-.detail-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;line-height:1.15}
-.detail-title-input{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;line-height:1.15;border:none;border-bottom:1.5px solid var(--clay-m);background:transparent;color:var(--ink);outline:none;width:100%;padding:0 0 3px}
+.detail-title{font-family:'Outfit',sans-serif;font-size:26px;font-weight:500;line-height:1.15}
+.detail-title-input{font-family:'Outfit',sans-serif;font-size:26px;font-weight:500;line-height:1.15;border:none;border-bottom:1.5px solid var(--clay-m);background:transparent;color:var(--ink);outline:none;width:100%;padding:0 0 3px}
 .detail-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.delete-btn{background:none;border:1px solid var(--sand);border-radius:6px;padding:6px 12px;font-size:12px;font-family:'Lato',sans-serif;color:var(--muted);cursor:pointer;transition:border-color .12s,color .12s}
+.delete-btn:hover{border-color:#c0392b;color:#c0392b}
 .edit-btn{background:var(--sand-l);border:none;border-radius:var(--r);padding:7px 14px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;transition:all .12s}
 .edit-btn:hover{background:var(--sand);color:var(--ink)}
 .edit-btn.save-mode{background:var(--clay);color:#fff}
@@ -186,15 +204,16 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .stage-select{font-size:12px;color:var(--muted);background:transparent;border:none;outline:none;font-family:'Lato',sans-serif;cursor:pointer;display:none;padding:0;letter-spacing:0.03em}
 .is-editing .stage-select{display:block}
 .is-editing .stage-badge-label{display:none}
-.detail-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.dcard{background:var(--sand-ll);border-radius:var(--r);padding:11px 14px}
-.dcard .dl{font-size:10px;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'Cormorant Garamond',serif}
-.dcard .dv{font-size:14px;color:var(--ink)}
-.dcard input,.dcard select{width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:14px;color:var(--ink);outline:none;padding:0 0 2px;font-family:'Lato',sans-serif;font-weight:300}
+.detail-2col{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:6px}
+.dcard{background:none;border-radius:0;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.07)}
+.dcard .dl{font-size:10px;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'Outfit',sans-serif}
+.dcard .dv{font-size:14px;color:var(--ink);font-weight:400}
+.dcard input,.dcard select{width:100%;border:none;background:transparent;font-size:14px;color:var(--ink);outline:none;padding:0;font-family:'Lato',sans-serif;font-weight:300}
+.is-editing .dcard input,.is-editing .dcard select{background:var(--white);border:1px solid var(--sand);border-radius:6px;padding:7px 10px}
 .build-result{background:var(--clay-l);border:1px solid rgba(160,51,24,.25);border-radius:var(--r);padding:12px 16px;display:flex;gap:26px;margin-bottom:16px}
 .br-item .brl{font-size:10px;text-transform:uppercase;letter-spacing:0.09em;color:var(--clay);display:block;margin-bottom:2px}
-.br-item .brv{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--clay-d)}
-.ds-label{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);margin-bottom:9px}
+.br-item .brv{font-family:'Outfit',sans-serif;font-size:19px;color:var(--clay-d)}
+.ds-label{font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);margin-bottom:9px}
 .detail-section{margin-bottom:18px}
 .glaze-list{display:flex;flex-direction:column;gap:9px}
 .glaze-row-d{display:flex;align-items:center;gap:10px}
@@ -235,10 +254,15 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .add-photo-btn{width:80px;height:80px;border-radius:var(--r);border:1.5px dashed var(--sand);background:transparent;cursor:pointer;display:none;flex-shrink:0;align-items:center;justify-content:center;color:var(--muted);font-size:22px;transition:border-color .12s}
 .add-photo-btn:hover{border-color:var(--clay-m)}
 .is-editing .add-photo-btn{display:flex}
+.is-editing .dcard input,.is-editing .dcard select{background:var(--white);border:1px solid var(--sand);border-radius:6px;padding:8px 10px;width:100%;font-family:'Lato',sans-serif;font-size:13px;color:var(--ink);outline:none}
+.detail-delete-zone{display:none;margin-top:28px;padding-top:20px;border-top:1px solid rgba(0,0,0,.07)}
+.is-editing .detail-delete-zone{display:block}
+.delete-btn-full{width:100%;padding:13px;border:1.5px solid #c0392b;border-radius:var(--r);background:none;color:#c0392b;font-size:13px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:.02em;transition:all .15s}
+.delete-btn-full:hover{background:#c0392b;color:#fff}
 
 /* ══ CALCULATOR ══ */
-#view-calc{flex-direction:column;overflow-y:auto;padding:20px 24px 48px}
-.calc-wrap{max-width:440px}
+#view-calc{flex-direction:column;overflow-y:auto;padding:0}
+.calc-wrap{padding:0 24px 48px;flex:1}
 .clay-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:15px}
 .clay-opt{background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:var(--r);padding:12px 10px;cursor:pointer;text-align:center;font-family:'Lato',sans-serif;transition:all .14s}
 .clay-opt:hover{border-color:var(--clay-m)}
@@ -250,26 +274,39 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .custom-row{display:flex;align-items:center;gap:11px;padding:10px 14px;background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:var(--r);margin-bottom:15px}
 .custom-row label{font-size:12px;color:var(--muted);white-space:nowrap}
 .custom-row input[type=range]{flex:1}
-.custom-row .cv{font-family:'Cormorant Garamond',serif;font-size:15px;min-width:44px;text-align:right;color:var(--ink)}
+.custom-row .cv{font-family:'Outfit',sans-serif;font-size:15px;min-width:44px;text-align:right;color:var(--ink)}
 .unit-row{display:flex;align-items:center;gap:9px;margin-bottom:15px}
 .unit-row span{font-size:11px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
 .utbtn{font-size:11px;padding:5px 15px;border-radius:20px;border:1px solid var(--sand);background:transparent;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;transition:all .12s}
 .utbtn.on{background:var(--clay);border-color:var(--clay);color:#fff}
 .calc-2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:15px}
-.cfield label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;font-family:'Cormorant Garamond',serif}
+.cfield label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;font-family:'Outfit',sans-serif}
 .cfi{display:flex;align-items:center;background:var(--white);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);overflow:hidden}
-.cfi input{flex:1;border:none;background:transparent;padding:10px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--ink);outline:none;min-width:0}
+.cfi input{flex:1;border:none;background:transparent;padding:10px;font-family:'Outfit',sans-serif;font-size:18px;color:var(--ink);outline:none;min-width:0}
 .cfi input::-webkit-inner-spin-button{-webkit-appearance:none}
 .cfi span{font-size:12px;color:var(--muted);padding:0 10px}
 .calc-out-box{background:var(--clay-l);border:1px solid rgba(160,51,24,.22);border-radius:var(--rl);padding:15px 18px}
-.co-label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--clay);margin-bottom:9px;font-family:'Cormorant Garamond',serif}
+.co-label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--clay);margin-bottom:9px;font-family:'Outfit',sans-serif}
 .co-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .co-item{background:rgba(255,255,255,.65);border:1px solid rgba(160,51,24,.18);border-radius:var(--r);padding:11px 13px}
 .co-item .col{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--clay);margin-bottom:3px}
-.co-item .cov{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--clay-d)}
+.co-item .cov{font-family:'Outfit',sans-serif;font-size:22px;color:var(--clay-d)}
 .co-item .cou{font-size:11px;color:var(--clay)}
 .calc-note{font-size:11px;color:var(--clay);opacity:.7;margin-top:10px;line-height:1.65}
-.sec-label{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.shape-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.shape-opt{background:var(--white);border:1.5px solid var(--sand);border-radius:var(--r);padding:10px 6px 8px;cursor:pointer;text-align:center;transition:all .14s;display:flex;flex-direction:column;align-items:center;gap:5px}
+.shape-opt:hover{border-color:var(--clay-m)}
+.shape-opt.on{background:var(--clay-l);border-color:var(--clay)}
+.shape-opt svg{width:40px;height:36px;display:block}
+.shape-opt .sn{font-size:10px;font-family:'Outfit',sans-serif;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase}
+.shape-opt.on .sn{color:var(--clay-d)}
+.calc-comparison{margin-top:16px;background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:var(--rl);padding:16px;overflow:hidden}
+.calc-comp-label{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--clay);margin-bottom:12px;font-family:'Outfit',sans-serif}
+.calc-comp-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.calc-comp-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+.calc-comp-item svg{display:block;width:100%;height:auto}
+.calc-comp-title{font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-family:'Outfit',sans-serif;color:var(--muted);text-align:center}
+.sec-label{font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 
 /* ══ LIBRARY ══ */
 #view-library{flex-direction:column;overflow-y:auto;padding:20px 24px 48px}
@@ -279,24 +316,68 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .lib-section{display:none}
 .lib-section.active{display:block}
 .lib-list{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}
-.lib-item{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--r);padding:12px 15px;display:flex;align-items:center;justify-content:space-between}
-.li-info .ln{font-size:14px;color:var(--ink);margin-bottom:2px}
+.lib-item{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--rl);padding:0;display:flex;flex-direction:column;overflow:hidden;transition:box-shadow .15s}
+.lib-item:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.li-top{display:flex;align-items:center;padding:12px 15px;gap:12px;cursor:pointer;width:100%;background:none;border:none;text-align:left;font-family:inherit}
+.li-top:hover{background:var(--sand-ll)}
+.li-info{flex:1;min-width:0}
+.li-info .ln{font-size:14px;color:var(--ink);margin-bottom:2px;font-family:'Outfit',sans-serif;font-weight:500}
 .li-info .lm{font-size:12px;color:var(--muted)}
 .li-badge{font-size:11px;padding:3px 11px;border-radius:20px;background:var(--clay-l);color:var(--clay-d)}
 .li-swatch{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0}
-.li-del{background:none;border:none;cursor:pointer;color:var(--sand);font-size:14px;padding:4px 7px;transition:color .12s}
+.li-del{background:none;border:none;cursor:pointer;color:var(--sand);font-size:14px;padding:4px 7px;transition:color .12s;flex-shrink:0}
 .li-del:hover{color:var(--muted)}
+.li-expand-caret{width:14px;height:14px;stroke:var(--sand);fill:none;stroke-width:2;transition:transform .2s;flex-shrink:0}
+.li-expand-caret.open{transform:rotate(90deg)}
+.li-detail{display:none;padding:0 15px 14px;border-top:1px solid var(--sand-l)}
+.li-detail.open{display:block;padding-top:12px}
+/* Stability bar */
+.stability-bar-wrap{margin-bottom:10px}
+.stability-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.stability-label span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'Outfit',sans-serif}
+.stability-label .stab-val{font-weight:600;color:var(--ink);text-transform:none;letter-spacing:0}
+.stability-bar{height:6px;background:var(--sand-l);border-radius:3px;overflow:hidden;position:relative}
+.stability-fill{height:100%;border-radius:3px;transition:width .3s}
+.stability-fill.s1{width:20%;background:var(--olive)}
+.stability-fill.s2{width:40%;background:#6B8A3E}
+.stability-fill.s3{width:60%;background:#C4A94D}
+.stability-fill.s4{width:80%;background:var(--clay-m)}
+.stability-fill.s5{width:100%;background:var(--clay)}
+.stability-endpoints{display:flex;justify-content:space-between;margin-top:3px}
+.stability-endpoints span{font-size:9px;color:var(--sand);font-family:'Outfit',sans-serif;letter-spacing:.06em;text-transform:uppercase}
+/* Glaze notes */
+.glaze-notes{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px;white-space:pre-line}
+.glaze-notes strong{color:var(--ink);font-weight:600}
+/* Test tile photos */
+.tt-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 0 2px;scrollbar-width:none}
+.tt-strip::-webkit-scrollbar{display:none}
+.tt-item{position:relative;width:72px;height:72px;flex-shrink:0;border-radius:8px;overflow:hidden;background:var(--sand-l)}
+.tt-item img{width:100%;height:100%;object-fit:cover;display:block}
+.tt-del{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.55);border:none;cursor:pointer;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1}
+.tt-add{width:72px;height:72px;flex-shrink:0;border-radius:8px;border:1.5px dashed var(--sand);background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:3px;transition:border-color .12s}
+.tt-add:hover{border-color:var(--clay-m)}
+.tt-add svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.4}
+.tt-add span{font-size:8px;font-family:'Lato',sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.tt-section-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'Outfit',sans-serif;margin-bottom:6px}
+/* Lightbox */
+.tt-lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+.tt-lightbox img{max-width:90%;max-height:90%;object-fit:contain;border-radius:8px}
 .add-form{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--rl);padding:16px}
-.add-form-title{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;margin-bottom:13px;color:var(--clay-d)}
+.add-form-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;margin-bottom:13px;color:var(--clay-d)}
 .add-grid-clay{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:end}
-.add-grid-glaze{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:9px;align-items:end}
-.af-field label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;font-family:'Cormorant Garamond',serif}
-.af-field input,.af-field select{width:100%;background:var(--cream);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:'Lato',sans-serif;color:var(--ink);outline:none}
+.add-grid-glaze{display:flex;flex-direction:column;gap:12px}
+.add-glaze-row1{display:grid;grid-template-columns:auto 1fr 1fr;gap:9px;align-items:end}
+.add-glaze-row2{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:end}
+.af-field label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;font-family:'Outfit',sans-serif}
+.af-field input,.af-field select,.af-field textarea{width:100%;background:var(--cream);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:'Lato',sans-serif;color:var(--ink);outline:none}
+.af-field textarea{resize:vertical;min-height:60px}
+.af-field input[type=range]{padding:4px 0;background:transparent;border:none;accent-color:var(--clay)}
+.range-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--sand);font-family:'Outfit',sans-serif;letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
 .btn-add-lib{background:var(--clay);color:#fff;border:none;border-radius:var(--r);padding:0 18px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;height:38px;transition:opacity .15s;align-self:end;white-space:nowrap}
 .btn-add-lib:hover{opacity:.87}
 .glaze-color-pick{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);position:relative;cursor:pointer;align-self:end}
 .glaze-color-pick input{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%}
-.empty-state{text-align:center;padding:36px 20px;color:var(--muted);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px}
+.empty-state{text-align:center;padding:36px 20px;color:var(--muted);font-family:'Outfit',sans-serif;font-style:italic;font-size:14px}
 
 /* ══ INSPIRATION PANEL ══ */
 .inspo-panel{flex-shrink:0;background:var(--white);border-bottom:1px solid var(--sand-l)}
@@ -333,11 +414,25 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .inspo-pin{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;background:var(--sand-l)}
 .inspo-pin img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s}
 .inspo-pin:hover img{transform:scale(1.07)}
+.inspo-toolbar{display:flex;align-items:center;gap:10px;padding:14px 20px 10px;flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.06)}
+.inspo-toolbar-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;flex:1}
+.inspo-tool-btn{background:var(--clay);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-size:11px;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:.04em;white-space:nowrap;transition:background .12s}
+.inspo-tool-btn.secondary{background:var(--sand-l);color:var(--ink)}
+.inspo-tool-btn.secondary:hover{background:var(--sand)}
+.inspo-photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;padding:16px 20px 48px}
+.inspo-photo-item{aspect-ratio:1;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;background:var(--sand-l)}
+.inspo-photo-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .22s}
+.inspo-photo-item:hover img{transform:scale(1.05)}
+.inspo-photo-del{position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.55);border:none;cursor:pointer;color:#fff;font-size:12px;display:none;align-items:center;justify-content:center}
+.inspo-edit-mode .inspo-photo-del{display:flex}
+.inspo-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:60px 20px;text-align:center;color:var(--muted)}
+.inspo-empty-state svg{width:48px;height:48px;stroke:currentColor;fill:none;stroke-width:1.1;opacity:.5}
+.inspo-empty-state p{font-size:13px;line-height:1.6;max-width:240px}
 .inspo-pin-ov{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .18s;display:flex;align-items:center;justify-content:center}
 .inspo-pin:hover .inspo-pin-ov{background:rgba(0,0,0,.3)}
 .inspo-pin-plus{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .16s;font-size:24px;color:var(--ink);line-height:1}
 .inspo-pin:hover .inspo-pin-plus{opacity:1}
-.inspo-page-msg{padding:52px 20px;text-align:center;color:var(--muted);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px}
+.inspo-page-msg{padding:52px 20px;text-align:center;color:var(--muted);font-family:'Outfit',sans-serif;font-style:italic;font-size:15px}
 .inspo-setup{padding:40px 24px;max-width:420px;margin:0 auto}
 .inspo-setup p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px}
 
@@ -348,7 +443,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .pin-sheet-hero{height:200px;background:var(--sand-l);flex-shrink:0;overflow:hidden}
 .pin-sheet-hero img{width:100%;height:100%;object-fit:cover;display:block}
 .pin-sheet-body{padding:20px 20px 32px;flex:1;overflow-y:auto}
-.pin-sheet-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:15px;color:var(--ink)}
+.pin-sheet-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;margin-bottom:15px;color:var(--ink)}
 .pin-sheet-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .psb{padding:15px 8px;border-radius:var(--rl);font-family:'Lato',sans-serif;font-size:11px;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;border:1.5px solid var(--sand);background:var(--white);color:var(--ink);transition:all .14s;text-align:center}
 .psb:hover{border-color:var(--clay-m);color:var(--clay)}
@@ -381,16 +476,16 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 }
 
 /* ══ MODAL ══ */
-.modal-wrap{position:fixed;inset:0;background:rgba(40,38,31,.5);z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
+.modal-wrap{position:fixed;inset:0;background:var(--cream);z-index:200;display:flex;flex-direction:column;overflow:hidden}
 .modal-wrap.hidden{display:none}
-.modal{background:var(--cream);border-radius:20px 20px 0 0;max-height:93vh;display:flex;flex-direction:column}
-.modal-handle{width:40px;height:4px;background:var(--sand);border-radius:2px;margin:12px auto 0;flex-shrink:0}
-.modal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.06)}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500}
+.modal{background:var(--cream);flex:1;display:flex;flex-direction:column;overflow:hidden}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 13px;flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.07)}
+.modal-title{font-family:'Outfit',sans-serif;font-size:17px;font-weight:500;color:var(--ink)}
 .modal-x{background:var(--sand-l);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center}
-.modal-body{overflow-y:auto;padding:18px 20px 28px;flex:1}
+.modal-body{overflow-y:auto;padding:20px 20px 32px;flex:1}
+.modal-foot{display:flex;gap:10px;padding:14px 20px;border-top:1px solid rgba(0,0,0,.07);flex-shrink:0;background:var(--cream)}
 .fr{margin-bottom:15px}
-.fr label{display:block;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-family:'Cormorant Garamond',serif}
+.fr label{display:block;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-family:'Outfit',sans-serif}
 .fr input,.fr textarea,.fr select{width:100%;background:var(--white);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);padding:10px 12px;font-size:13px;font-family:'Lato',sans-serif;font-weight:300;color:var(--ink);outline:none;transition:border-color .12s}
 .fr input:focus,.fr textarea:focus,.fr select:focus{border-color:var(--clay-m)}
 .fr textarea{resize:vertical;min-height:70px;line-height:1.65}
@@ -416,7 +511,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .btn-ghost:hover{border-color:var(--clay-m);color:var(--clay)}
 .inline-calc{background:var(--clay-l);border:1px solid rgba(160,51,24,.2);border-radius:var(--r);padding:11px 15px;display:flex;gap:22px;margin-top:8px}
 .ic-item label{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--clay);display:block;margin-bottom:2px}
-.ic-item span{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--clay-d)}
+.ic-item span{font-family:'Outfit',sans-serif;font-size:18px;color:var(--clay-d)}
 .photo-zone{border:1.5px dashed var(--sand);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;position:relative;background:var(--white);transition:border-color .15s,background .15s}
 .photo-zone:hover{border-color:var(--clay-m)}
 .photo-zone.drag-over{border-color:var(--clay);background:var(--clay-l)}
@@ -428,7 +523,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .crop-wrap{position:fixed;inset:0;background:rgba(28,18,8,.88);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .crop-wrap.hidden{display:none}
 .crop-box{background:var(--cream);border-radius:18px;padding:20px;max-width:min(480px,94vw);width:100%;display:flex;flex-direction:column;gap:14px}
-.crop-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--ink);font-weight:500}
+.crop-title{font-family:'Outfit',sans-serif;font-size:18px;color:var(--ink);font-weight:500}
 .crop-canvas-wrap{position:relative;width:100%;aspect-ratio:1;background:#1a1610;border-radius:10px;overflow:hidden;touch-action:none;cursor:move}
 .crop-canvas-wrap canvas{display:block;width:100%;height:100%}
 .crop-hint{font-size:11px;color:var(--muted);text-align:center;letter-spacing:0.02em}
@@ -436,7 +531,6 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .crop-cancel{flex:1;background:transparent;border:1px solid var(--sand);border-radius:var(--r);padding:11px;font-size:12px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif}
 .crop-save{flex:2;background:var(--clay);color:#fff;border:none;border-radius:var(--r);padding:11px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;transition:opacity .15s}
 .crop-save:hover{opacity:.87}
-.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding-top:16px;border-top:1px solid rgba(0,0,0,.06);margin-top:6px}
 .btn-cancel{background:transparent;border:1px solid var(--sand);border-radius:var(--r);padding:10px 18px;font-size:12px;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif}
 .btn-save{background:var(--clay);color:#fff;border:none;border-radius:var(--r);padding:10px 24px;font-size:12px;cursor:pointer;font-family:'Lato',sans-serif;transition:opacity .15s}
 .btn-save:hover{opacity:.87}
@@ -478,7 +572,6 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
         </svg>
         <div class="logo-mini">T</div>
       </div>
-      <div class="logo-name">TOAST CERAMICS</div>
     </div>
 
     <div class="sidenav-items">
@@ -526,21 +619,9 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 
     <!-- ── IDEAS ── -->
     <div class="view active" id="view-ideas">
-      <div class="inspo-panel" id="inspo-panel">
-        <button class="inspo-toggle-row" onclick="toggleInspo()">
-          <svg class="pin-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.641 1.267 1.408 0 .858-.546 2.141-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.132-1.867 3.132-4.562 0-2.387-1.715-4.054-4.163-4.054-2.838 0-4.503 2.128-4.503 4.327 0 .856.33 1.775.741 2.276a.3.3 0 0 1 .069.286c-.076.312-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.522 0 10-4.477 10-10S17.522 2 12 2z"/></svg>
-          <span class="inspo-toggle-label">Inspiration Board</span>
-          <svg class="inspo-caret" id="inspo-caret" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        <div class="inspo-body hidden" id="inspo-body">
-          <div class="inspo-url-row">
-            <input class="inspo-url-input" id="inspo-url-input" type="url" placeholder="Paste your Pinterest board URL…">
-            <button class="inspo-set-btn" onclick="setInspoBoard()">Preview</button>
-          </div>
-          <div class="inspo-embed" id="inspo-embed">
-            <p class="inspo-hint">Paste a Pinterest board URL above to preview your inspiration pins</p>
-          </div>
-        </div>
+      <div class="page-header">
+        <div class="page-header-title">Ideas</div>
+        <div class="page-header-sub" id="ideas-count"></div>
       </div>
       <div class="gallery-wrap">
         <div class="gallery-filters" id="ideas-filters"></div>
@@ -550,11 +631,19 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 
     <!-- ── ACTIVE WORK ── -->
     <div class="view" id="view-active">
+      <div class="page-header">
+        <div class="page-header-title">Active Work</div>
+        <div class="page-header-sub" id="active-count"></div>
+      </div>
       <div class="kanban-scroll" id="kanban-scroll"></div>
     </div>
 
     <!-- ── FINISHED ── -->
     <div class="view" id="view-finished">
+      <div class="page-header">
+        <div class="page-header-title">Finished</div>
+        <div class="page-header-sub" id="finished-count"></div>
+      </div>
       <div class="gallery-wrap">
         <div class="gallery-filters" id="finished-filters"></div>
         <div class="gallery-grid" id="finished-grid"></div>
@@ -563,23 +652,25 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 
     <!-- ── INSPIRATION PAGE ── -->
     <div class="view" id="view-inspo">
-      <div class="inspo-page-header" id="inspo-page-header">
-        <span class="inspo-board-label" id="inspo-page-label">Inspiration Board</span>
-        <button class="inspo-hdr-btn" onclick="refreshInspoPage()">↺ Refresh</button>
-        <button class="inspo-hdr-btn" onclick="toggleInspoBoardBar()">Change Board</button>
+      <div class="inspo-toolbar">
+        <span class="inspo-toolbar-title" style="font-size:22px;font-weight:600;letter-spacing:-0.01em">Inspiration</span>
+        <button class="inspo-tool-btn secondary" id="inspo-pinterest-btn" onclick="inspoOpenOrSetPinterest()">+ Pinterest</button>
+        <button class="inspo-tool-btn" onclick="document.getElementById('inspo-photo-input').click()">+ Add Photos</button>
       </div>
-      <div class="inspo-url-bar hidden" id="inspo-url-bar">
+      <div class="inspo-url-bar hidden" id="inspo-url-bar" style="padding:10px 20px;display:flex;gap:8px;border-bottom:1px solid rgba(0,0,0,.06)">
         <input class="inspo-url-input" id="inspo-page-url" type="url" placeholder="Paste Pinterest board or pin.it URL…" style="flex:1">
-        <button class="inspo-set-btn" onclick="setInspoBoardFromPage()">Load</button>
+        <button class="inspo-set-btn" onclick="setInspoBoardFromPage()">Import</button>
+        <button class="inspo-hdr-btn" onclick="document.getElementById('inspo-url-bar').classList.add('hidden')">✕</button>
       </div>
-      <div class="inspo-page-scroll" id="inspo-page-scroll">
-        <div class="inspo-full-grid" id="inspo-full-grid"></div>
-        <div class="inspo-page-msg" id="inspo-page-msg"></div>
+      <div style="flex:1;overflow-y:auto">
+        <div class="inspo-photo-grid" id="inspo-photo-grid"></div>
+        <div id="inspo-page-msg"></div>
       </div>
     </div>
 
     <!-- ── DETAIL ── -->
     <div class="view" id="view-detail">
+      <button class="edit-btn edit-btn-fixed" id="edit-toggle-btn" onclick="toggleEdit()">Edit</button>
       <div class="detail-scroll" id="detail-scroll">
         <button class="back-btn" onclick="goBack()">
           <svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
@@ -591,7 +682,48 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 
     <!-- ── CALCULATOR ── -->
     <div class="view" id="view-calc">
-      <div class="calc-wrap" style="padding:20px 24px 48px;overflow-y:auto;flex:1">
+      <div class="calc-wrap">
+        <div class="page-header" style="padding:22px 0 16px">
+          <div class="page-header-title">Calculator</div>
+          <div class="page-header-sub">Shrinkage & build dimensions</div>
+        </div>
+        <div class="sec-label" style="margin-bottom:11px">Shape</div>
+        <div class="shape-picker">
+          <button class="shape-opt on" data-shape="cylinder" onclick="pickShape(this)">
+            <svg viewBox="0 0 40 36" fill="none">
+              <ellipse cx="20" cy="8" rx="13" ry="4" stroke="#A03318" stroke-width="1.5" fill="#EFE0D4"/>
+              <rect x="7" y="8" width="26" height="20" fill="#EFE0D4"/>
+              <ellipse cx="20" cy="28" rx="13" ry="4" stroke="#A03318" stroke-width="1.5" fill="#C4632A" fill-opacity=".3"/>
+              <line x1="7" y1="8" x2="7" y2="28" stroke="#A03318" stroke-width="1.5"/>
+              <line x1="33" y1="8" x2="33" y2="28" stroke="#A03318" stroke-width="1.5"/>
+            </svg>
+            <span class="sn">Cylinder</span>
+          </button>
+          <button class="shape-opt" data-shape="bowl" onclick="pickShape(this)">
+            <svg viewBox="0 0 40 36" fill="none">
+              <path d="M5 12 Q5 30 20 30 Q35 30 35 12" stroke="#A03318" stroke-width="1.5" fill="#EFE0D4"/>
+              <line x1="5" y1="12" x2="35" y2="12" stroke="#A03318" stroke-width="1.5"/>
+              <ellipse cx="20" cy="12" rx="15" ry="3.5" stroke="#A03318" stroke-width="1" fill="#EFE0D4"/>
+            </svg>
+            <span class="sn">Bowl</span>
+          </button>
+          <button class="shape-opt" data-shape="plate" onclick="pickShape(this)">
+            <svg viewBox="0 0 40 36" fill="none">
+              <path d="M3 20 Q3 28 20 28 Q37 28 37 20" stroke="#A03318" stroke-width="1.5" fill="#EFE0D4"/>
+              <line x1="3" y1="20" x2="37" y2="20" stroke="#A03318" stroke-width="1.5"/>
+              <ellipse cx="20" cy="20" rx="17" ry="3" stroke="#A03318" stroke-width="1" fill="#EFE0D4"/>
+            </svg>
+            <span class="sn">Plate</span>
+          </button>
+          <button class="shape-opt" data-shape="vase" onclick="pickShape(this)">
+            <svg viewBox="0 0 40 36" fill="none">
+              <path d="M16 4 C16 4 8 10 8 20 C8 28 13 32 20 32 C27 32 32 28 32 20 C32 10 24 4 24 4 Z" stroke="#A03318" stroke-width="1.5" fill="#EFE0D4"/>
+              <ellipse cx="20" cy="4" rx="4" ry="1.5" stroke="#A03318" stroke-width="1" fill="#EFE0D4"/>
+              <ellipse cx="20" cy="32" rx="7" ry="2" stroke="#A03318" stroke-width="1" fill="#C4632A" fill-opacity=".3"/>
+            </svg>
+            <span class="sn">Vase</span>
+          </button>
+        </div>
         <div class="sec-label" style="margin-bottom:11px">Clay Body</div>
         <div class="clay-grid" id="calc-clay-grid">
           <button class="clay-opt" data-s="10" onclick="calcClay(this)"><span class="cn">Earthenware</span><span class="cp">~10%</span></button>
@@ -620,7 +752,11 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 
     <!-- ── LIBRARY ── -->
     <div class="view" id="view-library">
-      <div style="padding:20px 24px 48px;overflow-y:auto;flex:1">
+      <div style="padding:0 24px 48px;overflow-y:auto;flex:1">
+        <div class="page-header" style="padding:22px 0 16px">
+          <div class="page-header-title">Library</div>
+          <div class="page-header-sub">Your clay bodies &amp; glazes</div>
+        </div>
         <div class="seg-ctrl">
           <button class="seg-btn active" onclick="libTab('clay')">Clay</button>
           <button class="seg-btn" onclick="libTab('glaze')">Glazes</button>
@@ -641,18 +777,27 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
           <div class="add-form">
             <div class="add-form-title">Add Glaze</div>
             <div class="add-grid-glaze">
-              <div class="af-field"><label>Color</label>
-                <div class="glaze-color-pick" id="new-glaze-swatch" style="background:#3B6D11">
-                  <input type="color" value="#3B6D11" id="new-glaze-color" oninput="document.getElementById('new-glaze-swatch').style.background=this.value">
+              <div class="add-glaze-row1">
+                <div class="af-field"><label>Color</label>
+                  <div class="glaze-color-pick" id="new-glaze-swatch" style="background:#3B6D11">
+                    <input type="color" value="#3B6D11" id="new-glaze-color" oninput="document.getElementById('new-glaze-swatch').style.background=this.value">
+                  </div>
+                </div>
+                <div class="af-field"><label>Name</label><input type="text" id="new-glaze-name" placeholder="e.g. Celadon…"></div>
+                <div class="af-field"><label>Default Role</label>
+                  <select id="new-glaze-role">
+                    <option>Top coat</option><option>Bottom coat</option><option>Interior</option><option>Exterior</option><option>Accent</option>
+                  </select>
                 </div>
               </div>
-              <div class="af-field"><label>Name</label><input type="text" id="new-glaze-name" placeholder="e.g. Celadon…"></div>
-              <div class="af-field"><label>Default Role</label>
-                <select id="new-glaze-role">
-                  <option>Top coat</option><option>Bottom coat</option><option>Interior</option><option>Exterior</option><option>Accent</option>
-                </select>
+              <div class="add-glaze-row2">
+                <div class="af-field"><label>Stability <span id="new-glaze-stab-val" style="color:var(--ink);font-weight:600;text-transform:none;letter-spacing:0">Stable</span></label>
+                  <input type="range" id="new-glaze-stability" min="1" max="5" value="1" oninput="document.getElementById('new-glaze-stab-val').textContent=['Stable','Mostly Stable','Moderate','Runny','Very Runny'][this.value-1]">
+                  <div class="range-labels"><span>Stable</span><span>Runny</span></div>
+                </div>
+                <div class="af-field"><label>Notes</label><textarea id="new-glaze-notes" placeholder="Application tips, effects…" rows="2"></textarea></div>
+                <button class="btn-add-lib" onclick="addGlazeToLib()">Add</button>
               </div>
-              <button class="btn-add-lib" onclick="addGlazeToLib()">Add</button>
             </div>
           </div>
         </div>
@@ -682,57 +827,81 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 <!-- NEW PROJECT MODAL -->
 <div class="modal-wrap hidden" id="modal-wrap">
   <div class="modal">
-    <div class="modal-handle"></div>
     <div class="modal-header">
+      <button class="back-btn" style="margin-bottom:0" onclick="closeModal()">
+        <svg viewBox="0 0 16 16" width="14" height="14"><polyline points="10 3 5 8 10 13" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        Cancel
+      </button>
       <div class="modal-title">New Project</div>
-      <button class="modal-x" onclick="closeModal()">✕</button>
+      <button class="edit-btn save-mode" onclick="saveNewProject()">Save</button>
     </div>
     <div class="modal-body">
-      <div class="fr"><label>Project Name</label><input type="text" id="f-name" placeholder="e.g. Breakfast bowls, tall vase…"></div>
-      <div class="f2">
-        <div class="fr"><label>Clay Body</label><input type="text" id="f-clay" placeholder="Soldate, B-Mix…"></div>
-        <div class="fr"><label>Shrinkage %</label><input type="number" id="f-shrink" placeholder="14" step=".5" min="0" max="30" oninput="modalCalc()"></div>
+      <!-- Photo strip -->
+      <div class="detail-photo-strip" id="modal-photo-strip" style="margin:-0px -20px 16px;padding:0 20px 0">
+        <!-- Photos injected by JS -->
+        <button class="dps-add" onclick="document.getElementById('f-photos').click()">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Add Photo</span>
+        </button>
       </div>
-      <div class="f2">
-        <div class="fr"><label>Goal Diameter</label><div class="inline-field"><input type="number" id="f-dia" min="0" step=".1" placeholder="6" oninput="modalCalc()"><span>in</span></div></div>
-        <div class="fr"><label>Goal Height</label><div class="inline-field"><input type="number" id="f-ht" min="0" step=".1" placeholder="4" oninput="modalCalc()"><span>in</span></div></div>
-      </div>
-      <div id="modal-calc-out"></div>
-      <div class="fr" style="margin-top:8px"><label>Stage</label><div class="stage-picker" id="f-stages"></div></div>
-      <div class="f2">
-        <div class="fr"><label>Construction</label>
-          <select id="f-method"><option value="">Select…</option><option>Thrown</option><option>Hand built</option><option>Both</option></select>
-        </div>
-        <div class="fr"><label>Difficulty</label>
-          <select id="f-difficulty"><option value="">Select…</option><option>Easy</option><option>Medium</option><option>Hard</option></select>
+      <!-- Title + clay sub -->
+      <div class="detail-top" style="margin-bottom:14px">
+        <div class="detail-title-wrap" style="flex:1">
+          <input class="detail-title-input" id="f-name" type="text" placeholder="Project name…" style="display:block;width:100%;margin-bottom:6px">
+          <input type="text" id="f-clay" placeholder="Clay body…" style="font-size:13px;color:var(--muted);border:none;border-bottom:1px solid var(--sand);background:transparent;outline:none;font-family:'Lato',sans-serif;width:100%;padding-bottom:2px">
         </div>
       </div>
-      <div class="f2">
-        <div class="fr"><label>Price (£)</label><input type="number" id="f-price" placeholder="0.00" step="0.01" min="0"></div>
-        <div class="fr"><label>Date Completed</label><input type="date" id="f-dateCompleted"></div>
+      <!-- Stage -->
+      <div style="margin-bottom:16px">
+        <div class="stage-picker" id="f-stages"></div>
       </div>
-      <div class="fr">
-        <label>Glazes</label>
-        <div id="f-glazes"></div>
-        <button class="btn-ghost" onclick="addGlazeRow()">+ Add glaze</button>
-      </div>
-      <div class="fr"><label>Pinterest / Inspiration</label><input type="url" id="f-pin" placeholder="https://pinterest.com/…"></div>
-      <div class="fr"><label>Notes</label><textarea id="f-notes" placeholder="Glaze tests, firing notes, ideas…"></textarea></div>
-      <div class="fr">
-        <label>Photos</label>
-        <div class="photo-zone" id="modal-photo-zone"
-          onclick="document.getElementById('f-photos').click()"
-          ondragover="zoneDragOver(event,'modal-photo-zone')"
-          ondragleave="zoneDragLeave('modal-photo-zone')"
-          ondrop="zoneDrop(event,'modal')">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C2B4A0" stroke-width="1.4" style="display:block;margin:0 auto"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <p>Tap or drop photos here · HEIC supported</p>
+      <!-- 2-col fields -->
+      <div class="detail-2col" style="margin-bottom:12px">
+        <div class="dcard">
+          <div class="dl">Shrinkage %</div>
+          <input type="number" id="f-shrink" placeholder="14" step=".5" min="0" max="30" oninput="modalCalc()" style="width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:14px;color:var(--ink);outline:none;padding:3px 0;font-family:'Lato',sans-serif">
         </div>
-        <div class="thumb-strip-sm" id="f-thumbs"></div>
+        <div class="dcard">
+          <div class="dl">Method</div>
+          <select id="f-method" style="width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:13px;color:var(--ink);outline:none;font-family:'Lato',sans-serif;padding:3px 0"><option value="">Select…</option><option>Thrown</option><option>Hand built</option><option>Both</option></select>
+        </div>
       </div>
-      <div class="modal-foot">
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-save" onclick="saveNewProject()">Save Project</button>
+      <div class="detail-2col" style="margin-bottom:12px">
+        <div class="dcard">
+          <div class="dl">Goal Diameter (in)</div>
+          <input type="number" id="f-dia" min="0" step=".1" placeholder="6" oninput="modalCalc()" style="width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:14px;color:var(--ink);outline:none;padding:3px 0;font-family:'Lato',sans-serif">
+        </div>
+        <div class="dcard">
+          <div class="dl">Goal Height (in)</div>
+          <input type="number" id="f-ht" min="0" step=".1" placeholder="4" oninput="modalCalc()" style="width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:14px;color:var(--ink);outline:none;padding:3px 0;font-family:'Lato',sans-serif">
+        </div>
+      </div>
+      <div id="modal-calc-out" style="margin-bottom:10px"></div>
+      <div class="detail-2col" style="margin-bottom:12px">
+        <div class="dcard">
+          <div class="dl">Difficulty</div>
+          <select id="f-difficulty" style="width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:13px;color:var(--ink);outline:none;font-family:'Lato',sans-serif;padding:3px 0"><option value="">Select…</option><option>Easy</option><option>Medium</option><option>Hard</option></select>
+        </div>
+        <div class="dcard">
+          <div class="dl">Price (£)</div>
+          <input type="number" id="f-price" placeholder="0.00" step="0.01" min="0" style="width:100%;border:none;border-bottom:1px solid var(--clay-m);background:transparent;font-size:14px;color:var(--ink);outline:none;padding:3px 0;font-family:'Lato',sans-serif">
+        </div>
+      </div>
+      <!-- Glazes -->
+      <div class="detail-section" style="margin-bottom:16px">
+        <div class="ds-label">Glazes</div>
+        <div id="f-glazes" style="margin-bottom:8px"></div>
+        <button class="add-glaze-btn" style="display:block" onclick="addGlazeRow()">+ Add glaze</button>
+      </div>
+      <!-- Pinterest -->
+      <div class="detail-section" style="margin-bottom:16px">
+        <div class="ds-label">Pinterest Link</div>
+        <input class="pin-input" style="display:block" type="url" id="f-pin" placeholder="https://pinterest.com/…">
+      </div>
+      <!-- Notes -->
+      <div class="detail-section" style="margin-bottom:16px">
+        <div class="ds-label">Notes</div>
+        <textarea class="detail-notes-input" style="display:block" id="f-notes" placeholder="Glaze tests, firing notes, ideas…"></textarea>
       </div>
     </div>
   </div>
@@ -755,6 +924,7 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 
 <input type="file" id="f-photos" accept="image/*,.heic,.heif" multiple style="display:none" onchange="handlePhotos(event)">
 <input type="file" id="hero-photo-input" accept="image/*,.heic,.heif" multiple style="display:none" onchange="handleHeroPhotos(event)">
+<input type="file" id="inspo-photo-input" accept="image/*,.heic,.heif" multiple style="display:none" onchange="handleInspoPhotos(event)">
 
 <script>
 // ── CONSTANTS ──
@@ -773,12 +943,12 @@ ALL_STAGES.forEach(s=>STAGE_BY_LABEL[s.label]=s.key);
 const GLAZE_DEFAULTS=['#3B6D11','#185FA5','#A03318','#534AB7','#B4B2A9','#854F0B','#993556','#085041'];
 
 // ── STATE ──
-let projects=[],clays=[],glazeLib=[],formGlazes=[],formPhotos=[];
-let calcShrinkRate=14,calcUnitVal='in';
+let projects=[],clays=[],glazeLib=[],formGlazes=[],formPhotos=[],inspoPhotos=[];
+let calcShrinkRate=14,calcUnitVal='in',calcShape='cylinder';
 let dragId=null;
 let detailId=null,isEditing=false,editState={};
 let currentView='ideas',prevView='ideas';
-let ideaDiffFilter='All',ideaMethodFilter='All';
+let ideaDiffFilter='All',ideaMethodFilter='All',ideaSort='date';
 let finishedSort='date';
 let sidenavCollapsed=false;
 let currentPinUrl='',inspoLoaded=false,pendingPhoto=null;
@@ -786,6 +956,10 @@ let currentPinUrl='',inspoLoaded=false,pendingPhoto=null;
 let cloudEnabled=false,saveTimer=null;
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function todayStr(){return new Date().toISOString().split('T')[0];}
+function recordStageDate(p,stage){if(!p.stageDates)p.stageDates={};p.stageDates[stage]=todayStr();}
+function getStageDate(p){if(!p.stageDates||!p.stage)return null;return p.stageDates[p.stage]||null;}
+function fmtStageDate(p){const d=getStageDate(p);if(!d)return null;try{return new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch(e){return d;}}
 
 // ── HELPERS ──
 function stageToView(stage){
@@ -801,7 +975,34 @@ function formatDate(d){
 
 // ── STORAGE ──
 function defaultClays(){return [{id:'c1',name:'Soldate 60',shrink:14,note:'High-fire'},{id:'c2',name:'B-Mix',shrink:12,note:'Mid-fire'}];}
-function defaultGlazes(){return [{id:'g1',name:'Celadon',color:'#5DCAA5',role:'Top coat'},{id:'g2',name:'Tenmoku',color:'#28261F',role:'Top coat'},{id:'g3',name:'Shino',color:'#E8845A',role:'Top coat'}];}
+function defaultGlazes(){return [
+{id:'g1',name:"Alfred's Clear",color:'#E8E4D8',role:'Top coat',stability:1,notes:"Clear glaze, good for layering over other glazes or showing clay body.",testTilePhotos:[]},
+{id:'g2',name:'Blue Celadon',color:'#7BA7B8',role:'Top coat',stability:1,notes:"Can crawl if applied too thickly on porcelain clay bodies. Keep coats even.",testTilePhotos:[]},
+{id:'g3',name:"Coleman's Purple",color:'#6B4C7A',role:'Top coat',stability:1,notes:"May hardpan in the bucket — mix with electric drill mixer if needed. Stir frequently between dips.",testTilePhotos:[]},
+{id:'g4',name:"Denise's Blue Black",color:'#2C3E50',role:'Top coat',stability:1,notes:"Stable dark glaze with blue-black tones.",testTilePhotos:[]},
+{id:'g5',name:'Eggshell Matte',color:'#F0E8D8',role:'Top coat',stability:1,notes:"Can blush pink if applied too thickly. Aim for an even, moderate coat.",testTilePhotos:[]},
+{id:'g6',name:'Gloss White',color:'#F5F2EA',role:'Top coat',stability:1,notes:"Can be applied under Shino glazes (exception to the usual Shino-first rule).",testTilePhotos:[]},
+{id:'g7',name:"Jeff's Red",color:'#A83232',role:'Top coat',stability:2,notes:"Apply two full-length dips for correct color. Can run — best used on interiors, or apply second coat only ⅔ down the outside until you get a feel for it.",testTilePhotos:[]},
+{id:'g8',name:"Kathleen's Aquamarine Celadon",color:'#68B8A7',role:'Top coat',stability:2,notes:"Designed to have a crackled surface — this is intentional, not a defect.",testTilePhotos:[]},
+{id:'g9',name:'Kawai Blue',color:'#4A6FA5',role:'Top coat',stability:1,notes:"Stable blue glaze, good for general use.",testTilePhotos:[]},
+{id:'g10',name:'Mason Red',color:'#B03A2E',role:'Top coat',stability:1,notes:"May hardpan in the bucket — mix with electric drill mixer if needed.",testTilePhotos:[]},
+{id:'g11',name:'Moonlight',color:'#D4CFC4',role:'Top coat',stability:4,notes:"When used in combination with any glaze, will be even more runny. Can be applied under Shino glazes. Use with caution on exteriors.",testTilePhotos:[]},
+{id:'g12',name:'Mystery',color:'#8B7D6B',role:'Top coat',stability:2,notes:"Unique surface effects. Test before committing to a piece.",testTilePhotos:[]},
+{id:'g13',name:"Randy's Shino",color:'#E8845A',role:'Top coat',stability:2,notes:"Designed to have a crackled surface with two coats (results in white color). Crackle can be enhanced to orange by refiring in a bisque kiln. Can carbon trap gray-black, especially with wax resist over the surface. Apply Shino first when combining with other glazes (except Gloss White & Moonlight, which can go under). Sometimes crawls if not fully dry before firing.",testTilePhotos:[]},
+{id:'g14',name:'Satin Black',color:'#1C1C1C',role:'Top coat',stability:1,notes:"Smooth satin surface. Stable and reliable.",testTilePhotos:[]},
+{id:'g15',name:'Satin White',color:'#EDE8DC',role:'Top coat',stability:1,notes:"Smooth satin finish. Good all-purpose white.",testTilePhotos:[]},
+{id:'g16',name:'SF State Celadon',color:'#9DB8A0',role:'Top coat',stability:1,notes:"Classic celadon green. Stable application.",testTilePhotos:[]},
+{id:'g17',name:'SF State Shino',color:'#D4A574',role:'Top coat',stability:2,notes:"Same Shino rules apply: apply first when layering (except under Gloss White & Moonlight). Can carbon trap gray-black with wax resist. Must be completely dry before loading into kiln or may crawl.",testTilePhotos:[]},
+{id:'g18',name:'Shaner Blue',color:'#3B6D8C',role:'Top coat',stability:2,notes:"Rich blue glaze with visual depth.",testTilePhotos:[]},
+{id:'g19',name:'Sleeper Copper Red',color:'#C0544E',role:'Top coat',stability:3,notes:"Apply two full-length dips for correct color. Can run — best on interiors, or apply second coat only ⅔ down the outside until you get a feel for it.",testTilePhotos:[]},
+{id:'g20',name:"Taffy's Oatmeal",color:'#C8B99A',role:'Top coat',stability:2,notes:"Warm, toasty matte surface with oatmeal texture.",testTilePhotos:[]},
+{id:'g21',name:'Tenmoku',color:'#28261F',role:'Top coat',stability:2,notes:"Needs at least two coats for dark black-brown color. Breaks along edges, texture, and throwing marks to a chocolatey brown.",testTilePhotos:[]},
+{id:'g22',name:'Turquoise Matte',color:'#5AAFA0',role:'Top coat',stability:2,notes:"Matte turquoise surface. Moderate stability.",testTilePhotos:[]},
+{id:'g23',name:"Val's Blue",color:'#4169A0',role:'Top coat',stability:2,notes:"Vivid blue glaze.",testTilePhotos:[]},
+{id:'g24',name:'Yellow Gold',color:'#C8A84E',role:'Top coat',stability:3,notes:"Rich gold color. Watch thickness on vertical surfaces.",testTilePhotos:[]},
+{id:'g25',name:'Yellow Orange Matte',color:'#D4A03C',role:'Top coat',stability:4,notes:"Becomes quite runny when applied in combination with other glazes. Use with caution on exteriors when layering.",testTilePhotos:[]},
+{id:'g26',name:'Yellow Salt',color:'#D4C05A',role:'Top coat',stability:4,notes:"Becomes quite runny when applied in combination with other glazes. Use with caution on exteriors when layering.",testTilePhotos:[]}
+];}
 
 function loadLocal(){
   try{
@@ -967,59 +1168,108 @@ function renderPinEmbed(url){
 }
 
 // ── INSPO PAGE ──
-function renderInspoPage(){
+function inspoOpenOrSetPinterest(){
   const saved=localStorage.getItem('kd_pinboard')||'';
-  if(!saved){
-    document.getElementById('inspo-page-msg').innerHTML='<div class="inspo-setup"><p>Paste a Pinterest board or <code>pin.it</code> link below to fill this page with your inspiration pins. Tap any image to add it to a project.</p></div>';
-    document.getElementById('inspo-full-grid').innerHTML='';
+  if(saved){
+    inspoPhotos=[];saveInspoPhotos();
+    loadInspoPinterestPhotos(saved);
+  } else {
     document.getElementById('inspo-url-bar').classList.remove('hidden');
-    document.getElementById('inspo-page-url').value='';
-    return;
+    document.getElementById('inspo-page-url').focus();
   }
-  document.getElementById('inspo-page-label').textContent=saved.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'');
-  if(!inspoLoaded)loadInspoPage(saved);
-}
-async function loadInspoPage(url){
-  const grid=document.getElementById('inspo-full-grid');
-  const msg=document.getElementById('inspo-page-msg');
-  grid.innerHTML='';
-  msg.textContent='Loading your pins…';
-  try{
-    const res=await fetch(`/api/pinterest?url=${encodeURIComponent(url)}`);
-    const data=await res.json();
-    const imgs=data.images||[];
-    if(!imgs.length){msg.textContent='No images found — make sure the board is public.';return;}
-    grid.innerHTML=imgs.map(u=>`<div class="inspo-pin" onclick="openPinSheet('${u}')">
-      <img src="${u}" loading="lazy" onerror="this.closest('.inspo-pin').remove()">
-      <div class="inspo-pin-ov"><div class="inspo-pin-plus">+</div></div>
-    </div>`).join('');
-    // Show a note if Pinterest limited access (no feed API)
-    if(!data.feedApiWorked && data.total){
-      msg.innerHTML=`<span style="font-size:12px;opacity:.65">Showing ${data.total} pins · <a href="${url}" target="_blank" rel="noopener" style="color:var(--clay);text-decoration:none">View all on Pinterest ↗</a></span>`;
-    }else{
-      msg.textContent='';
-    }
-    inspoLoaded=true;
-  }catch(e){msg.textContent='Couldn\'t load pins. Try refreshing.';}
-}
-function refreshInspoPage(){
-  inspoLoaded=false;
-  const saved=localStorage.getItem('kd_pinboard')||'';
-  if(saved)loadInspoPage(saved);
-}
-function toggleInspoBoardBar(){
-  const bar=document.getElementById('inspo-url-bar');
-  bar.classList.toggle('hidden');
-  if(!bar.classList.contains('hidden'))document.getElementById('inspo-page-url').focus();
 }
 function setInspoBoardFromPage(){
   const url=document.getElementById('inspo-page-url').value.trim();
   if(!url)return;
   localStorage.setItem('kd_pinboard',url);
-  inspoLoaded=false;
   document.getElementById('inspo-url-bar').classList.add('hidden');
-  document.getElementById('inspo-page-label').textContent=url.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'');
-  loadInspoPage(url);
+  updateInspoPinterestBtn();
+  loadInspoPinterestPhotos(url);
+}
+async function loadInspoPinterestPhotos(url){
+  const msg=document.getElementById('inspo-page-msg');
+  msg.innerHTML='<p style="padding:20px;font-size:13px;color:var(--muted);text-align:center">Loading Pinterest pins…</p>';
+  try{
+    const res=await fetch(`/api/pinterest?url=${encodeURIComponent(url)}`);
+    const data=await res.json();
+    const imgs=data.images||[];
+    if(!imgs.length){
+      msg.innerHTML='<p style="padding:20px;font-size:13px;color:var(--muted);text-align:center">No images found — make sure the board is public.</p>';
+      return;
+    }
+    msg.innerHTML=`<p style="padding:12px 20px;font-size:12px;color:var(--muted);text-align:center">Importing ${Math.min(imgs.length,30)} pins…</p>`;
+    let added=0;
+    for(const imgUrl of imgs.slice(0,30)){
+      try{
+        const r=await fetch(`/api/image?url=${encodeURIComponent(imgUrl)}`);
+        if(r.ok){
+          const b=await r.text();
+          if(b.startsWith('data:image/')){inspoPhotos.unshift(b);added++;}
+        }
+      }catch(e){}
+    }
+    saveInspoPhotos();
+    renderInspoPage();
+    msg.innerHTML=added?`<p style="padding:8px 20px;font-size:12px;color:var(--muted);text-align:center">Added ${added} pins</p>`:'<p style="padding:20px;font-size:13px;color:var(--muted);text-align:center">Couldn\'t fetch images — Pinterest may have blocked the request.</p>';
+  }catch(e){
+    msg.innerHTML='<p style="padding:20px;font-size:13px;color:var(--muted);text-align:center">Couldn\'t load the board. Check the URL and try again.</p>';
+  }
+}
+function updateInspoPinterestBtn(){
+  const saved=localStorage.getItem('kd_pinboard')||'';
+  const btn=document.getElementById('inspo-pinterest-btn');
+  if(btn) btn.textContent=saved?'↻ Refresh':'+ Pinterest';
+}
+function loadInspoPhotos(){
+  try{
+    const raw=JSON.parse(localStorage.getItem('kd_inspo')||'[]');
+    // Only keep valid base64 data URLs — discard any garbled binary from old Pinterest import
+    const clean=raw.filter(p=>typeof p==='string'&&p.startsWith('data:image/'));
+    if(clean.length!==raw.length){localStorage.setItem('kd_inspo',JSON.stringify(clean));}
+    inspoPhotos=clean;
+  }catch(e){inspoPhotos=[];}
+}
+function saveInspoPhotos(){
+  try{localStorage.setItem('kd_inspo',JSON.stringify(inspoPhotos));}catch(e){}
+}
+function renderInspoPage(){
+  loadInspoPhotos();
+  updateInspoPinterestBtn();
+  const grid=document.getElementById('inspo-photo-grid');
+  const msg=document.getElementById('inspo-page-msg');
+  if(!inspoPhotos.length){
+    grid.innerHTML='';
+    const savedUrl=localStorage.getItem('kd_pinboard')||'';
+    if(savedUrl){
+      // Auto-load Pinterest board
+      loadInspoPinterestPhotos(savedUrl);
+    } else {
+      msg.innerHTML=`<div class="inspo-empty-state"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><p>Add photos from your camera roll, or paste a Pinterest board URL to load your inspiration images.</p></div>`;
+    }
+    return;
+  }
+  msg.innerHTML='';
+  grid.innerHTML=inspoPhotos.map((ph,i)=>`
+    <div class="inspo-photo-item">
+      <img src="${ph}" loading="lazy" onerror="this.closest('.inspo-photo-item').style.display='none'">
+      <button class="inspo-photo-del" onclick="deleteInspoPhoto(${i})">✕</button>
+    </div>`).join('');
+}
+function deleteInspoPhoto(i){
+  inspoPhotos.splice(i,1);
+  saveInspoPhotos();
+  renderInspoPage();
+}
+function handleInspoPhotos(e){
+  const files=Array.from(e.target.files);
+  e.target.value='';
+  files.forEach(f=>{
+    loadImageFile(f).then(({dataUrl})=>{
+      inspoPhotos.unshift(dataUrl);
+      saveInspoPhotos();
+      renderInspoPage();
+    }).catch(err=>console.error('Inspo photo failed:',err));
+  });
 }
 
 // ── PIN SHEET ──
@@ -1091,16 +1341,19 @@ function renderIdeas(){
     grid.innerHTML=`<div class="gallery-empty"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 3.5 13.1V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.9A7 7 0 0 1 12 2z"/><line x1="9.5" y1="21" x2="14.5" y2="21"/></svg>${ideaDiffFilter!=='All'||ideaMethodFilter!=='All'?'No ideas match those filters':'No ideas yet — start dreaming'}</div>`;
     return;
   }
+  if(ideaSort==='date') ps.sort((a,b)=>(b.stageDates?.Idea||'').localeCompare(a.stageDates?.Idea||''));
+  else if(ideaSort==='name') ps.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
   grid.innerHTML=ps.map(ideaCardHTML).join('');
 }
 function renderIdeasFilters(){
   const el=document.getElementById('ideas-filters');
   const diffs=['All','Easy','Medium','Hard'];
   const methods=['All','Thrown','Hand built','Both'];
-  el.innerHTML=`<span class="filter-group-label">Difficulty</span>${diffs.map(d=>`<button class="filter-chip${ideaDiffFilter===d?' on':''}" onclick="setIdeaDiff('${d}')">${d}</button>`).join('')}<div class="filter-sep"></div><span class="filter-group-label">Construction</span>${methods.map(m=>`<button class="filter-chip${ideaMethodFilter===m?' on':''}" onclick="setIdeaMethod('${m}')">${m}</button>`).join('')}`;
+  el.innerHTML=`<span class="filter-group-label">Difficulty</span>${diffs.map(d=>`<button class="filter-chip${ideaDiffFilter===d?' on':''}" onclick="setIdeaDiff('${d}')">${d}</button>`).join('')}<div class="filter-sep"></div><span class="filter-group-label">Construction</span>${methods.map(m=>`<button class="filter-chip${ideaMethodFilter===m?' on':''}" onclick="setIdeaMethod('${m}')">${m}</button>`).join('')}<div class="filter-sep"></div><span class="filter-group-label">Sort</span><button class="filter-chip${ideaSort==='date'?' on':''}" onclick="setIdeaSort('date')">Newest</button><button class="filter-chip${ideaSort==='name'?' on':''}" onclick="setIdeaSort('name')">A–Z</button>`;
 }
 function setIdeaDiff(d){ideaDiffFilter=d;renderIdeas();}
 function setIdeaMethod(m){ideaMethodFilter=m;renderIdeas();}
+function setIdeaSort(s){ideaSort=s;renderIdeas();}
 
 function ideaCardHTML(p){
   const thumb=p.photos&&p.photos.length
@@ -1111,11 +1364,16 @@ function ideaCardHTML(p){
     p.difficulty?`<span class="gal-badge ${diffClass}">${p.difficulty}</span>`:'',
     p.method?`<span class="gal-badge">${p.method}</span>`:''
   ].filter(Boolean).join('');
+  const dateStr=fmtStageDate(p);
   return `<div class="gal-card" onclick="openDetail('${p.id}')">
-    <div class="gal-photo">${thumb}</div>
+    <div class="gal-photo">
+      ${thumb}
+      ${[p.difficulty?`<span class="gal-tag">${p.difficulty}</span>`:'',p.price?`<span class="gal-tag">£${parseFloat(p.price).toFixed(0)}</span>`:''].filter(Boolean).length?`<div class="gal-tags">${[p.difficulty?`<span class="gal-tag">${p.difficulty}</span>`:'',p.price?`<span class="gal-tag">£${parseFloat(p.price).toFixed(0)}</span>`:''].filter(Boolean).join('')}</div>`:''}
+    </div>
     <div class="gal-body">
       <div class="gal-name">${p.name||'Untitled'}</div>
       <div class="gal-meta">${p.clay||'&nbsp;'}</div>
+      ${dateStr?`<div class="gal-card-date">${dateStr}</div>`:''}
       ${badges?`<div class="gal-badges">${badges}</div>`:''}
     </div>
     <div class="gal-action-bar">
@@ -1126,7 +1384,7 @@ function ideaCardHTML(p){
 function moveToActive(id,e){
   e.stopPropagation();
   const p=projects.find(x=>x.id===id);
-  if(p){p.stage='Wet work';save();renderIdeas();}
+  if(p){p.stage='Wet work';recordStageDate(p,'Wet work');save();renderIdeas();}
 }
 
 // ── ACTIVE WORK KANBAN ──
@@ -1152,16 +1410,20 @@ function activeCardHTML(p,stageKey){
   const thumb=p.photos&&p.photos.length
     ?`<div class="pc-photo"><img src="${p.photos[0]}" alt="" draggable="false"></div>`
     :`<div class="pc-photo"><div class="pc-photo-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>`;
-  const glazeDots=(p.glazes&&p.glazes.length)?`<div class="pc-glazes">${p.glazes.map(g=>`<span class="g-dot" style="background:${g.color}" title="${g.name}"></span>`).join('')}</div>`:'';
+  const glazeDots=(p.glazes&&p.glazes.length)?`<div class="pc-glazes">${p.glazes.map(g=>`<span class="glaze-chip"><span class="g-dot" style="background:${g.color}"></span>${g.name}</span>`).join('')}</div>`:'';
   const finishBtn=stageKey==='glazed'?`<button class="pc-finish-btn" onclick="markFinished('${p.id}',event)">✓ Mark as Finished</button>`:'';
+  const dateStr=fmtStageDate(p);
+  const topTags=[p.difficulty?`<span class="pc-tag">${p.difficulty}</span>`:'',p.price?`<span class="pc-tag">£${parseFloat(p.price).toFixed(0)}</span>`:''].filter(Boolean).join('');
   return `<div class="proj-card" id="card-${p.id}" draggable="true"
     ondragstart="onDragStart(event,'${p.id}')"
     ondragend="onDragEnd(event)"
     onclick="openDetail('${p.id}')">
     ${thumb}
-    <div class="pc-body">
+    ${topTags?`<div class="pc-tags">${topTags}</div>`:''}
+    <div class="pc-content">
       <div class="pc-name">${p.name||'Untitled'}</div>
       ${p.clay?`<div class="pc-clay">${p.clay}</div>`:''}
+      ${dateStr?`<div class="pc-card-date">${dateStr}</div>`:''}
       ${glazeDots}
     </div>
     ${finishBtn}
@@ -1172,7 +1434,7 @@ function markFinished(id,e){
   const p=projects.find(x=>x.id===id);
   if(p){
     p.stage='Finished';
-    if(!p.dateCompleted)p.dateCompleted=new Date().toISOString().split('T')[0];
+    recordStageDate(p,'Finished');if(!p.dateCompleted)p.dateCompleted=todayStr();
     save();renderActive();
   }
 }
@@ -1202,7 +1464,7 @@ function onDrop(e,key){
   if(!dragId)return;
   const newLabel=ACTIVE_STAGES.find(s=>s.key===key)?.label||'Wet work';
   const p=projects.find(x=>x.id===dragId);
-  if(p){p.stage=newLabel;save();renderActive();}
+  if(p){p.stage=newLabel;recordStageDate(p,newLabel);save();renderActive();}
   document.querySelectorAll('.col-cards').forEach(c=>c.classList.remove('drag-over'));
   dragId=null;
 }
@@ -1212,15 +1474,9 @@ function renderFinished(){
   renderFinishedFilters();
   const grid=document.getElementById('finished-grid');
   let ps=projects.filter(p=>p.stage==='Finished');
-  if(finishedSort==='price')ps=[...ps].sort((a,b)=>(parseFloat(b.price)||0)-(parseFloat(a.price)||0));
-  else if(finishedSort==='size')ps=[...ps].sort((a,b)=>(parseFloat(b.dia)||0)-(parseFloat(a.dia)||0));
-  else ps=[...ps].sort((a,b)=>{
-    // Items without a date sort to top (most recently added)
-    if(!a.dateCompleted&&!b.dateCompleted)return 0;
-    if(!a.dateCompleted)return -1;
-    if(!b.dateCompleted)return 1;
-    return b.dateCompleted>a.dateCompleted?1:-1;
-  });
+  if(finishedSort==='date') ps=[...ps].sort((a,b)=>{const da=a.stageDates?.Finished||a.dateCompleted||'';const db=b.stageDates?.Finished||b.dateCompleted||'';return db.localeCompare(da);});
+  else if(finishedSort==='price') ps=[...ps].sort((a,b)=>(b.price||0)-(a.price||0));
+  else ps=[...ps].sort((a,b)=>(a.name||'').localeCompare(b.name||''));
   if(!ps.length){
     grid.innerHTML=`<div class="gallery-empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="9 12 11 14 15 10"/></svg>Nothing finished yet — keep throwing!</div>`;
     return;
@@ -1229,7 +1485,7 @@ function renderFinished(){
 }
 function renderFinishedFilters(){
   const el=document.getElementById('finished-filters');
-  const sorts=[['date','Date'],['price','Price'],['size','Size']];
+  const sorts=[['date','Newest'],['price','Price'],['name','A–Z']];
   el.innerHTML=`<span class="filter-group-label">Sort by</span>${sorts.map(([v,l])=>`<button class="filter-chip${finishedSort===v?' on':''}" onclick="setFinishedSort('${v}')">${l}</button>`).join('')}`;
 }
 function setFinishedSort(s){finishedSort=s;renderFinished();}
@@ -1237,13 +1493,17 @@ function finishedCardHTML(p){
   const thumb=p.photos&&p.photos.length
     ?`<img src="${p.photos[0]}" alt="">`
     :`<div class="gal-photo-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>no photo</span></div>`;
+  const dateStr=fmtStageDate(p)||p.dateCompleted&&formatDate(p.dateCompleted)||null;
   return `<div class="gal-card" onclick="openDetail('${p.id}')">
-    <div class="gal-photo">${thumb}</div>
+    <div class="gal-photo">
+      ${thumb}
+      ${[p.difficulty?`<span class="gal-tag">${p.difficulty}</span>`:'',p.price?`<span class="gal-tag">£${parseFloat(p.price).toFixed(0)}</span>`:''].filter(Boolean).length?`<div class="gal-tags">${[p.difficulty?`<span class="gal-tag">${p.difficulty}</span>`:'',p.price?`<span class="gal-tag">£${parseFloat(p.price).toFixed(0)}</span>`:''].filter(Boolean).join('')}</div>`:''}
+    </div>
     <div class="gal-body">
       <div class="gal-name">${p.name||'Untitled'}</div>
       <div class="gal-meta">${p.clay||'&nbsp;'}</div>
+      ${dateStr?`<div class="gal-card-date">${dateStr}</div>`:''}
       ${p.price?`<div class="gal-price">£${parseFloat(p.price).toFixed(2)}</div>`:''}
-      ${p.dateCompleted?`<div class="gal-date">${formatDate(p.dateCompleted)}</div>`:''}
     </div>
   </div>`;
 }
@@ -1265,7 +1525,6 @@ function renderDetail(){
   const p=projects.find(x=>x.id===detailId);if(!p)return;
   const es=isEditing?editState:p;
   const stageKey=STAGE_BY_LABEL[es.stage||'Idea']||'idea';
-  const heroSrc=(es.photos&&es.photos.length)?es.photos[0]:null;
   let calcHtml='';
   const sr=parseFloat(es.shrink)||0,dd=parseFloat(es.dia)||0,hh=parseFloat(es.ht)||0;
   if(sr&&(dd||hh)){
@@ -1279,7 +1538,7 @@ function renderDetail(){
   const glazeRows=glazes.map((g,i)=>`
     <div class="glaze-row-d">
       <div class="gswatch" style="background:${g.color}"><input type="color" value="${g.color}" onchange="editGlaze(${i},'color',this.value);this.parentElement.style.background=this.value"></div>
-      <span class="gname">${g.name}</span>
+      <span class="gname">${g.name||'<em style="opacity:.5">unnamed</em>'}</span>
       <input class="gname-input" type="text" value="${g.name}" oninput="editGlaze(${i},'name',this.value)" placeholder="Glaze name">
       <span class="grole">${g.role}</span>
       <select class="grole-select" onchange="editGlaze(${i},'role',this.value)">${['Top coat','Bottom coat','Interior','Exterior','Accent'].map(r=>`<option${g.role===r?' selected':''}>${r}</option>`).join('')}</select>
@@ -1289,19 +1548,23 @@ function renderDetail(){
     ?`<a href="${es.pin}" target="_blank" class="pin-tile"><div class="pin-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.641 1.267 1.408 0 .858-.546 2.141-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.132-1.867 3.132-4.562 0-2.387-1.715-4.054-4.163-4.054-2.838 0-4.503 2.128-4.503 4.327 0 .856.33 1.775.741 2.276a.3.3 0 0 1 .069.286c-.076.312-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.522 0 10-4.477 10-10S17.522 2 12 2z"/></svg></div><div class="pin-text"><div class="pt">Pinterest Board</div><div class="ps">${es.pin}</div></div><div class="pin-arrow">›</div></a>`
     :`<span class="pin-empty">No link added</span>`;
   const editClass=isEditing?'is-editing':'';
+  const photos=es.photos||[];
+  const photoStrip=`<div class="detail-photo-strip" id="d-photo-strip">
+    ${photos.map((ph,i)=>`<div class="dps-item"><img src="${ph}" alt=""><button class="dps-del" onclick="removeDetailPhoto(${i})">✕</button></div>`).join('')}
+    <button class="dps-add" onclick="document.getElementById('hero-photo-input').click()">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Add Photo</span>
+    </button>
+  </div>`;
   document.getElementById('detail-inner').innerHTML=`
     <div class="${editClass}" id="detail-body">
-      <div class="detail-hero" id="detail-hero">
-        ${heroSrc?`<img src="${heroSrc}" id="hero-img" alt="">`:`<div class="dh-empty"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
-        <button class="hero-upload-btn" onclick="document.getElementById('hero-photo-input').click()">+ Add Photo</button>
-      </div>
+      ${photoStrip}
       <div class="detail-top">
         <div class="detail-title-wrap">
           <div class="detail-title" id="d-title-view">${es.name||'Untitled'}</div>
           <input class="detail-title-input hidden" id="d-title-input" type="text" value="${es.name||''}" oninput="editField('name',this.value)" placeholder="Project name">
           <div class="detail-sub">${[es.clay,es.method].filter(Boolean).join(' · ')}</div>
         </div>
-        <button class="edit-btn" id="edit-toggle-btn" onclick="toggleEdit()">${isEditing?'Save':'Edit'}</button>
       </div>
       <div class="stage-badge">
         <span class="stage-badge-dot dot-${stageKey}" id="d-stage-dot"></span>
@@ -1373,25 +1636,29 @@ function renderDetail(){
         <div class="detail-notes">${es.notes||'<span style="color:var(--muted);font-style:italic">No notes yet</span>'}</div>
         <textarea class="detail-notes-input" oninput="editField('notes',this.value)" placeholder="Glaze tests, firing notes, ideas…">${es.notes||''}</textarea>
       </div>
-      <div class="detail-section">
-        <div class="ds-label">Photos</div>
-        <div class="photo-strip" id="d-photo-strip">
-          ${(es.photos&&es.photos.length)?es.photos.map(ph=>`<img src="${ph}">`).join(''):''}
-          <button class="add-photo-btn" onclick="document.getElementById('hero-photo-input').click()">+</button>
-        </div>
+      <div class="detail-delete-zone">
+        <button class="delete-btn-full" onclick="deleteProject('${p.id}')">Delete Project</button>
       </div>
     </div>`;
 }
 function toggleEdit(){
+  const btn=document.getElementById('edit-toggle-btn');
   if(!isEditing){
     const p=projects.find(x=>x.id===detailId);if(!p)return;
     editState=JSON.parse(JSON.stringify(p));
     isEditing=true;
     applyEditMode();
+    if(btn){btn.textContent='Save';btn.classList.add('save-mode');}
   } else {
     const p=projects.find(x=>x.id===detailId);if(!p)return;
     Object.assign(p,editState);
+    (editState.glazes||[]).forEach(g=>{
+      if(g.name&&!glazeLib.find(gl=>gl.name.toLowerCase()===g.name.toLowerCase())){
+        glazeLib.push({id:uid(),name:g.name,color:g.color,role:g.role});
+      }
+    });
     save();isEditing=false;editState={};
+    if(btn){btn.textContent='Edit';btn.classList.remove('save-mode');}
     renderDetail();
   }
 }
@@ -1405,10 +1672,17 @@ function applyEditMode(){
     if(v)v.classList.add('hidden');if(i)i.classList.remove('hidden');
   });
   const pr=document.getElementById('price-date-row');if(pr)pr.style.display='';
-  const eb=document.getElementById('edit-toggle-btn');
-  if(eb){eb.textContent='Save';eb.classList.add('save-mode');}
 }
 function editField(key,val){editState[key]=val;}
+function deleteProject(id){
+  if(!confirm('Delete this project? This cannot be undone.'))return;
+  projects=projects.filter(p=>p.id!==id);
+  save();
+  isEditing=false;editState={};detailId=null;
+  document.getElementById('view-detail').classList.remove('active');
+  const prev=currentView==='detail'?'ideas':currentView;
+  navTo(prev==='detail'?'ideas':prev);
+}
 function editGlaze(i,key,val){if(!editState.glazes)editState.glazes=[];if(editState.glazes[i])editState.glazes[i][key]=val;}
 function removeDetailGlaze(i){if(!editState.glazes)return;editState.glazes.splice(i,1);rerenderDetailGlazes();}
 function addDetailGlaze(){
@@ -1449,25 +1723,41 @@ function handleHeroPhotos(e){
   e.target.value='';
   if(files.length)processPhotoFiles(files,'detail');
 }
+function removeDetailPhoto(i){
+  if(!editState.photos)return;
+  editState.photos.splice(i,1);
+  save();renderDetail();
+}
 
 // ── NEW PROJECT MODAL ──
 function openNewProjectModal(defaultStage='Idea'){
-  ['f-name','f-pin','f-notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('f-clay').value='Soldate 60';
-  document.getElementById('f-shrink').value='14';
-  document.getElementById('f-dia').value='';
-  document.getElementById('f-ht').value='';
-  document.getElementById('f-method').value='';
-  document.getElementById('f-difficulty').value='';
-  document.getElementById('f-price').value='';
-  document.getElementById('f-dateCompleted').value='';
+  ['f-name','f-pin','f-notes','f-dia','f-ht','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const clayEl=document.getElementById('f-clay');if(clayEl)clayEl.value='';
+  const shrinkEl=document.getElementById('f-shrink');if(shrinkEl)shrinkEl.value='14';
+  const methodEl=document.getElementById('f-method');if(methodEl)methodEl.value='';
+  const diffEl=document.getElementById('f-difficulty');if(diffEl)diffEl.value='';
   document.getElementById('modal-calc-out').innerHTML='';
   formGlazes=[];
-  if(pendingPhoto){formPhotos=[pendingPhoto];document.getElementById('f-thumbs').innerHTML=`<img src="${pendingPhoto}" style="width:56px;height:56px;border-radius:8px;object-fit:cover">`;pendingPhoto=null;}
-  else{formPhotos=[];document.getElementById('f-thumbs').innerHTML='';}
-  renderFormGlazes();buildFormStages(defaultStage);
+  if(pendingPhoto){
+    formPhotos=[pendingPhoto];
+    pendingPhoto=null;
+  } else {
+    formPhotos=[];
+  }
+  renderFormGlazes();
+  buildFormStages(defaultStage);
+  renderModalPhotoStrip();
   document.getElementById('modal-wrap').classList.remove('hidden');
 }
+function renderModalPhotoStrip(){
+  const strip=document.getElementById('modal-photo-strip');if(!strip)return;
+  const addBtn=`<button class="dps-add" onclick="document.getElementById('f-photos').click()">
+    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    <span>Add Photo</span>
+  </button>`;
+  strip.innerHTML=formPhotos.map((ph,i)=>`<div class="dps-item"><img src="${ph}"><button class="dps-del" style="display:flex" onclick="removeModalPhoto(${i})">✕</button></div>`).join('')+addBtn;
+}
+function removeModalPhoto(i){formPhotos.splice(i,1);renderModalPhotoStrip();}
 function closeModal(){document.getElementById('modal-wrap').classList.add('hidden');}
 function buildFormStages(sel){
   const el=document.getElementById('f-stages');
@@ -1551,7 +1841,7 @@ function processPhotoFiles(files,target){
       openCrop(img,dataUrl,result=>{
         if(target==='modal'){
           formPhotos.push(result);
-          document.getElementById('f-thumbs').innerHTML=formPhotos.map(ph=>`<img src="${ph}">`).join('');
+          renderModalPhotoStrip();
         } else {
           if(!editState.photos)editState.photos=[];
           editState.photos.push(result);
@@ -1604,8 +1894,9 @@ function confirmCrop(){
   const scale=600/size;
   ctx.drawImage(cropImg,x*scale,y*scale,dw*scale,dh*scale);
   const result=off.toDataURL('image/jpeg',0.88);
+  const cb=cropCallback;
   closeCrop();
-  if(cropCallback)cropCallback(result);
+  if(cb)cb(result);
 }
 
 function setupCropInteraction(){
@@ -1670,9 +1961,10 @@ function saveNewProject(){
     method:document.getElementById('f-method').value,
     difficulty:document.getElementById('f-difficulty').value,
     price:parseFloat(document.getElementById('f-price').value)||0,
-    dateCompleted:document.getElementById('f-dateCompleted').value,
+    dateCompleted:'',
     stage,glazes:[...formGlazes],photos:[...formPhotos]
   };
+  recordStageDate(p,p.stage||'Idea');
   projects.unshift(p);
   save();closeModal();
   navTo(stageToView(stage));
@@ -1689,6 +1981,12 @@ function calcClay(btn){
   calcRun();
 }
 function calcCustom(){calcShrinkRate=parseFloat(document.getElementById('calc-slider').value);document.getElementById('calc-cv').textContent=calcShrinkRate.toFixed(1)+'%';calcRun();}
+function pickShape(btn){
+  document.querySelectorAll('.shape-picker .shape-opt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  calcShape=btn.dataset.shape;
+  calcRun();
+}
 function calcUnitFn(u){
   calcUnitVal=u;
   document.getElementById('cu-in').className='utbtn'+(u==='in'?' on':'');
@@ -1703,10 +2001,99 @@ function calcRun(){
   const hd=!isNaN(d)&&d>0,hh=!isNaN(h)&&h>0;
   if(!hd&&!hh){el.innerHTML='';return;}
   const f=1/(1-calcShrinkRate/100);const u=calcUnitVal;
+  const bd=hd?d*f:null,bh=hh?h*f:null;
+  // Number output
   let html=`<div class="calc-out-box"><div class="co-label">Build your piece at</div><div class="co-grid">`;
-  if(hd)html+=`<div class="co-item"><div class="col">Diameter / Width</div><div class="cov">${(d*f).toFixed(2)}<span class="cou"> ${u}</span></div></div>`;
-  if(hh)html+=`<div class="co-item"><div class="col">Height</div><div class="cov">${(h*f).toFixed(2)}<span class="cou"> ${u}</span></div></div>`;
+  if(hd)html+=`<div class="co-item"><div class="col">Diameter / Width</div><div class="cov">${bd.toFixed(2)}<span class="cou"> ${u}</span></div></div>`;
+  if(hh)html+=`<div class="co-item"><div class="col">Height</div><div class="cov">${bh.toFixed(2)}<span class="cou"> ${u}</span></div></div>`;
   html+=`</div><div class="calc-note">Using ${calcShrinkRate}% shrinkage rate.</div></div>`;
+  // Visual comparison — shared scale so both panels are proportionally accurate
+  const fW=hd?d:0,fH=hh?h:0;
+  const bW=hd?bd:0,bH=hh?bh:0;
+  // SVG coordinate space: shape draws in area with cx=80, base at cy=105
+  // max half-width: 42px, max height: 78px (leaves room for dim lines below + right)
+  const vW=180,vH=165,cx=80,cy=105;
+  let sc;
+  if(hd&&hh) sc=Math.min(42/(bW/2),78/bH);
+  else if(hd) sc=42/(bW/2);
+  else sc=78/bH;
+  sc=Math.min(sc,12);
+  function getPath(w,h){
+    const hw=w/2*sc,hh2=h*sc;
+    switch(calcShape){
+      case 'cylinder':
+        return `M${cx-hw},${cy} L${cx+hw},${cy} L${cx+hw},${cy-hh2} L${cx-hw},${cy-hh2} Z`;
+      case 'bowl':
+        // rim at top (cy-hh2), curves inward to base at cy
+        if(hh2<2) return `M${cx-hw},${cy} L${cx+hw},${cy} Z`;
+        return `M${cx-hw},${cy-hh2} Q${cx-hw*1.08},${cy-hh2*0.45} ${cx},${cy} Q${cx+hw*1.08},${cy-hh2*0.45} ${cx+hw},${cy-hh2} Z`;
+      case 'plate':
+        // very flat — rim at top (cy-hh2), single curve to base
+        if(hh2<1) return `M${cx-hw},${cy} L${cx+hw},${cy} Z`;
+        return `M${cx-hw},${cy-hh2} Q${cx},${cy} ${cx+hw},${cy-hh2} Z`;
+      case 'vase': {
+        const neck=hw*0.42,belly=hw,base=hw*0.52;
+        if(hh2<2) return `M${cx-hw},${cy} L${cx+hw},${cy} Z`;
+        return `M${cx-neck},${cy-hh2} C${cx-neck},${cy-hh2+hh2*0.2} ${cx-belly},${cy-hh2*0.55} ${cx-belly},${cy-hh2*0.4} C${cx-belly},${cy-hh2*0.15} ${cx-base},${cy-hh2*0.05} ${cx-base},${cy} L${cx+base},${cy} C${cx+base},${cy-hh2*0.05} ${cx+belly},${cy-hh2*0.15} ${cx+belly},${cy-hh2*0.4} C${cx+belly},${cy-hh2*0.55} ${cx+neck},${cy-hh2+hh2*0.2} ${cx+neck},${cy-hh2} Z`;
+      }
+      default:
+        return `M${cx-hw},${cy} L${cx+hw},${cy} L${cx+hw},${cy-hh2} L${cx-hw},${cy-hh2} Z`;
+    }
+  }
+  function makeSvg(w,h,fill,stroke,labelW,labelH){
+    const hw=w/2*sc,hh2=h*sc;
+    const al=4,aw=2.5;
+    let s=`<svg viewBox="0 0 ${vW} ${vH}" style="width:100%;height:auto">`;
+    // subtle base line
+    s+=`<line x1="${cx-hw-8}" y1="${cy}" x2="${cx+hw+8}" y2="${cy}" stroke="${stroke}" stroke-width="0.6" opacity="0.18" stroke-dasharray="3,2"/>`;
+    // shape
+    s+=`<path d="${getPath(w,h)}" fill="${fill}" stroke="${stroke}" stroke-width="1.5" stroke-linejoin="round"/>`;
+    // ── Width dimension line (below shape) ──
+    if(labelW!==null&&hw>3){
+      const dy=cy+20,x1=cx-hw,x2=cx+hw;
+      // vertical leaders
+      s+=`<line x1="${x1}" y1="${cy}" x2="${x1}" y2="${dy+3}" stroke="${stroke}" stroke-width="0.7" opacity="0.4"/>`;
+      s+=`<line x1="${x2}" y1="${cy}" x2="${x2}" y2="${dy+3}" stroke="${stroke}" stroke-width="0.7" opacity="0.4"/>`;
+      // horizontal line with arrowheads
+      s+=`<line x1="${x1+al}" y1="${dy}" x2="${x2-al}" y2="${dy}" stroke="${stroke}" stroke-width="1"/>`;
+      s+=`<polygon points="${x1},${dy} ${x1+al},${dy-aw} ${x1+al},${dy+aw}" fill="${stroke}"/>`;
+      s+=`<polygon points="${x2},${dy} ${x2-al},${dy-aw} ${x2-al},${dy+aw}" fill="${stroke}"/>`;
+      // label
+      s+=`<text x="${(x1+x2)/2}" y="${dy+11}" text-anchor="middle" font-size="9" fill="${stroke}" font-family="Outfit,sans-serif" font-weight="500">Ø ${labelW.toFixed(1)} ${u}</text>`;
+    }
+    // ── Height dimension line (right of shape) ──
+    if(labelH!==null&&hh2>3){
+      const dx=cx+hw+16,y1=cy,y2=cy-hh2;
+      // horizontal leaders
+      s+=`<line x1="${cx+hw}" y1="${y1}" x2="${dx+3}" y2="${y1}" stroke="${stroke}" stroke-width="0.7" opacity="0.4"/>`;
+      s+=`<line x1="${cx+hw}" y1="${y2}" x2="${dx+3}" y2="${y2}" stroke="${stroke}" stroke-width="0.7" opacity="0.4"/>`;
+      // vertical line with arrowheads
+      s+=`<line x1="${dx}" y1="${y1-al}" x2="${dx}" y2="${y2+al}" stroke="${stroke}" stroke-width="1"/>`;
+      s+=`<polygon points="${dx},${y1} ${dx-aw},${y1-al} ${dx+aw},${y1-al}" fill="${stroke}"/>`;
+      s+=`<polygon points="${dx},${y2} ${dx-aw},${y2+al} ${dx+aw},${y2+al}" fill="${stroke}"/>`;
+      // label (two lines: value and unit)
+      const midY=(y1+y2)/2;
+      s+=`<text x="${dx+7}" y="${midY+1}" text-anchor="start" font-size="9" fill="${stroke}" font-family="Outfit,sans-serif" font-weight="500">H ${labelH.toFixed(1)}</text>`;
+      s+=`<text x="${dx+7}" y="${midY+11}" text-anchor="start" font-size="8" fill="${stroke}" font-family="Outfit,sans-serif" opacity="0.7">${u}</text>`;
+    }
+    s+=`</svg>`;
+    return s;
+  }
+  const buildSvg=makeSvg(bW,bH,'#EFE0D4','#A03318',hd?bd:null,hh?bh:null);
+  const firedSvg=makeSvg(fW,fH,'#DDE5CC','#4A5C2A',hd?d:null,hh?h:null);
+  html+=`<div class="calc-comparison">
+    <div class="calc-comp-label">Size comparison</div>
+    <div class="calc-comp-row">
+      <div class="calc-comp-item">
+        <div class="calc-comp-title">Starting Size</div>
+        ${buildSvg}
+      </div>
+      <div class="calc-comp-item">
+        <div class="calc-comp-title">Finished Size</div>
+        ${firedSvg}
+      </div>
+    </div>
+  </div>`;
   el.innerHTML=html;
 }
 
@@ -1733,24 +2120,89 @@ function addClay(){
   save();renderClayList();
 }
 function deleteClay(id){clays=clays.filter(c=>c.id!==id);save();renderClayList();}
+const STAB_LABELS=['Stable','Mostly Stable','Moderate','Runny','Very Runny'];
 function renderGlazeList(){
   const el=document.getElementById('glaze-list');
   if(!glazeLib.length){el.innerHTML='<div class="empty-state">No glazes yet</div>';return;}
-  el.innerHTML=glazeLib.map(g=>`<div class="lib-item">
-    <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+  el.innerHTML=glazeLib.map(g=>{
+    const s=g.stability||1;
+    const stabLabel=STAB_LABELS[s-1]||'Stable';
+    const photos=g.testTilePhotos||[];
+    const notes=g.notes||'';
+    return `<div class="lib-item" id="gli-${g.id}">
+    <div class="li-top" onclick="toggleGlazeDetail('${g.id}')">
       <span class="li-swatch" style="background:${g.color}"></span>
-      <div class="li-info"><div class="ln">${g.name}</div><div class="lm">${g.role}</div></div>
+      <div class="li-info"><div class="ln">${g.name}</div><div class="lm">${g.role} · ${stabLabel}</div></div>
+      <svg class="li-expand-caret" id="caret-${g.id}" viewBox="0 0 16 16"><polyline points="6 3 11 8 6 13" stroke="currentColor" fill="none"/></svg>
+      <button class="li-del" onclick="event.stopPropagation();deleteGlaze('${g.id}')">✕</button>
     </div>
-    <button class="li-del" onclick="deleteGlaze('${g.id}')">✕</button>
-  </div>`).join('');
+    <div class="li-detail" id="detail-${g.id}">
+      <div class="stability-bar-wrap">
+        <div class="stability-label"><span>Stability</span><span class="stab-val">${stabLabel}</span></div>
+        <div class="stability-bar"><div class="stability-fill s${s}"></div></div>
+        <div class="stability-endpoints"><span>Stable</span><span>Runny</span></div>
+      </div>
+      ${notes?`<div class="glaze-notes">${notes}</div>`:''}
+      <div class="tt-section-label">Test Tiles</div>
+      <div class="tt-strip">
+        ${photos.map((p,i)=>`<div class="tt-item"><img src="${p}" onclick="openTTLightbox('${p}')" alt="Test tile"><button class="tt-del" onclick="removeTTPhoto('${g.id}',${i})">✕</button></div>`).join('')}
+        <button class="tt-add" onclick="addTTPhoto('${g.id}')">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Add</span>
+        </button>
+      </div>
+    </div>
+  </div>`;}).join('');
+}
+function toggleGlazeDetail(id){
+  const det=document.getElementById('detail-'+id);
+  const car=document.getElementById('caret-'+id);
+  if(!det)return;
+  det.classList.toggle('open');
+  if(car)car.classList.toggle('open');
+}
+function openTTLightbox(src){
+  const lb=document.createElement('div');lb.className='tt-lightbox';
+  lb.onclick=()=>lb.remove();
+  lb.innerHTML=`<img src="${src}" alt="Test tile">`;
+  document.body.appendChild(lb);
+}
+function addTTPhoto(glazeId){
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
+  inp.onchange=()=>{
+    const g=glazeLib.find(gl=>gl.id===glazeId);if(!g)return;
+    if(!g.testTilePhotos)g.testTilePhotos=[];
+    Array.from(inp.files).forEach(f=>{
+      const reader=new FileReader();
+      reader.onload=e=>{g.testTilePhotos.push(e.target.result);save();renderGlazeList();
+        const det=document.getElementById('detail-'+glazeId);
+        const car=document.getElementById('caret-'+glazeId);
+        if(det)det.classList.add('open');if(car)car.classList.add('open');
+      };
+      reader.readAsDataURL(f);
+    });
+  };
+  inp.click();
+}
+function removeTTPhoto(glazeId,idx){
+  const g=glazeLib.find(gl=>gl.id===glazeId);if(!g||!g.testTilePhotos)return;
+  g.testTilePhotos.splice(idx,1);save();renderGlazeList();
+  const det=document.getElementById('detail-'+glazeId);
+  const car=document.getElementById('caret-'+glazeId);
+  if(det)det.classList.add('open');if(car)car.classList.add('open');
 }
 function addGlazeToLib(){
   const n=document.getElementById('new-glaze-name').value.trim();
   const c=document.getElementById('new-glaze-color').value;
   const r=document.getElementById('new-glaze-role').value;
+  const s=parseInt(document.getElementById('new-glaze-stability').value)||1;
+  const notes=document.getElementById('new-glaze-notes').value.trim();
   if(!n)return;
-  glazeLib.push({id:uid(),name:n,color:c,role:r});
+  glazeLib.push({id:uid(),name:n,color:c,role:r,stability:s,notes:notes,testTilePhotos:[]});
   document.getElementById('new-glaze-name').value='';
+  document.getElementById('new-glaze-notes').value='';
+  document.getElementById('new-glaze-stability').value='1';
+  document.getElementById('new-glaze-stab-val').textContent='Stable';
   save();renderGlazeList();
 }
 function deleteGlaze(id){glazeLib=glazeLib.filter(g=>g.id!==id);save();renderGlazeList();}
@@ -1778,19 +2230,24 @@ renderAll();
     if(r.ok){
       cloudEnabled=true;
       const data=await r.json();
-      const cloudHasData=data.projects&&data.projects.length>0;
-      if(cloudHasData){
-        // Cloud has data — use it
+      const cloudCount=(data.projects&&data.projects.length)||0;
+      const localCount=projects.length;
+
+      if(cloudCount>localCount){
+        // Cloud has more projects — it's the authoritative copy, pull it down
         projects=data.projects;
         clays=data.clays||defaultClays();
         glazeLib=data.glazeLib||defaultGlazes();
         saveLocal();
         renderAll();
         setSyncState('ok','Cloud sync on');
-      } else {
-        // Cloud is empty — push local data up (first-time migration)
-        setSyncState('saving','Migrating your data to cloud…');
+      } else if(localCount>0){
+        // Local has same or more projects — push local up (handles migration + conflict)
+        setSyncState('saving','Syncing to cloud…');
         await pushToCloud();
+        setSyncState('ok','Cloud sync on');
+      } else {
+        // Both empty — nothing to do
         setSyncState('ok','Cloud sync on');
       }
     } else {
