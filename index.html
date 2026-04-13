@@ -1004,6 +1004,14 @@ function defaultGlazes(){return [
 {id:'g26',name:'Yellow Salt',color:'#D4C05A',role:'Top coat',stability:4,notes:"Becomes quite runny when applied in combination with other glazes. Use with caution on exteriors when layering.",testTilePhotos:[]}
 ];}
 
+function migrateGlazes(lib){
+  const defaults=defaultGlazes();
+  const existing=lib||[];
+  const names=new Set(existing.map(g=>g.name.toLowerCase()));
+  defaults.forEach(dg=>{if(!names.has(dg.name.toLowerCase()))existing.push(dg);});
+  existing.forEach(g=>{if(g.stability===undefined){const match=defaults.find(d=>d.name.toLowerCase()===g.name.toLowerCase());g.stability=match?match.stability:1;g.notes=g.notes||(match?match.notes:'');g.testTilePhotos=g.testTilePhotos||[];}});
+  return existing;
+}
 function loadLocal(){
   try{
     let d=JSON.parse(localStorage.getItem('kd_v5')||'null');
@@ -1011,11 +1019,11 @@ function loadLocal(){
       const old=JSON.parse(localStorage.getItem('kd_v4')||'{}');
       projects=(old.projects||[]).map(p=>({difficulty:'',price:0,dateCompleted:'',...p}));
       clays=old.clays||defaultClays();
-      glazeLib=old.glazeLib||defaultGlazes();
+      glazeLib=migrateGlazes(old.glazeLib);
     } else {
       projects=d.projects||[];
       clays=d.clays||defaultClays();
-      glazeLib=d.glazeLib||defaultGlazes();
+      glazeLib=migrateGlazes(d.glazeLib);
     }
   }catch(e){projects=[];clays=defaultClays();glazeLib=defaultGlazes();}
 }
@@ -1070,7 +1078,7 @@ async function pullFromCloud(){
   const data=await r.json();
   projects=data.projects||[];
   clays=data.clays||defaultClays();
-  glazeLib=data.glazeLib||defaultGlazes();
+  glazeLib=migrateGlazes(data.glazeLib);
   saveLocal();
   setSyncState('ok','Cloud sync on');
   return true;
@@ -2237,7 +2245,7 @@ renderAll();
         // Cloud has more projects — it's the authoritative copy, pull it down
         projects=data.projects;
         clays=data.clays||defaultClays();
-        glazeLib=data.glazeLib||defaultGlazes();
+        glazeLib=migrateGlazes(data.glazeLib);
         saveLocal();
         renderAll();
         setSyncState('ok','Cloud sync on');
